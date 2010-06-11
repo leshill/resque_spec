@@ -5,8 +5,8 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "resque_spec"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
+    gem.summary = %Q{RSpec matchers for Resque}
+    gem.description = %Q{RSpec matchers for Resque}
     gem.email = "leshill@gmail.com"
     gem.homepage = "http://github.com/leshill/resque_spec"
     gem.authors = ["Les Hill"]

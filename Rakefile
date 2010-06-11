@@ -10,7 +10,8 @@ begin
     gem.email = "leshill@gmail.com"
     gem.homepage = "http://github.com/leshill/resque_spec"
     gem.authors = ["Les Hill"]
-    gem.add_development_dependency "rspec", ">= 1.2.9"
+    gem.add_dependency "resque", ">= 1.9.1"
+    gem.add_development_dependency "rspec", ">= 1.3.0"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new

@@ -36,13 +36,13 @@ And I write this spec using the resque_spec matcher
         ResqueSpec.reset!
       end
 
-      it "adds to the calculate to the person queue" do
+      it "adds person.calculate to the Person queue" do
         person.recalculate
         Person.should have_queued(person.id, :calculate)
       end
     end
 
-(And I take note of the `before` block that is using `reset` every spec)
+(And I take note of the `before` block that is calling `reset!` for every spec)
 
 And I might write this as a cucumber step
 

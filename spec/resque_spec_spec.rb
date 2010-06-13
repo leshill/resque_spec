@@ -9,6 +9,24 @@ describe "ResqueSpec" do
   let(:last_name) { 'Hill' }
 
   describe "#queue_for" do
+    it "raises if there is no queue defined for a class" do
+      expect do
+        ResqueSpec.queue_for(Address)
+      end.should raise_exception(::Resque::NoQueueError)
+    end
+
+    it "recognizes a queue defined as a class instance variable" do
+      expect do
+        ResqueSpec.queue_for(Person)
+      end.should_not raise_exception(::Resque::NoQueueError)
+    end
+
+    it "recognizes a queue defined as a class method" do
+      expect do
+        ResqueSpec.queue_for(Account)
+      end.should_not raise_exception(::Resque::NoQueueError)
+    end
+
     it "has an empty array if nothing queued for a class" do
       ResqueSpec.queue_for(Person).should == []
     end

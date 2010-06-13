@@ -8,7 +8,9 @@ module ResqueSpec
   end
 
   def queue_for(klass)
-    queues[klass]
+    queue_name = klass.instance_variable_get(:@queue) || klass.respond_to?(:queue) && klass.queue
+    raise ::Resque::NoQueueError.new("Jobs must be placed onto a queue.") unless queue_name
+    queues[queue_name]
   end
 
   def queues

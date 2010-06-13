@@ -29,7 +29,7 @@ Given this scenario
     When I recalculate
     Then the person has calculate queued
 
-And I write this spec using the resque_spec matcher
+And I write this spec using the `resque_spec` matcher
 
     describe "#recalculate" do
       before do
@@ -44,7 +44,7 @@ And I write this spec using the resque_spec matcher
 
 (And I take note of the `before` block that is calling `reset!` for every spec)
 
-And I might write this as a cucumber step
+And I might write this as a Cucumber step
 
     Then /the (\w?) has (\w?) queued/ do |thing, method|
       thing_obj = instance_variable_get("@#{thing}")

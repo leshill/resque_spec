@@ -4,6 +4,8 @@ ResqueSpec
 A simple RSpec and Cucumber matcher for Resque.enqueue, loosely based on
 [http://github.com/justinweiss/resque_unit](resque_unit).
 
+This should work with all recent versions of Resque and RSpec.
+
 Install
 -------
 
@@ -12,7 +14,7 @@ Install the gem
     % gem install resque_spec
 
 And update your Gemfile (Not using bundler? Do the necessary thing for
-your app's gem management):
+your app's gem management)
 
     group :test do
       gem 'resque_spec'
@@ -40,7 +42,7 @@ And I write this spec using the resque_spec matcher
       end
     end
 
-(And I take note of the `before` block that is using `reset` every spec.)
+(And I take note of the `before` block that is using `reset` every spec)
 
 And I might write this as a cucumber step
 

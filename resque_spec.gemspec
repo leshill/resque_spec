@@ -5,16 +5,16 @@
 
 Gem::Specification.new do |s|
   s.name = %q{resque_spec}
-  s.version = "0.1.0"
+  s.version = "0.1.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Les Hill"]
-  s.date = %q{2010-06-12}
+  s.date = %q{2010-06-13}
   s.description = %q{RSpec matchers for Resque}
   s.email = %q{leshill@gmail.com}
   s.extra_rdoc_files = [
     "LICENSE",
-     "README.rdoc"
+     "README.md"
   ]
   s.files = [
     ".document",
@@ -22,13 +22,16 @@ Gem::Specification.new do |s|
      ".rvmrc",
      "Gemfile",
      "LICENSE",
-     "README.rdoc",
+     "README.md",
      "Rakefile",
      "VERSION",
      "lib/resque_spec.rb",
+     "resque_spec.gemspec",
      "spec/resque_spec_spec.rb",
      "spec/spec.opts",
      "spec/spec_helper.rb",
+     "spec/support/account.rb",
+     "spec/support/address.rb",
      "spec/support/person.rb"
   ]
   s.homepage = %q{http://github.com/leshill/resque_spec}
@@ -39,6 +42,8 @@ Gem::Specification.new do |s|
   s.test_files = [
     "spec/resque_spec_spec.rb",
      "spec/spec_helper.rb",
+     "spec/support/account.rb",
+     "spec/support/address.rb",
      "spec/support/person.rb"
   ]
 

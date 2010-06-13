@@ -11,6 +11,7 @@ begin
     gem.homepage = "http://github.com/leshill/resque_spec"
     gem.authors = ["Les Hill"]
     gem.add_dependency "resque", ">= 1.9.1"
+    gem.add_development_dependency "jeweler", ">= 1.4.0"
     gem.add_development_dependency "rspec", ">= 1.3.0"
   end
   Jeweler::GemcutterTasks.new

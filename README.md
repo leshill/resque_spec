@@ -4,7 +4,7 @@ ResqueSpec
 A simple RSpec and Cucumber matcher for Resque.enqueue, loosely based on
 [http://github.com/justinweiss/resque_unit](resque_unit).
 
-This should work with all recent versions of Resque and RSpec.
+This should work with Resque v1.6.0 and up and RSpec v1.3.0 and up.
 
 Install
 -------

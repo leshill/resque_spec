@@ -62,7 +62,8 @@ Then I write some code to make it pass:
     end
 
 
-== Note on Patches/Pull Requests
+Note on Patches/Pull Requests
+=============================
 
 * Fork the project.
 * Make your feature addition or bug fix.
@@ -72,6 +73,7 @@ Then I write some code to make it pass:
   (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
 * Send me a pull request. Bonus points for topic branches.
 
-== Copyright
+Copyright
+=========
 
 Copyright (c) 2010 Les Hill. See LICENSE for details.

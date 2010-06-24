@@ -1,7 +1,7 @@
 ResqueSpec
 ==========
 
-A simple RSpec and Cucumber matcher for Resque.enqueue, loosely based on
+A simple RSpec and Cucumber matcher for Resque.enqueue and Resque.enqueue_at (from `ResqueScheduler`), loosely based on
 [http://github.com/justinweiss/resque_unit](resque_unit).
 
 This should work with Resque v1.6.0 and up and RSpec v1.3.0 and up.
@@ -61,6 +61,46 @@ Then I write some code to make it pass:
       end
     end
 
+ResqueScheduler with Specs
+--------------------------
+
+Given this scenario
+
+    Given a person
+    When I schedule a recalculate
+    Then the person has calculate scheduled
+
+And I write this spec using the `resque_spec` matcher
+
+    describe "#recalculate" do
+      before do
+        ResqueSpec.reset!
+      end
+
+      it "adds person.calculate to the Person queue" do
+        person.recalculate
+        Person.should have_scheduled(person.id, :calculate)
+      end
+    end
+
+(And I take note of the `before` block that is calling `reset!` for every spec)
+
+And I might write this as a Cucumber step
+
+    Then /the (\w?) has (\w?) scheduled/ do |thing, method|
+      thing_obj = instance_variable_get("@#{thing}")
+      thing_obj.class.should have_scheduled(thing_obj.id, method.to_sym)
+    end
+
+Then I write some code to make it pass:
+
+    class Person
+      @queue = :people
+
+      def recalculate
+        Resque.enqueue_at(Time.now + 3600, Person, id, :calculate)
+      end
+    end
 
 Note on Patches/Pull Requests
 =============================

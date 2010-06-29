@@ -24,7 +24,7 @@ end
 
 Resque.extend(ResqueSpec::ResqueScheduler)
 
-Spec::Matchers.define :have_scheduled do |*expected_args|
+RSpec::Matchers.define :have_scheduled do |*expected_args|
   match do |actual|
     ResqueSpec.scheduled_anytime?(actual, *expected_args)
   end
@@ -42,7 +42,7 @@ Spec::Matchers.define :have_scheduled do |*expected_args|
   end
 end
 
-Spec::Matchers.define :have_scheduled_at do |*expected_args|
+RSpec::Matchers.define :have_scheduled_at do |*expected_args|
   match do |actual|
     ResqueSpec.scheduled?(actual, *expected_args)
   end

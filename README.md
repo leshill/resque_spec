@@ -4,7 +4,9 @@ ResqueSpec
 A simple RSpec and Cucumber matcher for Resque.enqueue and Resque.enqueue_at (from `ResqueScheduler`), loosely based on
 [http://github.com/justinweiss/resque_unit](resque_unit).
 
-This should work with Resque v1.6.0 and up and RSpec v1.3.0 and up.
+This should work with `Resque v1.6.0` and up and `RSpec v2.0.0.beta.12` and up.
+
+If you are using `RSpec ~> 1.3.0`, you should use version `~> 0.2.0`.
 
 Install
 -------

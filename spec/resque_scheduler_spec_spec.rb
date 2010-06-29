@@ -35,19 +35,19 @@ describe "ResqueSchedulerSpec" do
     it "raises if there is no schedule queue defined for a class" do
       expect do
         ResqueSpec.schedule_for(Address)
-      end.should raise_exception(::Resque::NoQueueError)
+      end.should raise_error(::Resque::NoQueueError)
     end
 
     it "recognizes a queue defined as a class instance variable" do
       expect do
         ResqueSpec.schedule_for(Person)
-      end.should_not raise_exception(::Resque::NoQueueError)
+      end.should_not raise_error(::Resque::NoQueueError)
     end
 
     it "recognizes a queue defined as a class method" do
       expect do
         ResqueSpec.schedule_for(Account)
-      end.should_not raise_exception(::Resque::NoQueueError)
+      end.should_not raise_error(::Resque::NoQueueError)
     end
 
     it "has an empty array if nothing queued for a class" do

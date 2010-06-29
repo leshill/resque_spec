@@ -1,3 +1,4 @@
+require 'rspec'
 require 'resque'
 
 module ResqueSpec
@@ -33,7 +34,7 @@ end
 
 Resque.extend(ResqueSpec::Resque)
 
-Spec::Matchers.define :have_queued do |*expected_args|
+RSpec::Matchers.define :have_queued do |*expected_args|
   match do |actual|
     ResqueSpec.in_queue?(actual, *expected_args)
   end

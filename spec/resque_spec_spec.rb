@@ -37,6 +37,22 @@ describe "ResqueSpec" do
     end
   end
 
+  describe "#queue_name" do
+    it "raises if there is no queue defined for a class" do
+      expect do
+        ResqueSpec.queue_name(Address)
+      end.should raise_error(::Resque::NoQueueError)
+    end
+
+    it "returns the queue name if there is a queue defined as an instance var" do
+      ResqueSpec.queue_name(Person).should == :people
+    end
+
+    it "returns the queue name if there is a queue defined via self.queue" do
+      ResqueSpec.queue_name(Account).should == :people
+    end
+  end
+
   describe "#reset!" do
     it "clears the queues" do
       ResqueSpec.queue_for(Person) << 'queued'

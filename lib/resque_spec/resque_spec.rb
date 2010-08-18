@@ -13,8 +13,9 @@ module ResqueSpec
   end
 
   def queue_name(klass)
-    queue_name = klass.instance_variable_get(:@queue) || klass.respond_to?(:queue) && klass.queue
-    raise ::Resque::NoQueueError.new("Jobs must be placed onto a queue.") unless queue_name
+    name_from_instance_var(klass) or
+      name_from_queue_accessor(klass) or
+      raise ::Resque::NoQueueError.new("Jobs must be placed onto a queue.")
   end
 
   def queues
@@ -29,6 +30,16 @@ module ResqueSpec
     def enqueue(klass, *args)
       ResqueSpec.queue_for(klass) << {:klass => klass, :args => args}
     end
+  end
+
+  private
+
+  def name_from_instance_var(klass)
+    klass.instance_variable_get(:@queue)
+  end
+
+  def name_from_queue_accessor(klass)
+    klass.respond_to?(:queue) and klass.queue
   end
 end
 

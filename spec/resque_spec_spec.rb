@@ -53,6 +53,13 @@ describe "ResqueSpec" do
     end
   end
 
+  describe "#queue_size" do
+
+    before { 3.times { ResqueSpec.queue_for(Account) << 'queued' }}
+    subject { ResqueSpec.queue_size(Account) }
+    it { should == 3 }
+  end
+
   describe "#reset!" do
     it "clears the queues" do
       ResqueSpec.queue_for(Person) << 'queued'

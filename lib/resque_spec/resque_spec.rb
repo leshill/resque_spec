@@ -18,6 +18,10 @@ module ResqueSpec
       raise ::Resque::NoQueueError.new("Jobs must be placed onto a queue.")
   end
 
+  def queue_size(klass)
+    queue_for(klass).size
+  end
+
   def queues
     @queues ||= Hash.new {|h,k| h[k] = []}
   end

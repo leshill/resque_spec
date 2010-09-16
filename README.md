@@ -104,6 +104,22 @@ Then I write some code to make it pass:
       end
     end
 
+Queue Size Specs
+----------------
+
+You can check the size of the queue in your specs too.
+
+    describe "#recalculate" do
+      before do
+        ResqueSpec.reset!
+      end
+
+      it "adds an entry to the Person queue" do
+        person.recalculate
+        Person.should have_queue_size_of(1)
+      end
+    end
+
 Note on Patches/Pull Requests
 =============================
 

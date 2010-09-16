@@ -67,3 +67,20 @@ RSpec::Matchers.define :have_queued do |*expected_args|
   end
 end
 
+RSpec::Matchers.define :have_queue_size_of do |size|
+  match do |actual|
+    ResqueSpec.queue_size(actual) == size
+  end
+
+  failure_message_for_should do |actual|
+    "expected that #{actual} would have #{size} entries queued"
+  end
+
+  failure_message_for_should_not do |actual|
+    "expected that #{actual} would not have #{size} entries queued"
+  end
+
+  description do
+    "have a queue size of #{size}"
+  end
+end

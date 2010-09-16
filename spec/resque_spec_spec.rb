@@ -117,5 +117,11 @@ describe "ResqueSpec" do
         Person.should_not have_queued(last_name, first_name)
       end
     end
+
+    describe "#have_queue_size_of" do
+      subject { Person }
+
+      it { should have_queue_size_of(1) }
+    end
   end
 end

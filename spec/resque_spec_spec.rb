@@ -108,19 +108,14 @@ describe "ResqueSpec" do
       Resque.enqueue(Person, first_name, last_name)
     end
 
-    describe "#have_queued" do
-      it "returns true if the arguments are found in the queue" do
-        Person.should have_queued(first_name, last_name)
-      end
+    subject { Person }
 
-      it "returns false if the arguments are not found in the queue" do
-        Person.should_not have_queued(last_name, first_name)
-      end
+    describe "#have_queued" do
+      it { should have_queued(first_name, last_name) }
+      it { should_not have_queued(last_name, first_name) }
     end
 
     describe "#have_queue_size_of" do
-      subject { Person }
-
       it { should have_queue_size_of(1) }
     end
   end

@@ -63,7 +63,7 @@ RSpec::Matchers.define :have_queued do |*expected_args|
   end
 
   description do
-    "have queued arguments"
+    "have queued arguments of [#{expected_args.join(', ')}]"
   end
 end
 

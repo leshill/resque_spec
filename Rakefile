@@ -1,12 +1,9 @@
-require 'rubygems'
-require 'rake'
-
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "resque_spec"
-    gem.summary = %Q{RSpec matchers for Resque}
-    gem.description = %Q{RSpec matchers for Resque}
+    gem.summary = %{RSpec matchers for Resque}
+    gem.description = %{RSpec matchers for Resque}
     gem.email = "leshill@gmail.com"
     gem.homepage = "http://github.com/leshill/resque_spec"
     gem.authors = ["Les Hill"]

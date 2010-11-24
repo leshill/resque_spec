@@ -12,7 +12,7 @@ begin
     gem.authors = ["Les Hill"]
     gem.add_dependency "resque", ">= 1.6.0"
     gem.add_development_dependency "jeweler", ">= 1.4.0"
-    gem.add_development_dependency "rspec", ">= 1.3.0"
+    gem.add_development_dependency "rspec", "~> 1.3.0"
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError
@@ -30,8 +30,6 @@ Spec::Rake::SpecTask.new(:rcov) do |spec|
   spec.pattern = 'spec/**/*_spec.rb'
   spec.rcov = true
 end
-
-task :spec => :check_dependencies
 
 task :default => :spec
 

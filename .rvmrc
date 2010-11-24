@@ -1,2 +1,1 @@
-rvm_gemset_create_on_use_flag=1
-rvm gemset use resque_spec
+rvm gemset use resque_spec_v0_2_x

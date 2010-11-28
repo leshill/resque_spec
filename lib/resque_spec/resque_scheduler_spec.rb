@@ -11,7 +11,7 @@ module ResqueSpec
   end
 
   def schedule_for(klass)
-    name = queue_name(klass).to_s << "_scheduled"
+    name = "#{queue_name(klass)}_scheduled"
     queues[name]
   end
 

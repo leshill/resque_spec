@@ -58,6 +58,11 @@ describe "ResqueSchedulerSpec" do
       ResqueSpec.schedule_for(Person) << 'queued'
       ResqueSpec.schedule_for(Person).should_not be_empty
     end
+
+    it "does not mutate the Book's @queue if it is a string" do
+      ResqueSpec.schedule_for(Book)
+      Book.instance_variable_get(:@queue).should == 'book'
+    end
   end
 
   describe "Resque" do

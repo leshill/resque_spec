@@ -1,19 +1,6 @@
-begin
-  require 'jeweler'
-  Jeweler::Tasks.new do |gem|
-    gem.name = "resque_spec"
-    gem.summary = %{RSpec matchers for Resque}
-    gem.description = %{RSpec matchers for Resque}
-    gem.email = "leshill@gmail.com"
-    gem.homepage = "http://github.com/leshill/resque_spec"
-    gem.authors = ["Les Hill"]
-    gem.add_dependency "resque", ">= 1.6.0"
-    gem.add_dependency "rspec", ">= 2.0.0.beta.12"
-    gem.add_development_dependency "jeweler", ">= 1.4.0"
-  end
-  Jeweler::GemcutterTasks.new
-rescue LoadError
-  puts "Jeweler (or a dependency) not available. Install it with: gem install jeweler"
+task :gem => :build
+task :build do
+  system "gem build resque_spec.gemspec"
 end
 
 require 'rspec/core/rake_task'

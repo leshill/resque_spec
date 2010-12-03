@@ -127,6 +127,23 @@ Normally, Resque does not perform queued jobs within tests. You may want to
 make assertions based on the result of your jobs. To process jobs immediately,
 you can pass a block to the `with_resque` helper:
 
+Given this scenario
+
+    Given a game
+    When I score
+    Then the game has a score
+
+I might write this as a Cucumber step
+
+    When /I score/ do
+      with_resque do
+        visit game_path
+        click_link 'Score!'
+      end
+    end
+
+Or I write this spec using the `with_resque` helper
+
     describe "#score!" do
       before do
         ResqueSpec.reset!

@@ -31,6 +31,7 @@ module ResqueSpec
   end
 
   module Resque
+    extend self
     def enqueue(klass, *args)
       ResqueSpec.queue_for(klass) << {:klass => klass, :args => args}
     end

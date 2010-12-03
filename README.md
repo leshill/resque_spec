@@ -120,6 +120,26 @@ You can check the size of the queue in your specs too.
       end
     end
 
+Performing Jobs in Specs
+------------------------
+
+Normally, Resque does not perform queued jobs within tests. You may want to
+make assertions based on the result of your jobs. To process jobs immediately,
+you can pass a block to the `with_resque` helper:
+
+    describe "#score!" do
+      before do
+        ResqueSpec.reset!
+      end
+
+      it "increases the score" do
+        with_resque do
+          game.score!
+        end
+        game.score.should == 10
+      end
+    end
+
 Note on Patches/Pull Requests
 =============================
 

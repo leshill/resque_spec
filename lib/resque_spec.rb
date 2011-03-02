@@ -5,4 +5,4 @@ require 'resque_spec/helpers'
 config = RSpec.configuration
 config.include ResqueSpec::Helpers
 
-World(ResqueSpec::Helpers) if defined?(Cucumber)
+World(ResqueSpec::Helpers) if defined?(World)

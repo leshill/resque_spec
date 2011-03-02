@@ -9,7 +9,6 @@ Gem::Specification.new do |s|
   s.name = 'resque_spec'
   s.version = ResqueSpec::VERSION
   s.authors = ['Les Hill']
-  s.date = '2010-11-28'
   s.description = 'RSpec matchers for Resque'
   s.summary = 'RSpec matchers for Resque'
   s.homepage = 'http://github.com/leshill/resque_spec'

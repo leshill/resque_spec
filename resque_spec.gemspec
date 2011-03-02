@@ -20,6 +20,6 @@ Gem::Specification.new do |s|
   s.files = Dir.glob("lib/**/*") + %w(LICENSE README.md Rakefile)
 
   s.add_runtime_dependency('resque', ['>= 1.6.0'])
-  s.add_runtime_dependency('rspec', ['>= 2.0.0.beta.12'])
+  s.add_runtime_dependency('rspec', ['>= 2.5.0'])
 end
 

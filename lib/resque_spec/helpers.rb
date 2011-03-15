@@ -20,7 +20,7 @@ module ResqueSpec
     def disable_perform
       ::Resque.module_eval do
         def self.enqueue(klass, *args)
-          ResqueSpec::Resque.enqueue(klass, *args)
+          ::Resque::Job.create(ResqueSpec.queue_name(klass), klass, *args)
         end
       end
     end

@@ -3,11 +3,11 @@ require 'resque_spec'
 module ResqueSpec
 
   def scheduled?(klass, time, *args)
-    schedule_for(klass).any? {|entry| entry[:klass] == klass && entry[:time] == time && entry[:args] == args}
+    schedule_for(klass).any? {|entry| entry[:klass].to_s == klass.to_s && entry[:time] == time && entry[:args] == args}
   end
 
   def scheduled_anytime?(klass, *args)
-    schedule_for(klass).any? {|entry| entry[:klass] == klass && entry[:args] == args}
+    schedule_for(klass).any? {|entry| entry[:klass].to_s == klass.to_s && entry[:args] == args}
   end
 
   def schedule_for(klass)
@@ -17,7 +17,7 @@ module ResqueSpec
 
   module ResqueScheduler
     def enqueue_at(time, klass, *args)
-      ResqueSpec.schedule_for(klass) << {:klass => klass, :time  => time, :args => args}
+      ResqueSpec.schedule_for(klass) << {:klass => klass.to_s, :time  => time, :args => args}
     end
   end
 end

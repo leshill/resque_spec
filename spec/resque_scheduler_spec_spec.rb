@@ -77,7 +77,7 @@ describe "ResqueSchedulerSpec" do
       end
 
       it "sets the klass on the queue" do
-        ResqueSpec.schedule_for(Person).first.should include(:klass => Person)
+        ResqueSpec.schedule_for(Person).first.should include(:klass => Person.to_s)
       end
 
       it "sets the arguments on the queue" do

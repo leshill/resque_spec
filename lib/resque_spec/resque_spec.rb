@@ -1,11 +1,12 @@
-require 'rspec'
 require 'resque'
 
 module ResqueSpec
   extend self
 
   def in_queue?(klass, *args)
-    queue_for(klass).any? {|entry| entry[:klass].to_s == klass.to_s && entry[:args] == args}
+    options = args.last.is_a?(Hash) ? args.pop : {}
+    queue = options[:queue_name] ? queues[options[:queue_name]] : queue_for(klass)
+    queue.any? {|entry| entry[:klass].to_s == klass.to_s && entry[:args] == args}
   end
 
   def queue_for(klass)
@@ -13,7 +14,10 @@ module ResqueSpec
   end
 
   def queue_name(klass)
-    klass = Kernel.const_get(klass) if klass.is_a?(String)
+    if klass.is_a?(String)
+      klass = Kernel.const_get(klass) rescue nil
+    end
+    
     name_from_instance_var(klass) or
       name_from_queue_accessor(klass) or
         raise ::Resque::NoQueueError.new("Jobs must be placed onto a queue.")
@@ -82,42 +86,5 @@ module ResqueSpec
   end
 end
 
-
 Resque.extend ResqueSpec::Resque
 Resque::Job.send :include, ResqueSpec::Resque::Job
-
-RSpec::Matchers.define :have_queued do |*expected_args|
-  match do |actual|
-    ResqueSpec.in_queue?(actual, *expected_args)
-  end
-
-  failure_message_for_should do |actual|
-    "expected that #{actual} would have [#{expected_args.join(', ')}] queued"
-  end
-
-  failure_message_for_should_not do |actual|
-    "expected that #{actual} would not have [#{expected_args.join(', ')}] queued"
-  end
-
-  description do
-    "have queued arguments of [#{expected_args.join(', ')}]"
-  end
-end
-
-RSpec::Matchers.define :have_queue_size_of do |size|
-  match do |actual|
-    ResqueSpec.queue_size(actual) == size
-  end
-
-  failure_message_for_should do |actual|
-    "expected that #{actual} would have #{size} entries queued"
-  end
-
-  failure_message_for_should_not do |actual|
-    "expected that #{actual} would not have #{size} entries queued"
-  end
-
-  description do
-    "have a queue size of #{size}"
-  end
-end

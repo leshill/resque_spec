@@ -20,43 +20,8 @@ module ResqueSpec
       ResqueSpec.schedule_for(klass) << {:klass => klass.to_s, :time  => time, :args => args}
     end
   end
+  
 end
 
 Resque.extend(ResqueSpec::ResqueScheduler)
-
-RSpec::Matchers.define :have_scheduled do |*expected_args|
-  match do |actual|
-    ResqueSpec.scheduled_anytime?(actual, *expected_args)
-  end
-
-  failure_message_for_should do |actual|
-    "expected that #{actual} would have [#{expected_args.join(', ')}] queued"
-  end
-
-  failure_message_for_should_not do |actual|
-    "expected that #{actual} would not have [#{expected_args.join(', ')}] queued"
-  end
-
-  description do
-    "have scheduled arguments"
-  end
-end
-
-RSpec::Matchers.define :have_scheduled_at do |*expected_args|
-  match do |actual|
-    ResqueSpec.scheduled?(actual, *expected_args)
-  end
-
-  failure_message_for_should do |actual|
-    "expected that #{actual} would have [#{expected_args.join(', ')}] queued"
-  end
-
-  failure_message_for_should_not do |actual|
-    "expected that #{actual} would not have [#{expected_args.join(', ')}] queued"
-  end
-
-  description do
-    "have scheduled at the given time the arguments"
-  end
-end
 

@@ -185,20 +185,84 @@ describe "ResqueSpec" do
     end
   end
 
-  context "Matchers" do
-    before do
-      Resque.enqueue(Person, first_name, last_name)
+  context "Matchers" do    
+    describe "given a class" do
+      before do
+        Resque.enqueue(Person, first_name, last_name)
+      end
+      
+      subject { Person }
+
+      describe "#have_queued" do
+        it { should have_queued(first_name, last_name) }
+        it { should_not have_queued(last_name, first_name) }
+      end
+
+      describe "#have_queue_size_of" do
+        it { should have_queue_size_of(1) }
+      end
     end
+    
+    describe "given a class name" do
+      before do
+        Resque::Job.create(:people, "Person", first_name, last_name)
+      end      
+      
+      subject { Person }
 
-    subject { Person }
+      describe "#have_queued" do
+        it { should have_queued(first_name, last_name) }
+        it { should_not have_queued(last_name, first_name) }
+      end
 
-    describe "#have_queued" do
-      it { should have_queued(first_name, last_name) }
-      it { should_not have_queued(last_name, first_name) }
+      describe "#have_queue_size_of" do
+        it { should have_queue_size_of(1) }
+      end 
+      
+      subject { "Person" }
+
+      describe "#have_queued" do
+        it { should have_queued(first_name, last_name) }
+        it { should_not have_queued(last_name, first_name) }
+      end
+
+      describe "#have_queue_size_of" do
+        it { should have_queue_size_of(1) }
+      end           
     end
+    
+    describe "given a name for a non-existent class (e.g. the class is on a separate application processing the Resque jobs)" do
+      before do
+        Resque::Job.create(:people, "User", first_name, last_name)
+      end      
+      
+      subject { "User" }
+      
+      describe "#have_queued" do
+        describe "without #in(queue_name)" do
+          it "should raise a Resque::NoQueueError" do
+            lambda { "User".should have_queued(first_name, last_name) }.should raise_error(Resque::NoQueueError)
+          end
+        end
+        
+        describe "with #in(queue_name)" do
+          it { should have_queued(first_name, last_name).in(:people) }
+          it { should_not have_queued(last_name, first_name).in(:people) }
+        end
+      end
 
-    describe "#have_queue_size_of" do
-      it { should have_queue_size_of(1) }
+      describe "#have_queue_size_of" do
+        describe "without #in(queue_name)" do
+          it "should raise a Resque::NoQueueError" do
+            lambda { "User".should have_queue_size_of(1) }.should raise_error(Resque::NoQueueError)
+          end
+        end
+        
+        describe "with #in(queue_name)" do
+          it { should have_queue_size_of(1).in(:people) }
+        end        
+        
+      end
     end
   end
 end

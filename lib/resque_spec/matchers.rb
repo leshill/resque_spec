@@ -4,7 +4,7 @@ RSpec::Matchers.define :have_queued do |*expected_args|
   match do |actual|
     ResqueSpec.in_queue?(actual, *expected_args, :queue_name => @queue_name)
   end
-  
+
   chain :in do |queue_name|
     @queue_name = queue_name
   end
@@ -26,10 +26,10 @@ RSpec::Matchers.define :have_queue_size_of do |size|
   match do |actual|
     (@queue ||= ResqueSpec.queue_for(actual)).size == size
   end
-  
+
   chain :in do |queue_name|
     @queue = ResqueSpec.queues[queue_name]
-  end  
+  end
 
   failure_message_for_should do |actual|
     "expected that #{actual} would have #{size} entries queued, but got #{@queue.size} instead"

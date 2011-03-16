@@ -20,7 +20,7 @@ module ResqueSpec
       ResqueSpec.schedule_for(klass) << {:klass => klass.to_s, :time  => time, :args => args}
     end
   end
-  
+
 end
 
 Resque.extend(ResqueSpec::ResqueScheduler)

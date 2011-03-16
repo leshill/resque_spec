@@ -17,7 +17,7 @@ module ResqueSpec
     if klass.is_a?(String)
       klass = Kernel.const_get(klass) rescue nil
     end
-    
+
     name_from_instance_var(klass) or
       name_from_queue_accessor(klass) or
         raise ::Resque::NoQueueError.new("Jobs must be placed onto a queue.")
@@ -34,7 +34,7 @@ module ResqueSpec
   def reset!
     queues.clear
   end
-  
+
   private
 
     def name_from_instance_var(klass)
@@ -43,21 +43,21 @@ module ResqueSpec
 
     def name_from_queue_accessor(klass)
       klass.respond_to?(:queue) and klass.queue
-    end  
+    end
 
   module Resque
     extend self
 
     def reset!
       ResqueSpec.reset!
-    end     
-    
+    end
+
     module Job
       extend self
-      
+
       def self.included(base)
         base.instance_eval do
-          
+
           def create(queue, klass, *args)
             raise ::Resque::NoQueueError.new("Jobs must be placed onto a queue.") if !queue
             raise ::Resque::NoClassError.new("Jobs must be given a class.") if klass.to_s.empty?
@@ -76,13 +76,13 @@ module ResqueSpec
               ResqueSpec.queues[queue].delete_if{ |job| job[:klass] == klass.to_s and job[:args].to_a == args.to_a }
             end
             old_count - ResqueSpec.queues[queue].size
-          end    
-          
+          end
+
         end
-      end    
-      
+      end
+
     end
-        
+
   end
 end
 

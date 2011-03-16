@@ -46,6 +46,19 @@ And I write this spec using the `resque_spec` matcher
 
 (And I take note of the `before` block that is calling `reset!` for every spec)
 
+And I might use the `in` statement to specify the queue:
+
+    describe "#recalculate" do
+      before do
+        ResqueSpec.reset!
+      end
+
+      it "adds person.calculate to the Person queue" do
+        person.recalculate
+        Person.should have_queued(person.id, :calculate).in(:people)
+      end
+    end
+
 And I might write this as a Cucumber step
 
     Then /the (\w?) has (\w?) queued/ do |thing, method|

@@ -3,14 +3,12 @@ require 'resque'
 module ResqueSpec
   extend self
 
-  def in_queue?(klass, *args)
-    options = args.last.is_a?(Hash) ? args.pop : {}
-    queue = options[:queue_name] ? queues[options[:queue_name]] : queue_for(klass)
-    queue.any? {|entry| entry[:klass].to_s == klass.to_s && entry[:args] == args}
+  def queue_by_name(name)
+    queues[name]
   end
 
   def queue_for(klass)
-    queues[queue_name(klass)]
+    queue_by_name(queue_name(klass))
   end
 
   def queue_name(klass)
@@ -21,10 +19,6 @@ module ResqueSpec
     name_from_instance_var(klass) or
       name_from_queue_accessor(klass) or
         raise ::Resque::NoQueueError.new("Jobs must be placed onto a queue.")
-  end
-
-  def queue_size(klass)
-    queue_for(klass).size
   end
 
   def queues

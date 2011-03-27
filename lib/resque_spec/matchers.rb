@@ -1,12 +1,33 @@
 require 'rspec'
 
-RSpec::Matchers.define :have_queued do |*expected_args|
-  match do |actual|
-    ResqueSpec.in_queue?(actual, *expected_args, :queue_name => @queue_name)
+module InQueueHelper
+  def self.extended(klass)
+    klass.instance_eval do
+      chain :in do |queue_name|
+        self.queue_name = queue_name
+      end
+    end
   end
 
-  chain :in do |queue_name|
-    @queue_name = queue_name
+  private
+
+  attr_accessor :queue_name
+
+  def queue(actual)
+    if @queue_name
+      ResqueSpec.queue_by_name(@queue_name)
+    else
+      ResqueSpec.queue_for(actual)
+    end
+  end
+
+end
+
+RSpec::Matchers.define :have_queued do |*expected_args|
+  extend InQueueHelper
+
+  match do |actual|
+    queue(actual).any? { |entry| entry[:klass].to_s == actual.to_s && entry[:args] == expected_args }
   end
 
   failure_message_for_should do |actual|
@@ -23,12 +44,10 @@ RSpec::Matchers.define :have_queued do |*expected_args|
 end
 
 RSpec::Matchers.define :have_queue_size_of do |size|
-  match do |actual|
-    (@queue ||= ResqueSpec.queue_for(actual)).size == size
-  end
+  extend InQueueHelper
 
-  chain :in do |queue_name|
-    @queue = ResqueSpec.queues[queue_name]
+  match do |actual|
+    queue(actual).size == size
   end
 
   failure_message_for_should do |actual|
@@ -46,7 +65,7 @@ end
 
 RSpec::Matchers.define :have_scheduled do |*expected_args|
   match do |actual|
-    ResqueSpec.scheduled_anytime?(actual, *expected_args)
+    ResqueSpec.schedule_for(actual).any? { |entry| entry[:klass].to_s == actual.to_s && entry[:args] == expected_args }
   end
 
   failure_message_for_should do |actual|
@@ -64,7 +83,9 @@ end
 
 RSpec::Matchers.define :have_scheduled_at do |*expected_args|
   match do |actual|
-    ResqueSpec.scheduled?(actual, *expected_args)
+    time = expected_args.first
+    other_args = expected_args[1..-1]
+    ResqueSpec.schedule_for(actual).any? { |entry| entry[:klass].to_s == actual.to_s && entry[:time] == time && entry[:args] == other_args }
   end
 
   failure_message_for_should do |actual|

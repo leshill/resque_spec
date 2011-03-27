@@ -9,28 +9,6 @@ describe "ResqueSchedulerSpec" do
   let(:last_name) { 'Hill' }
   let(:scheduled_at) { Time.now + 5 * 60 }
 
-  describe "scheduled?" do
-    it "returns true if the arguments were queued" do
-      Resque.enqueue_at(scheduled_at, Person, first_name, last_name)
-      ResqueSpec.scheduled?(Person, scheduled_at, first_name, last_name).should be
-    end
-
-    it "returns false if the arguments were not queued" do
-      ResqueSpec.scheduled?(Person, scheduled_at, first_name, last_name).should_not be
-    end
-  end
-
-  describe "scheduled_anytime?" do
-    it "returns true if the arguments were queued" do
-      Resque.enqueue_at(scheduled_at, Person, first_name, last_name)
-      ResqueSpec.scheduled_anytime?(Person, first_name, last_name).should be
-    end
-
-    it "returns false if the arguments were not queued" do
-      ResqueSpec.scheduled_anytime?(Person, first_name, last_name).should_not be
-    end
-  end
-
   describe "#schedule_for" do
     it "raises if there is no schedule queue defined for a class" do
       expect do

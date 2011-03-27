@@ -24,4 +24,3 @@ module ResqueSpec
 end
 
 Resque.extend(ResqueSpec::ResqueScheduler)
-

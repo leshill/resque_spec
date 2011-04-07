@@ -5,6 +5,16 @@ require 'resque_spec/matchers'
 module ResqueSpec
   extend self
 
+  def dequeue(queue_name, klass, *args)
+    queue_by_name(queue_name).delete_if do |job|
+      job[:klass] == klass.to_s && args.empty? || job[:args] == args
+    end
+  end
+
+  def enqueue(queue_name, klass, *args)
+    queue_by_name(queue_name) << { :klass => klass.to_s, :args => args }
+  end
+
   def queue_by_name(name)
     queues[name]
   end

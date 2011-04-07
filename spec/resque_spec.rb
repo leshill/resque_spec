@@ -8,6 +8,65 @@ describe ResqueSpec do
   let(:first_name) { 'Les' }
   let(:last_name) { 'Hill' }
 
+  describe "#dequeue" do
+    let(:klass) { Object }
+    let(:queue_name) { :queue_name }
+
+    context "given just a class" do
+      context "when the klass is queued" do
+        it "removes the klass from the queue" do
+          ResqueSpec.enqueue(queue_name, klass)
+          ResqueSpec.dequeue(queue_name, klass)
+          ResqueSpec.queue_by_name(queue_name).should_not include({ klass: klass, args: [] })
+        end
+      end
+
+      context "when the klass is not queued" do
+        it "does nothing" do
+          ResqueSpec.enqueue(queue_name, klass, first_name, last_name)
+
+          expect do
+            ResqueSpec.dequeue(queue_name, klass)
+          end.should_not change { ResqueSpec.queue_by_name(queue_name) }
+        end
+      end
+    end
+
+    context "given args" do
+      before { ResqueSpec.enqueue(queue_name, klass, first_name, last_name) }
+
+      context "when the klass and args are queued" do
+        it "removes the klass and args from the queue" do
+          ResqueSpec.dequeue(queue_name, klass, first_name, last_name)
+          ResqueSpec.queue_by_name(queue_name).should_not include({ klass: klass.to_s, args: [first_name, last_name] })
+        end
+      end
+
+      context "when the klass and args are not queued" do
+        it "does nothing" do
+          expect do
+            ResqueSpec.dequeue(queue_name, klass, first_name)
+          end.should_not change { ResqueSpec.queue_by_name(queue_name) }
+        end
+      end
+    end
+  end
+
+  describe "#enqueue" do
+    let(:klass) { Object }
+    let(:queue_name) { :queue_name }
+
+    it "queues the klass and args" do
+      ResqueSpec.enqueue(queue_name, klass, first_name, last_name)
+      ResqueSpec.queue_by_name(queue_name).should include({:klass => klass.to_s, :args => [first_name, last_name]})
+    end
+
+    it "queues the klass and an empty array" do
+      ResqueSpec.enqueue(queue_name, klass)
+      ResqueSpec.queue_by_name(queue_name).should include({:klass => klass.to_s, :args => []})
+    end
+  end
+
   describe "#queue_by_name" do
 
     it "has an empty array if nothing queued for a class" do

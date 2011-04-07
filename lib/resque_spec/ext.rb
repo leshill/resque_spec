@@ -5,7 +5,7 @@ module Resque
     def self.create(queue, klass, *args)
       raise ::Resque::NoQueueError.new("Jobs must be placed onto a queue.") if !queue
       raise ::Resque::NoClassError.new("Jobs must be given a class.") if klass.to_s.empty?
-      ResqueSpec.queues[queue] << {:klass => klass.to_s, :args => args}
+      ResqueSpec.enqueue(queue, klass, *args)
     end
 
     def self.destroy(queue, klass, *args)
@@ -14,11 +14,7 @@ module Resque
 
       old_count = ResqueSpec.queues[queue].size
 
-      if args.empty?
-        ResqueSpec.queues[queue].delete_if{ |job| job[:klass] == klass.to_s }
-      else
-        ResqueSpec.queues[queue].delete_if{ |job| job[:klass] == klass.to_s and job[:args].to_a == args.to_a }
-      end
+      ResqueSpec.dequeue(queue, klass, *args)
 
       old_count - ResqueSpec.queues[queue].size
     end

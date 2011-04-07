@@ -14,16 +14,16 @@ describe ResqueSpec do
 
     context "given just a class" do
       context "when the klass is queued" do
-        it "removes the klass from the queue" do
-          ResqueSpec.enqueue(queue_name, klass)
+        it "removes the klass items from the queue" do
+          ResqueSpec.enqueue(queue_name, klass, first_name, last_name)
           ResqueSpec.dequeue(queue_name, klass)
-          ResqueSpec.queue_by_name(queue_name).should_not include({ klass: klass, args: [] })
+          ResqueSpec.queue_by_name(queue_name).should_not include({ klass: klass.to_s, args: [first_name, last_name] })
         end
       end
 
       context "when the klass is not queued" do
         it "does nothing" do
-          ResqueSpec.enqueue(queue_name, klass, first_name, last_name)
+          ResqueSpec.enqueue(queue_name, String, first_name, last_name)
 
           expect do
             ResqueSpec.dequeue(queue_name, klass)

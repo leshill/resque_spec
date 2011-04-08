@@ -1,12 +1,14 @@
 ResqueSpec
 ==========
 
-A simple RSpec and Cucumber matcher for Resque.enqueue and Resque.enqueue_at (from `ResqueScheduler`), loosely based on
+A simple RSpec and Cucumber matcher for Resque.enqueue and Resque.enqueue_at
+(from `ResqueScheduler`), loosely based on
 [http://github.com/justinweiss/resque_unit](http://github.com/justinweiss/resque_unit).
 
-This should work with `Resque v1.6.0` and up and `RSpec v2.0.0.beta.12` and up.
+This should work with `Resque v1.15.0` and up and `RSpec v2.5.0` and up.
 
-If you are using `RSpec ~> 1.3.0`, you should use version `~> 0.2.0`.
+If you are using `RSpec ~> 1.3.0`, you should use version `~> 0.2.0`. This
+branch is not actively maintained.
 
 Install
 -------
@@ -172,6 +174,19 @@ Or I write this spec using the `with_resque` helper
       end
     end
 
+You can turn this behavior on by setting `ResqueSpec.inline = true`.
+
+Hooks
+-----
+
+Resque will call a hook method on your class after a Job is enqueued. Name your
+class method starting with the string `after_enqueue` (you can stop there if
+you want) and it will be called with the arguments to the Job after it has been
+placed on the queue. When you are using ResqueSpec, your `after_enqueue` hook
+will be called.
+
+The hooks around `perform` are not support by ResqueSpec (contributions welcome!)
+
 Note on Patches/Pull Requests
 =============================
 
@@ -186,4 +201,4 @@ Note on Patches/Pull Requests
 Copyright
 =========
 
-Copyright (c) 2010 Les Hill. See LICENSE for details.
+Copyright (c) 2010-2011 Les Hill. See LICENSE for details.

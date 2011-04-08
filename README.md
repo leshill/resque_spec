@@ -81,6 +81,8 @@ Then I write some code to make it pass:
 ResqueScheduler with Specs
 --------------------------
 
+To use with ResqueScheduler, add this require `require 'resque_spec/scheduler'`
+
 Given this scenario
 
     Given a person

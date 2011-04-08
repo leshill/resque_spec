@@ -1,5 +1,21 @@
 require 'spec_helper'
 
+class NameFromClassMethod
+  class << self
+    attr_accessor :invocations
+
+    def perform(*args)
+      self.invocations += 1
+    end
+
+    def queue
+      :queue_name
+    end
+  end
+
+  self.invocations = 0
+end
+
 describe ResqueSpec do
   before do
     ResqueSpec.reset!
@@ -64,6 +80,38 @@ describe ResqueSpec do
     it "queues the klass and an empty array" do
       ResqueSpec.enqueue(queue_name, klass)
       ResqueSpec.queue_by_name(queue_name).should include({:klass => klass.to_s, :args => []})
+    end
+  end
+
+  describe "#inline" do
+    context "when not set" do
+      before { ResqueSpec.inline = false }
+
+      it "does not perform the queued action" do
+        expect {
+          ResqueSpec.enqueue(:queue_name, NameFromClassMethod, 1)
+        }.should_not change(NameFromClassMethod, :invocations)
+      end
+
+      it "does not change the behavior of enqueue" do
+        ResqueSpec.enqueue(:queue_name, NameFromClassMethod, 1)
+        ResqueSpec.queue_by_name(:queue_name).should include({ klass: NameFromClassMethod.to_s, args: [1] })
+      end
+    end
+
+    context "when set" do
+      before { ResqueSpec.inline = true }
+
+      it "performs the queued action" do
+        expect {
+          ResqueSpec.enqueue(:queue_name, NameFromClassMethod, 1)
+        }.should change(NameFromClassMethod, :invocations).by(1)
+      end
+
+      it "does not enqueue" do
+        ResqueSpec.enqueue(:queue_name, NameFromClassMethod, 1)
+        ResqueSpec.queue_by_name(:queue_name).should be_empty
+      end
     end
   end
 

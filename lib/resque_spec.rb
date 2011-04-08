@@ -5,6 +5,8 @@ require 'resque_spec/matchers'
 module ResqueSpec
   extend self
 
+  attr_accessor :inline
+
   def dequeue(queue_name, klass, *args)
     queue_by_name(queue_name).delete_if do |job|
       job[:klass] == klass.to_s && args.empty? || job[:args] == args
@@ -12,7 +14,11 @@ module ResqueSpec
   end
 
   def enqueue(queue_name, klass, *args)
-    queue_by_name(queue_name) << { :klass => klass.to_s, :args => args }
+    if inline
+      klass.send(:perform, *args)
+    else
+      queue_by_name(queue_name) << { :klass => klass.to_s, :args => args }
+    end
   end
 
   def queue_by_name(name)

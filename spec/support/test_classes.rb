@@ -19,10 +19,22 @@ class NameFromInstanceVariable
 end
 
 class Person
-  def self.perform(first_name, last_name)
+  class << self
+    attr_accessor :enqueues, :invocations
+
+    def after_enqueue(*args)
+      self.enqueues += 1
+    end
+
+    def perform(first_name, last_name)
+      self.invocations += 1
+    end
+
+    def queue
+      :people
+    end
   end
 
-  def self.queue
-    :people
-  end
+  self.enqueues = 0
+  self.invocations = 0
 end

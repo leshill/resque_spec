@@ -17,22 +17,31 @@ describe "Resque Extensions" do
 
     describe "#enqueue" do
 
-      before do
-        Resque.enqueue(Person, first_name, last_name)
+      context "queues" do
+        before do
+          Resque.enqueue(Person, first_name, last_name)
+        end
+
+        it "adds to the queue hash" do
+          ResqueSpec.queue_for(Person).should_not be_empty
+        end
+
+        it "sets the klass on the queue" do
+          ResqueSpec.queue_for(Person).last.should include(:klass => Person.to_s)
+        end
+
+        it "sets the arguments on the queue" do
+          ResqueSpec.queue_for(Person).last.should include(:args => [first_name, last_name])
+        end
       end
 
-      it "adds to the queue hash" do
-        ResqueSpec.queue_for(Person).should_not be_empty
+      context "hooks" do
+        it "calls the after_enqueue hook" do
+          expect {
+            Resque.enqueue(Person, first_name, last_name)
+          }.to change(Person, :enqueues).by(1)
+        end
       end
-
-      it "sets the klass on the queue" do
-        ResqueSpec.queue_for(Person).last.should include(:klass => Person.to_s)
-      end
-
-      it "sets the arguments on the queue" do
-        ResqueSpec.queue_for(Person).last.should include(:args => [first_name, last_name])
-      end
-
     end
 
     describe "#dequeue" do

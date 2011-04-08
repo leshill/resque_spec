@@ -1,21 +1,5 @@
 require 'spec_helper'
 
-class NameFromClassMethod
-  class << self
-    attr_accessor :invocations
-
-    def perform(*args)
-      self.invocations += 1
-    end
-
-    def queue
-      :queue_name
-    end
-  end
-
-  self.invocations = 0
-end
-
 describe ResqueSpec do
   before do
     ResqueSpec.reset!
@@ -131,19 +115,19 @@ describe ResqueSpec do
   describe "#queue_for" do
     it "raises if there is no queue defined for a class" do
       expect do
-        ResqueSpec.queue_for(Address)
+        ResqueSpec.queue_for(String)
       end.should raise_error(::Resque::NoQueueError)
     end
 
     it "recognizes a queue defined as a class instance variable" do
       expect do
-        ResqueSpec.queue_for(Person)
+        ResqueSpec.queue_for(NameFromInstanceVariable)
       end.should_not raise_error(::Resque::NoQueueError)
     end
 
     it "recognizes a queue defined as a class method" do
       expect do
-        ResqueSpec.queue_for(Account)
+        ResqueSpec.queue_for(NameFromClassMethod)
       end.should_not raise_error(::Resque::NoQueueError)
     end
 
@@ -152,27 +136,27 @@ describe ResqueSpec do
   describe "#queue_name" do
     it "raises if there is no queue defined for a class" do
       expect do
-        ResqueSpec.queue_name(Address)
+        ResqueSpec.queue_name(String)
       end.should raise_error(::Resque::NoQueueError)
     end
 
     it "returns the queue name if there is a queue defined as an instance var" do
-      ResqueSpec.queue_name(Person).should == :people
+      ResqueSpec.queue_name(NameFromInstanceVariable).should == 'name_from_instance_variable'
     end
 
     it "returns the queue name for the name of the class" do
-      ResqueSpec.queue_name("Person").should == :people
+      ResqueSpec.queue_name("NameFromClassMethod").should == NameFromClassMethod.queue
     end
 
     it "returns the queue name if there is a queue defined via self.queue" do
-      ResqueSpec.queue_name(Account).should == :people
+      ResqueSpec.queue_name(NameFromClassMethod).should == NameFromClassMethod.queue
     end
 
   end
 
   describe "#reset!" do
     it "clears the queues" do
-      ResqueSpec.queue_for(Person) << 'queued'
+      ResqueSpec.queue_for(NameFromClassMethod) << 'queued'
       ResqueSpec.reset!
       ResqueSpec.queues.should be_empty
     end

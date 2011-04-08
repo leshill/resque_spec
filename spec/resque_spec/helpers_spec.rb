@@ -10,25 +10,25 @@ describe ResqueSpec::Helpers do
   describe "#with_resque" do
 
     it "performs job" do
-      Person.should_receive(:perform).with(1)
-      subject.with_resque { Resque.enqueue(Person, 1) }
+      NameFromClassMethod.should_receive(:perform).with(1)
+      subject.with_resque { Resque.enqueue(NameFromClassMethod, 1) }
     end
 
     it "does not add to the queue" do
-      subject.with_resque { Resque.enqueue(Person, 1) }
-      ResqueSpec.queue_for(Person).should be_empty
+      subject.with_resque { Resque.enqueue(NameFromClassMethod, 1) }
+      ResqueSpec.queue_for(NameFromClassMethod).should be_empty
     end
 
     it "only performs jobs in block" do
-      Person.should_receive(:perform).with(1).once
-      subject.with_resque { Resque.enqueue(Person, 1) }
-      Resque.enqueue(Person, 1)
+      NameFromClassMethod.should_receive(:perform).with(1).once
+      subject.with_resque { Resque.enqueue(NameFromClassMethod, 1) }
+      Resque.enqueue(NameFromClassMethod, 1)
     end
 
     it "only adds to queue outside of block" do
-      subject.with_resque { Resque.enqueue(Person, 1) }
-      Resque.enqueue(Person, 1)
-      ResqueSpec.queue_for(Person).should have(1).item
+      subject.with_resque { Resque.enqueue(NameFromClassMethod, 1) }
+      Resque.enqueue(NameFromClassMethod, 1)
+      ResqueSpec.queue_for(NameFromClassMethod).should have(1).item
     end
   end
 end

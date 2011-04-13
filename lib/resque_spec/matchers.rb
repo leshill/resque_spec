@@ -51,11 +51,11 @@ RSpec::Matchers.define :have_queue_size_of do |size|
   end
 
   failure_message_for_should do |actual|
-    "expected that #{actual} would have #{size} entries queued, but got #{@queue.size} instead"
+    "expected that #{actual} would have #{size} entries queued, but got #{queue(actual).size} instead"
   end
 
   failure_message_for_should_not do |actual|
-    "expected that #{actual} would not have #{size} entries queued, but got #{@queue..size} instead"
+    "expected that #{actual} would not have #{size} entries queued, but got #{queue(actual).size} instead"
   end
 
   description do

@@ -62,6 +62,16 @@ describe "ResqueSpec Matchers" do
   end
 
   describe "#have_queue_size_of" do
+    context "when nothing is queued" do
+      subject { Person }
+
+      it "raises the approrpiate exception" do
+        expect do
+          should have_queue_size_of(1)
+        end.to raise_error(RSpec::Expectations::ExpectationNotMetError)
+      end
+    end
+
     context "queued with a class" do
       before do
         Resque.enqueue(Person, first_name, last_name)

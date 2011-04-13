@@ -8,7 +8,11 @@ module ResqueSpec
 
   module SchedulerExt
     def enqueue_at(time, klass, *args)
-      ResqueSpec.schedule_for(klass) << {:klass => klass.to_s, :time  => time, :args => args}
+      if ResqueSpec.inline
+        klass.send(:perform, *args)
+      else
+        ResqueSpec.schedule_for(klass) << {:klass => klass.to_s, :time  => time, :args => args}
+      end
     end
   end
 end

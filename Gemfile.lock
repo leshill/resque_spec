@@ -8,10 +8,14 @@ PATH
 GEM
   remote: http://rubygems.org/
   specs:
+    archive-tar-minitar (0.5.2)
+    columnize (0.3.2)
     diff-lcs (1.1.2)
     json (1.4.6)
+    linecache19 (0.5.12)
+      ruby_core_source (>= 0.1.4)
     rack (1.2.2)
-    redis (2.1.1)
+    redis (2.2.0)
     redis-namespace (0.10.0)
       redis (< 3.0.0)
     resque (1.15.0)
@@ -27,7 +31,17 @@ GEM
     rspec-expectations (2.5.0)
       diff-lcs (~> 1.1.2)
     rspec-mocks (2.5.0)
-    sinatra (1.2.1)
+    ruby-debug-base19 (0.11.25)
+      columnize (>= 0.3.1)
+      linecache19 (>= 0.5.11)
+      ruby_core_source (>= 0.1.4)
+    ruby-debug19 (0.11.6)
+      columnize (>= 0.3.1)
+      linecache19 (>= 0.5.11)
+      ruby-debug-base19 (>= 0.11.19)
+    ruby_core_source (0.1.5)
+      archive-tar-minitar (>= 0.5.2)
+    sinatra (1.2.2)
       rack (~> 1.1)
       tilt (< 2.0, >= 1.2.2)
     tilt (1.2.2)
@@ -39,3 +53,4 @@ PLATFORMS
 
 DEPENDENCIES
   resque_spec!
+  ruby-debug19

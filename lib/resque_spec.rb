@@ -9,12 +9,12 @@ module ResqueSpec
 
   def dequeue(queue_name, klass, *args)
     queue_by_name(queue_name).delete_if do |job|
-      job[:klass] == klass.to_s && args.empty? || job[:args] == args
+      job[:class] == klass.to_s && args.empty? || job[:args] == args
     end
   end
 
   def enqueue(queue_name, klass, *args)
-    store(queue_name, klass, { :klass => klass.to_s, :args => args })
+    store(queue_name, klass, { :class => klass.to_s, :args => args })
   end
 
   def queue_by_name(name)

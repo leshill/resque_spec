@@ -56,7 +56,7 @@ describe ResqueSpec do
       end
 
       it "sets the klass on the queue" do
-        ResqueSpec.schedule_for(NameFromClassMethod).first.should include(:klass => NameFromClassMethod.to_s)
+        ResqueSpec.schedule_for(NameFromClassMethod).first.should include(:class => NameFromClassMethod.to_s)
       end
 
       it "sets the arguments on the queue" do

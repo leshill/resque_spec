@@ -17,7 +17,7 @@ describe ResqueSpec do
         it "removes the klass items from the queue" do
           ResqueSpec.enqueue(queue_name, klass, first_name, last_name)
           ResqueSpec.dequeue(queue_name, klass)
-          ResqueSpec.queue_by_name(queue_name).should_not include({ klass: klass.to_s, args: [first_name, last_name] })
+          ResqueSpec.queue_by_name(queue_name).should_not include({ class: klass.to_s, args: [first_name, last_name] })
         end
       end
 
@@ -38,7 +38,7 @@ describe ResqueSpec do
       context "when the klass and args are queued" do
         it "removes the klass and args from the queue" do
           ResqueSpec.dequeue(queue_name, klass, first_name, last_name)
-          ResqueSpec.queue_by_name(queue_name).should_not include({ klass: klass.to_s, args: [first_name, last_name] })
+          ResqueSpec.queue_by_name(queue_name).should_not include({ class: klass.to_s, args: [first_name, last_name] })
         end
       end
 
@@ -58,12 +58,12 @@ describe ResqueSpec do
 
     it "queues the klass and args" do
       ResqueSpec.enqueue(queue_name, klass, first_name, last_name)
-      ResqueSpec.queue_by_name(queue_name).should include({:klass => klass.to_s, :args => [first_name, last_name]})
+      ResqueSpec.queue_by_name(queue_name).should include({:class => klass.to_s, :args => [first_name, last_name]})
     end
 
     it "queues the klass and an empty array" do
       ResqueSpec.enqueue(queue_name, klass)
-      ResqueSpec.queue_by_name(queue_name).should include({:klass => klass.to_s, :args => []})
+      ResqueSpec.queue_by_name(queue_name).should include({:class => klass.to_s, :args => []})
     end
   end
 
@@ -79,7 +79,7 @@ describe ResqueSpec do
 
       it "does not change the behavior of enqueue" do
         ResqueSpec.enqueue(:queue_name, NameFromClassMethod, 1)
-        ResqueSpec.queue_by_name(:queue_name).should include({ klass: NameFromClassMethod.to_s, args: [1] })
+        ResqueSpec.queue_by_name(:queue_name).should include({ class: NameFromClassMethod.to_s, args: [1] })
       end
     end
 

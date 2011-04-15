@@ -27,7 +27,7 @@ describe "Resque Extensions" do
         end
 
         it "sets the klass on the queue" do
-          ResqueSpec.queue_for(Person).last.should include(:klass => Person.to_s)
+          ResqueSpec.queue_for(Person).last.should include(:class => Person.to_s)
         end
 
         it "sets the arguments on the queue" do
@@ -84,7 +84,7 @@ describe "Resque Extensions" do
       end
 
       it "sets the klass on the queue" do
-        ResqueSpec.queues[:people].last.should include(:klass => Person.to_s)
+        ResqueSpec.queues[:people].last.should include(:class => Person.to_s)
       end
 
       it "sets the arguments on the queue" do

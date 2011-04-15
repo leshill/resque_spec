@@ -1,19 +1,24 @@
 require 'resque_spec'
 
 module ResqueSpec
-  def schedule_for(klass)
-    name = "#{queue_name(klass)}_scheduled"
-    queues[name]
-  end
-
   module SchedulerExt
     def enqueue_at(time, klass, *args)
-      if ResqueSpec.inline
-        klass.send(:perform, *args)
-      else
-        ResqueSpec.schedule_for(klass) << {:klass => klass.to_s, :time  => time, :args => args}
-      end
+      ResqueSpec.enqueue_at(time, klass, *args)
     end
+  end
+
+  def enqueue_at(time, klass, *args)
+    store(schedule_queue_name(klass), klass, { :klass => klass.to_s, :time  => time, :args => args })
+  end
+
+  def schedule_for(klass)
+    queues[schedule_queue_name(klass)]
+  end
+
+  private
+
+  def schedule_queue_name(klass)
+    "#{queue_name(klass)}_scheduled"
   end
 end
 

@@ -14,11 +14,7 @@ module ResqueSpec
   end
 
   def enqueue(queue_name, klass, *args)
-    if inline
-      klass.send(:perform, *args)
-    else
-      queue_by_name(queue_name) << { :klass => klass.to_s, :args => args }
-    end
+    store(queue_name, klass, { :klass => klass.to_s, :args => args })
   end
 
   def queue_by_name(name)
@@ -55,6 +51,14 @@ module ResqueSpec
 
   def name_from_queue_accessor(klass)
     klass.respond_to?(:queue) and klass.queue
+  end
+
+  def store(queue_name, klass, payload)
+    if inline
+      klass.send(:perform, *payload[:args])
+    else
+      queue_by_name(queue_name) << payload
+    end
   end
 end
 

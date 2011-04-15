@@ -181,13 +181,8 @@ You can turn this behavior on by setting `ResqueSpec.inline = true`.
 Hooks
 -----
 
-Resque will call a hook method on your class after a Job is enqueued. Name your
-class method starting with the string `after_enqueue` (you can stop there if
-you want) and it will be called with the arguments to the Job after it has been
-placed on the queue. When you are using ResqueSpec, your `after_enqueue` hook
-will be called.
-
-The hooks around `perform` are not support by ResqueSpec (contributions welcome!)
+Resque will call a hook method on your class after a Job is enqueued; before, around, and after your Job is performed; and on failure.
+ResqueSpec will fire all of these hooks if you are using `with_resque` or set `ResqueSpec.inline = true`.
 
 Note on Patches/Pull Requests
 =============================

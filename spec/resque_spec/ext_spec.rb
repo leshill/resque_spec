@@ -41,6 +41,34 @@ describe "Resque Extensions" do
             Resque.enqueue(Person, first_name, last_name)
           }.to change(Person, :enqueues).by(1)
         end
+
+        context "when inline" do
+          it "calls the before_perform hook" do
+            expect {
+              with_resque { Resque.enqueue(Person, first_name, last_name) }
+            }.to change(Person, :befores).by(1)
+          end
+
+          it "calls the around_perform hook" do
+            expect {
+              with_resque { Resque.enqueue(Person, first_name, last_name) }
+            }.to change(Person, :befores).by(1)
+          end
+
+          it "calls the after_perform hook" do
+            expect {
+              with_resque { Resque.enqueue(Person, first_name, last_name) }
+            }.to change(Person, :befores).by(1)
+          end
+
+          context "a failure occurs" do
+            it "calls the on_failure hook" do
+              expect {
+                with_resque { Resque.enqueue(Place, last_name) } rescue nil
+              }.to change(Place.failures, :size).by(1)
+            end
+          end
+        end
       end
     end
 

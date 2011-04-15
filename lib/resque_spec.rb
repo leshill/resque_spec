@@ -55,10 +55,17 @@ module ResqueSpec
 
   def store(queue_name, klass, payload)
     if inline
-      klass.send(:perform, *payload[:args])
+      Resque::Job.new(queue_name, payload_with_string_keys(payload)).perform
     else
       queue_by_name(queue_name) << payload
     end
+  end
+
+  def payload_with_string_keys(payload)
+    {
+      'class' => payload[:class],
+      'args' => payload[:args]
+    }
   end
 end
 

@@ -5,6 +5,8 @@ A simple RSpec and Cucumber matcher for Resque.enqueue and Resque.enqueue_at
 (from `ResqueScheduler`), loosely based on
 [http://github.com/justinweiss/resque_unit](http://github.com/justinweiss/resque_unit).
 
+ResqueSpec will also fire Resque hooks if you are using them. See below.
+
 This should work with `Resque v1.15.0` and up and `RSpec v2.5.0` and up.
 
 If you are using `RSpec ~> 1.3.0`, you should use version `~> 0.2.0`. This
@@ -181,8 +183,14 @@ You can turn this behavior on by setting `ResqueSpec.inline = true`.
 Hooks
 -----
 
-Resque will call a hook method on your class after a Job is enqueued; before, around, and after your Job is performed; and on failure.
-ResqueSpec will fire all of these hooks if you are using `with_resque` or set `ResqueSpec.inline = true`.
+Resque provides hooks at different points of the queueing lifecylce.  ResqueSpec fires these hooks when appropriate.
+
+The after enqueue hook is always called when you use `Resque#enqueue`.
+
+The `perform` hooks: before, around, after, and on failure are fired by
+ResqueSpec if you are using the `with_resque` helper or set `ResqueSpec.inline = true`.
+
+Important! `Resque#enqueue_at` does not fire the after enqueue hook (the job has not been queued yet!), but will fire the `perform` hooks if you are using `inline` mode.
 
 Note on Patches/Pull Requests
 =============================

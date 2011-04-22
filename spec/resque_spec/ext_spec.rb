@@ -43,6 +43,13 @@ describe "Resque Extensions" do
         end
 
         context "when inline" do
+          it "calls the after_enqueue hook before performing" do
+            HookOrder.reset!
+            expect {
+              with_resque { Resque.enqueue(HookOrder, 1) }
+            }.should_not raise_error
+          end
+
           it "calls the before_perform hook" do
             expect {
               with_resque { Resque.enqueue(Person, first_name, last_name) }

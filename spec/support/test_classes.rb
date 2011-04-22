@@ -1,3 +1,25 @@
+class HookOrder
+  class << self
+    attr_accessor :invoked
+
+    def after_enqueue(*args)
+      raise "Enqueue called after perform!" if invoked
+    end
+
+    def perform(*args)
+      self.invoked = true
+    end
+
+    def queue
+      :hook_order
+    end
+
+    def reset!
+      self.invoked = nil
+    end
+  end
+end
+
 class NameFromClassMethod
   class << self
     attr_accessor :invocations

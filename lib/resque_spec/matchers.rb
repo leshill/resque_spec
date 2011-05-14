@@ -69,11 +69,11 @@ RSpec::Matchers.define :have_scheduled do |*expected_args|
   end
 
   failure_message_for_should do |actual|
-    "expected that #{actual} would have [#{expected_args.join(', ')}] queued"
+    "expected that #{actual} would have [#{expected_args.join(', ')}] scheduled"
   end
 
   failure_message_for_should_not do |actual|
-    "expected that #{actual} would not have [#{expected_args.join(', ')}] queued"
+    "expected that #{actual} would not have [#{expected_args.join(', ')}] scheduled"
   end
 
   description do
@@ -89,11 +89,11 @@ RSpec::Matchers.define :have_scheduled_at do |*expected_args|
   end
 
   failure_message_for_should do |actual|
-    "expected that #{actual} would have [#{expected_args.join(', ')}] queued"
+    "expected that #{actual} would have [#{expected_args.join(', ')}] scheduled"
   end
 
   failure_message_for_should_not do |actual|
-    "expected that #{actual} would not have [#{expected_args.join(', ')}] queued"
+    "expected that #{actual} would not have [#{expected_args.join(', ')}] scheduled"
   end
 
   description do

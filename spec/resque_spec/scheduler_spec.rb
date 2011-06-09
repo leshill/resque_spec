@@ -9,6 +9,7 @@ describe ResqueSpec do
   let(:first_name) { 'Les' }
   let(:last_name) { 'Hill' }
   let(:scheduled_at) { Time.now + 5 * 60 }
+  let(:scheduled_in) { 5 * 60 }
 
   describe "#schedule_for" do
     it "raises if there is no schedule queue defined for a class" do
@@ -67,6 +68,29 @@ describe ResqueSpec do
         ResqueSpec.schedule_for(NameFromClassMethod).first.should include(:time => scheduled_at)
       end
 
+    end
+    
+    describe "#enqueue_in" do
+      before do
+        Timecop.freeze(Time.now)
+        Resque.enqueue_in(scheduled_in, NameFromClassMethod, 1)
+      end
+
+      after do
+        Timecop.return
+      end
+
+      it "adds to the scheduled queue hash" do
+        ResqueSpec.schedule_for(NameFromClassMethod).should_not be_empty
+      end
+
+      it "sets the klass on the queue" do
+        ResqueSpec.schedule_for(NameFromClassMethod).first.should include(:class => NameFromClassMethod.to_s)
+      end
+
+      it "sets the arguments on the queue" do
+        ResqueSpec.schedule_for(NameFromClassMethod).first.should include(:time => Time.now + scheduled_in)
+      end
     end
   end
 end

@@ -1,7 +1,8 @@
 ResqueSpec
 ==========
 
-A simple RSpec and Cucumber matcher for Resque.enqueue and Resque.enqueue_at/enqueue_in (from `ResqueScheduler`), loosely based on
+A simple RSpec and Cucumber matcher for Resque.enqueue and
+Resque.enqueue_at/enqueue_in (from `ResqueScheduler`), loosely based on
 [http://github.com/justinweiss/resque_unit](http://github.com/justinweiss/resque_unit).
 
 ResqueSpec will also fire Resque hooks if you are using them. See below.

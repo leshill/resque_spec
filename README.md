@@ -145,8 +145,13 @@ Performing Jobs in Specs
 ------------------------
 
 Normally, Resque does not perform queued jobs within tests. You may want to
-make assertions based on the result of your jobs. To process jobs immediately,
-you can pass a block to the `with_resque` helper:
+make assertions based on the result of your jobs. ResqueSpec can process jobs
+immediately as they are queued or under your control.
+
+Performing jobs immediately
+===========================
+
+To perform jobs immediately, you can pass a block to the `with_resque` helper:
 
 Given this scenario
 
@@ -179,6 +184,26 @@ Or I write this spec using the `with_resque` helper
     end
 
 You can turn this behavior on by setting `ResqueSpec.inline = true`.
+
+Performing jobs at your discretion
+===================================
+
+You can perform the first job on a queue at a time, or perform all the jobs on
+a queue.  Use `ResqueSpec#perform_next(queue_name)` or
+`ResqueSpec#perform_all(queue_name)`
+
+Given this scenario:
+
+    Given a game
+    When I score
+    And the score queue runs
+    Then the game has a score
+
+I might write this as a Cucumber step
+
+    When /the (\w+) queue runs/ do |queue_name|
+      ResqueSpec.perform_all(queue_name)
+    end
 
 Hooks
 -----

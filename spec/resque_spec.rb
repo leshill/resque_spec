@@ -160,5 +160,12 @@ describe ResqueSpec do
       ResqueSpec.reset!
       ResqueSpec.queues.should be_empty
     end
+
+    it "resets the inline status" do
+      ResqueSpec.inline = true
+      ResqueSpec.reset!
+      ResqueSpec.inline.should be_false
+    end
   end
+
 end

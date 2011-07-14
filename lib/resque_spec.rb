@@ -41,6 +41,7 @@ module ResqueSpec
 
   def reset!
     queues.clear
+    self.inline = false
   end
 
   private

@@ -17,6 +17,17 @@ module ResqueSpec
     store(queue_name, klass, { :class => klass.to_s, :args => args })
   end
 
+  def perform_next(queue_name)
+    perform(queue_name, queue_by_name(queue_name).shift)
+  end
+
+  def perform_all(queue_name)
+    queue = queue_by_name(queue_name)
+    until queue.empty?
+      perform(queue_name, queue.shift)
+    end
+  end
+
   def queue_by_name(name)
     queues[name]
   end
@@ -54,9 +65,13 @@ module ResqueSpec
     klass.respond_to?(:queue) and klass.queue
   end
 
+  def perform(queue_name, payload)
+    Resque::Job.new(queue_name, payload_with_string_keys(payload)).perform
+  end
+
   def store(queue_name, klass, payload)
     if inline
-      Resque::Job.new(queue_name, payload_with_string_keys(payload)).perform
+      perform(queue_name, payload)
     else
       queue_by_name(queue_name) << payload
     end

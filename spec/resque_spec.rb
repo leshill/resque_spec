@@ -99,6 +99,42 @@ describe ResqueSpec do
     end
   end
 
+  describe "#perform_all" do
+    before do
+      ResqueSpec.enqueue(:queue_name, NameFromClassMethod, 1)
+      ResqueSpec.enqueue(:queue_name, NameFromClassMethod, 2)
+      ResqueSpec.enqueue(:queue_name, NameFromClassMethod, 3)
+    end
+
+    it "performs the enqueued job" do
+      expect {
+        ResqueSpec.perform_all(:queue_name)
+      }.should change(NameFromClassMethod, :invocations).by(3)
+    end
+
+    it "removes all items from the queue" do
+      expect {
+        ResqueSpec.perform_all(:queue_name)
+      }.should change { ResqueSpec.queue_by_name(:queue_name).empty? }.from(false).to(true)
+    end
+  end
+
+  describe "#perform_next" do
+    before { 3.times {|i| ResqueSpec.enqueue(:queue_name, NameFromClassMethod, i) }}
+
+    it "performs the enqueued job" do
+      expect {
+        ResqueSpec.perform_next(:queue_name)
+      }.should change(NameFromClassMethod, :invocations).by(1)
+    end
+
+    it "removes an item from the queue" do
+      expect {
+        ResqueSpec.perform_next(:queue_name)
+      }.should change { ResqueSpec.queue_by_name(:queue_name).size }.by(-1)
+    end
+  end
+
   describe "#queue_by_name" do
 
     it "has an empty array if nothing queued for a class" do

@@ -27,7 +27,7 @@ your app's gem management)
     end
 
 Resque with Specs
------------------
+=================
 
 Given this scenario
 
@@ -81,7 +81,7 @@ Then I write some code to make it pass:
     end
 
 ResqueScheduler with Specs
---------------------------
+==========================
 
 To use with ResqueScheduler, add this require `require 'resque_spec/scheduler'`
 
@@ -126,7 +126,7 @@ Then I write some code to make it pass:
     end
 
 Queue Size Specs
-----------------
+================
 
 You can check the size of the queue in your specs too.
 
@@ -142,14 +142,14 @@ You can check the size of the queue in your specs too.
     end
 
 Performing Jobs in Specs
-------------------------
+========================
 
 Normally, Resque does not perform queued jobs within tests. You may want to
 make assertions based on the result of your jobs. ResqueSpec can process jobs
 immediately as they are queued or under your control.
 
 Performing jobs immediately
-===========================
+---------------------------
 
 To perform jobs immediately, you can pass a block to the `with_resque` helper:
 
@@ -186,7 +186,7 @@ Or I write this spec using the `with_resque` helper
 You can turn this behavior on by setting `ResqueSpec.inline = true`.
 
 Performing jobs at your discretion
-===================================
+----------------------------------
 
 You can perform the first job on a queue at a time, or perform all the jobs on
 a queue.  Use `ResqueSpec#perform_next(queue_name)` or
@@ -206,7 +206,7 @@ I might write this as a Cucumber step
     end
 
 Hooks
------
+=====
 
 Resque provides hooks at different points of the queueing lifecylce.  ResqueSpec fires these hooks when appropriate.
 

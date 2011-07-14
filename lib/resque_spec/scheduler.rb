@@ -12,7 +12,7 @@ module ResqueSpec
   end
 
   def enqueue_at(time, klass, *args)
-    store(schedule_queue_name(klass), klass, { :class => klass.to_s, :time  => time, :args => args })
+    store(schedule_queue_name(klass), :class => klass.to_s, :time  => time, :args => args)
   end
 
   def enqueue_in(time, klass, *args)

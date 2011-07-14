@@ -14,7 +14,7 @@ module ResqueSpec
   end
 
   def enqueue(queue_name, klass, *args)
-    store(queue_name, klass, { :class => klass.to_s, :args => args })
+    store(queue_name, :class => klass.to_s, :args => args)
   end
 
   def perform_next(queue_name)
@@ -69,7 +69,7 @@ module ResqueSpec
     Resque::Job.new(queue_name, payload_with_string_keys(payload)).perform
   end
 
-  def store(queue_name, klass, payload)
+  def store(queue_name, payload)
     if inline
       perform(queue_name, payload)
     else

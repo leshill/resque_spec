@@ -85,7 +85,7 @@ RSpec::Matchers.define :have_scheduled_at do |*expected_args|
   match do |actual|
     time = expected_args.first
     other_args = expected_args[1..-1]
-    ResqueSpec.schedule_for(actual).any? { |entry| entry[:class].to_s == actual.to_s && entry[:time] == time && entry[:args] == other_args }
+    ResqueSpec.schedule_for(actual).any? { |entry| entry[:class].to_s == actual.to_s && compare_numeric_time(entry[:time], time) && entry[:args] == other_args }
   end
 
   failure_message_for_should do |actual|
@@ -98,5 +98,9 @@ RSpec::Matchers.define :have_scheduled_at do |*expected_args|
 
   description do
     "have scheduled at the given time the arguments"
+  end
+  
+  def compare_numeric_time(time, time2)
+    Time.at(time.hour * 60 * 60 + time.min * 60 + time.sec) == Time.at(time2.hour * 60 * 60 + time2.min * 60 + time2.sec)
   end
 end

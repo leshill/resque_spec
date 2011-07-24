@@ -92,5 +92,35 @@ describe ResqueSpec do
         ResqueSpec.schedule_for(NameFromClassMethod).first.should include(:time => Time.now + scheduled_in)
       end
     end
+    
+    describe "#remove_delayed" do
+      describe "with #enqueue_at" do
+        before do
+          Resque.enqueue_at(scheduled_at, NameFromClassMethod, 1)
+        end
+      
+        it "should remove a scheduled item from the queue" do
+          Resque.remove_delayed(NameFromClassMethod, 1)
+          ResqueSpec.schedule_for(NameFromClassMethod).should be_empty
+        end        
+      end
+      
+      describe "with #enqueue_in" do
+        before do
+          Timecop.freeze(Time.now)
+          Resque.enqueue_in(scheduled_in, NameFromClassMethod, 1)
+        end
+        
+        after do
+          Timecop.return
+        end
+        
+        it "should remove a scheduled item from the queue" do
+          Resque.remove_delayed(NameFromClassMethod, 1)
+          ResqueSpec.schedule_for(NameFromClassMethod).should be_empty
+        end        
+      end
+      
+    end
   end
 end

@@ -15,7 +15,7 @@ branch is not actively maintained.
 Install
 -------
 
-Update your Gemfile to include resque_spec only in the _test_ group (Not using
+Update your Gemfile to include `resque_spec` only in the *test* group (Not using
 `bundler`? Do the necessary thing for your app's gem management and use
 `bundler`. `resque_spec` is a mock API, it should only be used with your tests!)
 

@@ -15,12 +15,9 @@ branch is not actively maintained.
 Install
 -------
 
-Install the gem
-
-    % gem install resque_spec
-
-And update your Gemfile (Not using bundler? Do the necessary thing for
-your app's gem management)
+Update your Gemfile to include resque_spec only in the _test_ group (Not using
+`bundler`? Do the necessary thing for your app's gem management and use
+`bundler`. `resque_spec` is a mock API, it should only be used with your tests!)
 
     group :test do
       gem 'resque_spec'

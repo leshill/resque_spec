@@ -77,6 +77,16 @@ Then I write some code to make it pass:
       end
     end
 
+ResqueMailer with Specs
+=======================
+
+To use with [ResqueMailer](https://github.com/zapnap/resque_mailer) you should
+have an initializer that does *not* exclude the `test` (or `cucumber`)
+environment. Your initializer will probably end up looking like:
+
+    # config/initializers/resque_mailer.rb
+    Resque::Mailer.excluded_environments = []
+
 ResqueScheduler with Specs
 ==========================
 

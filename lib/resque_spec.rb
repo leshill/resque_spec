@@ -29,7 +29,7 @@ module ResqueSpec
   end
 
   def queue_by_name(name)
-    queues[name]
+    queues[name.to_s]
   end
 
   def queue_for(klass)

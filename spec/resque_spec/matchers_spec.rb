@@ -117,6 +117,10 @@ describe "ResqueSpec Matchers" do
     context "with #in(queue_name)" do
       it { should have_queue_size_of(1).in(:people) }
     end
+
+    context "with #in('queue_name')" do
+      it { should have_queue_size_of(1).in('people') }
+    end
   end
 
   describe "#have_scheduled_at" do

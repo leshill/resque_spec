@@ -141,6 +141,11 @@ describe ResqueSpec do
       ResqueSpec.queue_by_name(:my_queue).should == []
     end
 
+    it "converts symbol names to strings" do
+      ResqueSpec.queue_by_name(:my_queue) << 'queued'
+      ResqueSpec.queues['my_queue'].should_not be_empty
+    end
+
     it "allows additions" do
       ResqueSpec.queue_by_name(:my_queue) << 'queued'
       ResqueSpec.queue_by_name(:my_queue).should_not be_empty

@@ -115,15 +115,15 @@ describe "Resque Extensions" do
       end
 
       it "adds to the queue hash" do
-        ResqueSpec.queues[:people].should_not be_empty
+        ResqueSpec.queue_by_name(:people).should_not be_empty
       end
 
       it "sets the klass on the queue" do
-        ResqueSpec.queues[:people].last.should include(:class => Person.to_s)
+        ResqueSpec.queue_by_name(:people).last.should include(:class => Person.to_s)
       end
 
       it "sets the arguments on the queue" do
-        ResqueSpec.queues[:people].last.should include(:args => [first_name, last_name])
+        ResqueSpec.queue_by_name(:people).last.should include(:args => [first_name, last_name])
       end
     end
 

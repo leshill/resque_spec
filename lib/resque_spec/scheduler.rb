@@ -30,7 +30,7 @@ module ResqueSpec
   end
 
   def schedule_for(klass)
-    queues[schedule_queue_name(klass)]
+    queue_by_name(schedule_queue_name(klass))
   end
 
   private

@@ -12,11 +12,11 @@ module Resque
       raise ::Resque::NoQueueError.new("Jobs must have been placed onto a queue.") if !queue
       raise ::Resque::NoClassError.new("Jobs must have been given a class.") if klass.to_s.empty?
 
-      old_count = ResqueSpec.queues[queue].size
+      old_count = ResqueSpec.queue_by_name(queue).size
 
       ResqueSpec.dequeue(queue, klass, *args)
 
-      old_count - ResqueSpec.queues[queue].size
+      old_count - ResqueSpec.queue_by_name(queue).size
     end
   end
 

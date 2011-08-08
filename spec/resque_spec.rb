@@ -187,7 +187,6 @@ describe ResqueSpec do
     it "returns the queue name if there is a queue defined via self.queue" do
       ResqueSpec.queue_name(NameFromClassMethod).should == NameFromClassMethod.queue
     end
-
   end
 
   describe "#reset!" do

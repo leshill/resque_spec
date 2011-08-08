@@ -9,7 +9,7 @@ module ResqueSpec
     def enqueue_in(time, klass, *args)
       ResqueSpec.enqueue_in(time, klass, *args)
     end
-    
+
     def remove_delayed(klass, *args)
       ResqueSpec.remove_delayed(klass, *args)
     end
@@ -22,13 +22,13 @@ module ResqueSpec
   def enqueue_in(time, klass, *args)
     enqueue_at(Time.now + time, klass, *args)
   end
-  
+
   def remove_delayed(klass, *args)
     queue_by_name(schedule_queue_name(klass)).delete_if do |job|
       job[:class] == klass.to_s && job[:args] == args
     end
   end
-  
+
   def schedule_for(klass)
     queues[schedule_queue_name(klass)]
   end

@@ -1,4 +1,5 @@
 require 'resque'
+require 'spec'
 
 module ResqueSpec
   extend self

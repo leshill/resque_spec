@@ -248,6 +248,7 @@ Contributors
 * James Conroy-Finn (@jcf)           : spec fix
 * Dennis Walters    (@ess)           : enqueue_in support
 *                   (@RipTheJacker)  : remove_delayed support
+* Kurt Werle        (@kwerle)        : explicit require spec for v020
 
 Copyright
 =========

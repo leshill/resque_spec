@@ -17,7 +17,8 @@ describe ResqueSpec do
         it "removes the klass items from the queue" do
           ResqueSpec.enqueue(queue_name, klass, first_name, last_name)
           ResqueSpec.dequeue(queue_name, klass)
-          ResqueSpec.queue_by_name(queue_name).should_not include({ class: klass.to_s, args: [first_name, last_name] })
+          # if we avoid the sexy new key: value stuff, we can remain 1.8.x compatible
+          ResqueSpec.queue_by_name(queue_name).should_not include({ :class => klass.to_s, :args => [first_name, last_name] })
         end
       end
 
@@ -38,7 +39,7 @@ describe ResqueSpec do
       context "when the klass and args are queued" do
         it "removes the klass and args from the queue" do
           ResqueSpec.dequeue(queue_name, klass, first_name, last_name)
-          ResqueSpec.queue_by_name(queue_name).should_not include({ class: klass.to_s, args: [first_name, last_name] })
+          ResqueSpec.queue_by_name(queue_name).should_not include({ :class => klass.to_s, :args => [first_name, last_name] })
         end
       end
 
@@ -79,7 +80,7 @@ describe ResqueSpec do
 
       it "does not change the behavior of enqueue" do
         ResqueSpec.enqueue(:queue_name, NameFromClassMethod, 1)
-        ResqueSpec.queue_by_name(:queue_name).should include({ class: NameFromClassMethod.to_s, args: [1] })
+        ResqueSpec.queue_by_name(:queue_name).should include({ :class => NameFromClassMethod.to_s, :args => [1] })
       end
     end
 

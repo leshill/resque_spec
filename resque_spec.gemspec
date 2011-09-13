@@ -18,9 +18,14 @@ Gem::Specification.new do |s|
 
   s.files = Dir.glob("lib/**/*") + %w(LICENSE README.md Rakefile)
 
+  # s.add_runtime_dependency('resque', ['>= 1.15.0'])
   s.add_runtime_dependency('resque', ['>= 1.15.0'])
-  s.add_runtime_dependency('rspec', ['>= 2.5.0'])
-  s.add_development_dependency('ruby-debug19')
+  s.add_runtime_dependency('rspec')
+  if RUBY_VERSION.match /1\.9/
+    s.add_development_dependency('ruby-debug19')
+  else
+    s.add_development_dependency('ruby-debug')    
+  end
   s.add_development_dependency('timecop')
 end
 

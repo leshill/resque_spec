@@ -89,7 +89,11 @@ module ResqueSpec
   end
 end
 
-config = RSpec.configuration
-config.include ResqueSpec::Helpers
+if defined? RSpec
+  config = RSpec.configuration
+  config.include ResqueSpec::Helpers
+else
+  Spec::Runner.configuration.include ResqueSpec::Helpers
+end
 
 World(ResqueSpec::Helpers) if defined?(World)

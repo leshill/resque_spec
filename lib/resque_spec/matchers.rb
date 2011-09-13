@@ -1,4 +1,12 @@
-require 'rspec'
+rspec_or_spec = nil
+begin
+  require 'spec'
+  rspec_or_spec = Spec
+rescue NameError, LoadError => e
+  require 'rspec'
+  rspec_or_spec = RSpec
+end
+
 
 module InQueueHelper
   def self.extended(klass)
@@ -23,7 +31,7 @@ module InQueueHelper
 
 end
 
-RSpec::Matchers.define :have_queued do |*expected_args|
+rspec_or_spec::Matchers.define :have_queued do |*expected_args|
   extend InQueueHelper
 
   match do |actual|
@@ -43,7 +51,7 @@ RSpec::Matchers.define :have_queued do |*expected_args|
   end
 end
 
-RSpec::Matchers.define :have_queue_size_of do |size|
+rspec_or_spec::Matchers.define :have_queue_size_of do |size|
   extend InQueueHelper
 
   match do |actual|
@@ -63,7 +71,7 @@ RSpec::Matchers.define :have_queue_size_of do |size|
   end
 end
 
-RSpec::Matchers.define :have_scheduled do |*expected_args|
+rspec_or_spec::Matchers.define :have_scheduled do |*expected_args|
   match do |actual|
     ResqueSpec.schedule_for(actual).any? { |entry| entry[:class].to_s == actual.to_s && entry[:args] == expected_args }
   end
@@ -81,7 +89,7 @@ RSpec::Matchers.define :have_scheduled do |*expected_args|
   end
 end
 
-RSpec::Matchers.define :have_scheduled_at do |*expected_args|
+rspec_or_spec::Matchers.define :have_scheduled_at do |*expected_args|
   match do |actual|
     time = expected_args.first
     other_args = expected_args[1..-1]

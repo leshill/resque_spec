@@ -66,9 +66,10 @@ describe "ResqueSpec Matchers" do
       subject { Person }
 
       it "raises the approrpiate exception" do
+        spec_or_rspec = (defined? RSpec) ? RSpec : Spec
         expect do
           should have_queue_size_of(1)
-        end.to raise_error(RSpec::Expectations::ExpectationNotMetError)
+        end.to raise_error(spec_or_rspec::Expectations::ExpectationNotMetError)
       end
     end
 

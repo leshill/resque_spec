@@ -25,6 +25,7 @@ module Resque
       run_after_enqueue(klass, *args)
       Job.create(queue_from_class(klass), klass, *args)
     else
+      return if run_before_enqueue(klass, *args)
       Job.create(queue_from_class(klass), klass, *args)
       run_after_enqueue(klass, *args)
     end
@@ -32,9 +33,16 @@ module Resque
 
   private
 
-  def run_after_enqueue(klass, *args)
-    Plugin.after_enqueue_hooks(klass).each do |hook|
-      klass.send(hook, *args)
+    def run_after_enqueue(klass, *args)
+      Plugin.after_enqueue_hooks(klass).each do |hook|
+        klass.send(hook, *args)
+      end
     end
-  end
+
+    def run_before_enqueue(klass, *args)
+      before_hooks = Plugin.before_enqueue_hooks(klass).collect do |hook|
+        klass.send(hook, *args)
+      end
+      before_hooks.any? { |result| result == false }
+    end
 end

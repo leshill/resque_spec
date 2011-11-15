@@ -42,12 +42,42 @@ describe "Resque Extensions" do
           }.to change(Person, :enqueues).by(1)
         end
 
+        it "calls the before_enqueue hook" do
+          expect {
+            Resque.enqueue(Person, first_name, last_name)
+          }.to change(Person, :before_enq).by(1)
+        end
+
+        context "a before enqueue hook returns false" do
+          before do
+            Person.stub(:before_enqueue).and_return(false)
+          end
+
+          it "should not call the after_enqueue hook" do
+            expect {
+              Resque.enqueue(Person, first_name, last_name)
+            }.not_to change(Person, :enqueues)
+          end
+
+          it "should not call create" do
+            ResqueSpec.reset!
+            Resque.enqueue(Person, first_name, last_name)
+            ResqueSpec.queue_for(Person).count.should == 0
+          end
+        end
+
         context "when inline" do
           it "calls the after_enqueue hook before performing" do
             HookOrder.reset!
             expect {
               with_resque { Resque.enqueue(HookOrder, 1) }
             }.should_not raise_error
+          end
+
+          it "does not call the before_enqueue hook" do
+            expect {
+              with_resque { Resque.enqueue(Person, first_name, last_name) }
+            }.not_to change(Person, :before_enq)
           end
 
           it "calls the before_perform hook" do

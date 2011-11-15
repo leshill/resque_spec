@@ -42,7 +42,7 @@ end
 
 class Person
   class << self
-    attr_accessor :afters, :arounds, :befores, :enqueues, :invocations
+    attr_accessor :afters, :arounds, :befores, :enqueues, :invocations, :before_enq
 
     def after_enqueue(*args)
       self.enqueues += 1
@@ -55,6 +55,10 @@ class Person
     def around_perform(*args)
       self.arounds += 1
       yield *args
+    end
+
+    def before_enqueue(*args)
+      self.before_enq += 1
     end
 
     def before_perform(*args)
@@ -83,6 +87,7 @@ class Person
   self.befores = 0
   self.enqueues = 0
   self.invocations = 0
+  self.before_enq = 0
 end
 
 class Place

@@ -28,6 +28,11 @@ module ResqueSpec
     end
   end
 
+  def pop(queue_name)
+    return unless payload = queue_by_name(queue_name).shift
+    new_job(queue_name, payload)
+  end
+
   def queue_by_name(name)
     queues[name.to_s]
   end
@@ -65,8 +70,12 @@ module ResqueSpec
     klass.respond_to?(:queue) and klass.queue
   end
 
+  def new_job(queue_name, payload)
+    Resque::Job.new(queue_name, payload_with_string_keys(payload))
+  end
+
   def perform(queue_name, payload)
-    Resque::Job.new(queue_name, payload_with_string_keys(payload)).perform
+    new_job(queue_name, payload).perform
   end
 
   def perform_or_store(queue_name, payload)

@@ -175,6 +175,43 @@ describe "Resque Extensions" do
         end
       end
     end
+
+    describe "#reserve" do
+
+      subject { Resque.reserve(queue_name) }
+
+      context "given an invalid queue" do
+        let(:queue_name) { :not_a_queue }
+
+        it { should be_nil }
+      end
+
+      context "given a valid queue" do
+        before do
+          Resque.enqueue(Person, 'Dutch', 'Schaefer')
+        end
+
+        let(:queue_name) { Person.queue }
+
+        context "and no jobs" do
+          before do
+            Resque.dequeue(Person)
+          end
+
+          it { should be_nil }
+        end
+
+        context "and at least one job" do
+          it { should be_kind_of(Resque::Job) }
+
+          it "reduced the size of the queue" do
+            expect do
+              subject
+            end.to change(ResqueSpec.queue_for(Person), :count).by(-1)
+          end
+        end
+      end
+    end
   end
 
   describe Resque::Job do

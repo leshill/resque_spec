@@ -36,6 +36,10 @@ module Resque
     end
   end
 
+  def reserve(queue_name)
+    ResqueSpec.pop(queue_name)
+  end
+
   private
 
   def run_after_enqueue(klass, *args)

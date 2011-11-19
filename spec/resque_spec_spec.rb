@@ -194,6 +194,25 @@ describe ResqueSpec do
     end
   end
 
+  describe "#pop" do
+    subject { ResqueSpec.pop(:queue_name) }
+
+    context "when the queue is empty" do
+      it { should be_nil }
+    end
+
+    context "when the queue has at least one job" do
+      before { 3.times {|i| ResqueSpec.enqueue(:queue_name, NameFromClassMethod, i) }}
+
+      it { should be_kind_of(Resque::Job) }
+
+      it "removes the first item from the queue" do
+        subject
+        ResqueSpec.queue_by_name(:queue_name).map {|h| h[:args] }.flatten.should_not include(0)
+      end
+    end
+  end
+
   describe "#reset!" do
     it "clears the queues" do
       ResqueSpec.queue_for(NameFromClassMethod) << 'queued'

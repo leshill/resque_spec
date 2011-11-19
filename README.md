@@ -249,6 +249,7 @@ Contributors
 * Dennis Walters    (@ess)           : enqueue_in support
 *                   (@RipTheJacker)  : remove_delayed support
 * Kurt Werle        (@kwerle)        : explicit require spec for v020
+*                   (@dwilkie)       : initial before_enqueue support
 
 Copyright
 =========

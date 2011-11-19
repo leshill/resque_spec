@@ -16,22 +16,31 @@ describe "Resque Extensions" do
     end
 
     describe "#enqueue" do
+      before do
+        Resque.enqueue(Person, first_name, last_name)
+      end
 
+      it "adds to the queue for the given class" do
+        ResqueSpec.queue_for(Person).should_not be_empty
+      end
+    end
+
+    describe "#enqueue_to" do
       context "queues" do
         before do
-          Resque.enqueue(Person, first_name, last_name)
+          Resque.enqueue_to(:specified, Person, first_name, last_name)
         end
 
         it "adds to the queue hash" do
-          ResqueSpec.queue_for(Person).should_not be_empty
+          ResqueSpec.queue_by_name(:specified).should_not be_empty
         end
 
         it "sets the klass on the queue" do
-          ResqueSpec.queue_for(Person).last.should include(:class => Person.to_s)
+          ResqueSpec.queue_by_name(:specified).last.should include(:class => Person.to_s)
         end
 
         it "sets the arguments on the queue" do
-          ResqueSpec.queue_for(Person).last.should include(:args => [first_name, last_name])
+          ResqueSpec.queue_by_name(:specified).last.should include(:args => [first_name, last_name])
         end
       end
 

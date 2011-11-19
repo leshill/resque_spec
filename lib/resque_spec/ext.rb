@@ -21,12 +21,16 @@ module Resque
   end
 
   def enqueue(klass, *args)
+    enqueue_to(queue_from_class(klass), klass, *args)
+  end
+
+  def enqueue_to(queue, klass, *args)
     if ResqueSpec.inline
       run_after_enqueue(klass, *args)
-      Job.create(queue_from_class(klass), klass, *args)
+      Job.create(queue, klass, *args)
     else
       return if run_before_enqueue(klass, *args)
-      Job.create(queue_from_class(klass), klass, *args)
+      Job.create(queue, klass, *args)
       run_after_enqueue(klass, *args)
     end
   end

@@ -1,16 +1,13 @@
 ResqueSpec
 ==========
 
-A simple RSpec and Cucumber matcher for Resque.enqueue and
-Resque.enqueue_at/enqueue_in (from `ResqueScheduler`), loosely based on
+A test double of Resque for RSpec and Cucumber. The code was originally based
+on
 [http://github.com/justinweiss/resque_unit](http://github.com/justinweiss/resque_unit).
 
 ResqueSpec will also fire Resque hooks if you are using them. See below.
 
-This should work with `Resque v1.15.0` and up and `RSpec v2.5.0` and up.
-
-If you are using `RSpec ~> 1.3.0`, you should use version `~> 0.2.0`. This
-branch is not actively maintained.
+The current version works with `Resque v1.19.0` and up and `RSpec v2.5.0` and up.
 
 Install
 -------
@@ -22,6 +19,15 @@ Update your Gemfile to include `resque_spec` only in the *test* group (Not using
     group :test do
       gem 'resque_spec'
     end
+
+What is ResqueSpec?
+===================
+
+ResqueSpec is a fake of the *stable API* for Resque 1.19.x (which is `enqueue`,
+`enqueue_to`, `dequeue`, `reserve`, and the Resque hooks). It does not have a
+test double for Redis, so this may lead to some interesting and puzzling
+behaviour if you use some of the popular Resque plugins (such as
+`resque_lock`).
 
 Resque with Specs
 =================
@@ -74,6 +80,19 @@ Then I write some code to make it pass:
 
       def recalculate
         Resque.enqueue(Person, id, :calculate)
+      end
+    end
+
+You can check the size of the queue in your specs too.
+
+    describe "#recalculate" do
+      before do
+        ResqueSpec.reset!
+      end
+
+      it "adds an entry to the Person queue" do
+        person.recalculate
+        Person.should have_queue_size_of(1)
       end
     end
 
@@ -132,26 +151,10 @@ Then I write some code to make it pass:
       end
     end
 
-Queue Size Specs
-================
-
-You can check the size of the queue in your specs too.
-
-    describe "#recalculate" do
-      before do
-        ResqueSpec.reset!
-      end
-
-      it "adds an entry to the Person queue" do
-        person.recalculate
-        Person.should have_queue_size_of(1)
-      end
-    end
-
 Performing Jobs in Specs
 ========================
 
-Normally, Resque does not perform queued jobs within tests. You may want to
+Normally, ResqueSpec does not perform queued jobs within tests. You may want to
 make assertions based on the result of your jobs. ResqueSpec can process jobs
 immediately as they are queued or under your control.
 
@@ -215,14 +218,19 @@ I might write this as a Cucumber step
 Hooks
 =====
 
-Resque provides hooks at different points of the queueing lifecylce.  ResqueSpec fires these hooks when appropriate.
+Resque provides hooks at different points of the queueing lifecylce.
+ResqueSpec fires these hooks when appropriate.
 
-The after enqueue hook is always called when you use `Resque#enqueue`.
+The before and after `enqueue` hooks are always called when you use
+`Resque#enqueue`. If your `before_enqueue` hook returns `false`, the job will
+not be queued and `after_enqueue` will not be called.
 
 The `perform` hooks: before, around, after, and on failure are fired by
 ResqueSpec if you are using the `with_resque` helper or set `ResqueSpec.inline = true`.
 
-Important! `Resque#enqueue_at/enqueue_in` does not fire the after enqueue hook (the job has not been queued yet!), but will fire the `perform` hooks if you are using `inline` mode.
+Important! If you are using ResqueScheduler, `Resque#enqueue_at/enqueue_in`
+does not fire the after enqueue hook (the job has not been queued yet!), but
+will fire the `perform` hooks if you are using `inline` mode.
 
 Note on Patches/Pull Requests
 =============================

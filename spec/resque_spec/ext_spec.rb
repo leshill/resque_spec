@@ -53,13 +53,13 @@ describe "Resque Extensions" do
             Person.stub(:before_enqueue).and_return(false)
           end
 
-          it "should not call the after_enqueue hook" do
+          it "will not call the after_enqueue hook" do
             expect {
               Resque.enqueue(Person, first_name, last_name)
             }.not_to change(Person, :enqueues)
           end
 
-          it "should not call create" do
+          it "did not queue a job" do
             ResqueSpec.reset!
             Resque.enqueue(Person, first_name, last_name)
             ResqueSpec.queue_for(Person).count.should == 0

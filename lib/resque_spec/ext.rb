@@ -26,6 +26,7 @@ module Resque
 
   def enqueue_to(queue, klass, *args)
     if ResqueSpec.inline
+      return if run_before_enqueue(klass, *args)
       run_after_enqueue(klass, *args)
       Job.create(queue, klass, *args)
     else

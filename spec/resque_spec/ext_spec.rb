@@ -83,10 +83,10 @@ describe "Resque Extensions" do
             }.should_not raise_error
           end
 
-          it "does not call the before_enqueue hook" do
+          it "calls the before_enqueue hook" do
             expect {
               with_resque { Resque.enqueue(Person, first_name, last_name) }
-            }.not_to change(Person, :before_enq)
+            }.to change(Person, :before_enq)
           end
 
           it "calls the before_perform hook" do
@@ -105,6 +105,42 @@ describe "Resque Extensions" do
             expect {
               with_resque { Resque.enqueue(Person, first_name, last_name) }
             }.to change(Person, :befores).by(1)
+          end
+
+          context "a before enqueue hook returns false" do
+            before do
+              Person.stub(:before_enqueue).and_return(false)
+            end
+
+            it "does not call the before_perform hook" do
+              expect {
+                with_resque { Resque.enqueue(Person, first_name, last_name) }
+              }.not_to change(Person, :befores)
+            end
+
+            it "does not call the around_perform hook" do
+              expect {
+                with_resque { Resque.enqueue(Person, first_name, last_name) }
+              }.not_to change(Person, :befores)
+            end
+
+            it "does not call the after_perform hook" do
+              expect {
+                with_resque { Resque.enqueue(Person, first_name, last_name) }
+              }.not_to change(Person, :befores)
+            end
+
+            it "does not call the after_enqueue hook" do
+              expect {
+                Resque.enqueue(Person, first_name, last_name)
+              }.not_to change(Person, :enqueues)
+            end
+
+            it "does not perform the job" do
+              expect {
+                Resque.enqueue(Person, first_name, last_name)
+              }.not_to change(Person, :invocations)
+            end
           end
 
           context "a failure occurs" do

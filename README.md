@@ -12,9 +12,10 @@ The current version works with `Resque v1.19.0` and up and `RSpec v2.5.0` and up
 Install
 -------
 
-Update your Gemfile to include `resque_spec` only in the *test* group (Not using
-`bundler`? Do the necessary thing for your app's gem management and use
-`bundler`. `resque_spec` is a mock API, it should only be used with your tests!)
+Update your Gemfile to include `resque_spec` only in the *test* group (Not
+using `bundler`? Do the necessary thing for your app's gem management and use
+`bundler`. `resque_spec` monkey patches `resque` it should only be used with
+your tests!)
 
     group :test do
       gem 'resque_spec'
@@ -23,10 +24,10 @@ Update your Gemfile to include `resque_spec` only in the *test* group (Not using
 What is ResqueSpec?
 ===================
 
-ResqueSpec is a fake of the *stable API* for Resque 1.19.x (which is `enqueue`,
-`enqueue_to`, `dequeue`, `reserve`, and the Resque hooks). It does not have a
-test double for Redis, so this may lead to some interesting and puzzling
-behaviour if you use some of the popular Resque plugins (such as
+ResqueSpec implements the *stable API* for Resque 1.19.x (which is `enqueue`,
+`enqueue_to` (*unreleased*), `dequeue`, `reserve`, and the Resque hooks). It
+does not have a test double for Redis, so this may lead to some interesting and
+puzzling behaviour if you use some of the popular Resque plugins (such as
 `resque_lock`).
 
 Resque with Specs

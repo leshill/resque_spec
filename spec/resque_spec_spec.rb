@@ -61,8 +61,7 @@ describe "ResqueSpec" do
     end
   end
 
-  describe "in_queue?" do
-
+  describe "#in_queue?" do
     it "returns true if the arguments were queued" do
       Resque.enqueue(Person, first_name, last_name)
       ResqueSpec.in_queue?(Person, first_name, last_name).should be
@@ -71,7 +70,32 @@ describe "ResqueSpec" do
     it "returns false if the arguments were not queued" do
       ResqueSpec.in_queue?(Person, first_name, last_name).should_not be
     end
+  end
 
+  describe "#perform_all" do
+    before do
+      Resque.enqueue(NameFromClassMethod, 1)
+      Resque.enqueue(NameFromClassMethod, 2)
+      Resque.enqueue(NameFromClassMethod, 3)
+    end
+
+    it "performs the enqueued job" do
+      ResqueSpec.queue_for(NameFromClassMethod).should_not be_empty
+
+      puts NameFromClassMethod.invocations
+
+      expect {
+        ResqueSpec.perform_all(:name_from_class_method)
+      }.should change(NameFromClassMethod, :invocations).by(3)
+    end
+
+    it "removes all items from the queue" do
+      ResqueSpec.queue_for(NameFromClassMethod).should_not be_empty
+
+      expect {
+        ResqueSpec.perform_all(:name_from_class_method)
+      }.should change { ResqueSpec.queue_by_name(:name_from_class_method).empty? }.from(false).to(true)
+    end
   end
 
   describe "Resque" do
@@ -97,17 +121,32 @@ describe "ResqueSpec" do
   end
 
   context "Matchers" do
-    before do
-      Resque.enqueue(Person, first_name, last_name)
-    end
-
     describe "#have_queued" do
+      before do
+        Resque.enqueue(Person, first_name, last_name)
+      end
+
       it "returns true if the arguments are found in the queue" do
         Person.should have_queued(first_name, last_name)
       end
 
       it "returns false if the arguments are not found in the queue" do
         Person.should_not have_queued(last_name, first_name)
+      end
+    end
+
+    describe "#have_queue_size_of" do
+      it "should pass when the queue has the specified number of jobs" do
+        2.times { Resque.enqueue(Person, first_name, last_name) }
+
+        lambda {
+          Person.should have_queue_size_of(0)
+        }.should raise_error(Spec::Expectations::ExpectationNotMetError)
+      end
+
+      it "should fail when the queue does not have the specified number of jobs" do
+        3.times { Resque.enqueue(Person, first_name, last_name) }
+        Person.should have_queue_size_of(3)
       end
     end
   end

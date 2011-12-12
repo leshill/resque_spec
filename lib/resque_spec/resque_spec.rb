@@ -4,6 +4,17 @@ require 'spec'
 module ResqueSpec
   extend self
 
+  def perform_all(queue_name)
+    queue = queue_by_name(queue_name)
+    until queue.empty?
+      perform(queue_name, queue.shift)
+    end
+  end
+
+  def queue_by_name(name)
+    queues[name]
+  end
+
   def in_queue?(klass, *args)
     queue_for(klass).any? {|entry| entry[:klass] == klass && entry[:args] == args}
   end
@@ -33,6 +44,22 @@ module ResqueSpec
   end
 
   private
+
+  def new_job(queue_name, payload)
+    ::Resque::Job.new(queue_name, payload_with_string_keys(payload))
+  end
+
+  def perform(queue_name, payload)
+    job = new_job(queue_name, payload)
+    job.perform
+  end
+
+  def payload_with_string_keys(payload)
+    {
+      'class' => payload[:klass],
+      'args' => payload[:args]
+    }
+  end
 
   def name_from_instance_var(klass)
     klass.instance_variable_get(:@queue)

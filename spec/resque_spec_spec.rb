@@ -61,8 +61,7 @@ describe "ResqueSpec" do
     end
   end
 
-  describe "in_queue?" do
-
+  describe "#in_queue?" do
     it "returns true if the arguments were queued" do
       Resque.enqueue(Person, first_name, last_name)
       ResqueSpec.in_queue?(Person, first_name, last_name).should be
@@ -71,7 +70,32 @@ describe "ResqueSpec" do
     it "returns false if the arguments were not queued" do
       ResqueSpec.in_queue?(Person, first_name, last_name).should_not be
     end
+  end
 
+  describe "#perform_all" do
+    before do
+      Resque.enqueue(NameFromClassMethod, 1)
+      Resque.enqueue(NameFromClassMethod, 2)
+      Resque.enqueue(NameFromClassMethod, 3)
+    end
+
+    it "performs the enqueued job" do
+      ResqueSpec.queue_for(NameFromClassMethod).should_not be_empty
+
+      puts NameFromClassMethod.invocations
+
+      expect {
+        ResqueSpec.perform_all(:name_from_class_method)
+      }.should change(NameFromClassMethod, :invocations).by(3)
+    end
+
+    it "removes all items from the queue" do
+      ResqueSpec.queue_for(NameFromClassMethod).should_not be_empty
+
+      expect {
+        ResqueSpec.perform_all(:name_from_class_method)
+      }.should change { ResqueSpec.queue_by_name(:name_from_class_method).empty? }.from(false).to(true)
+    end
   end
 
   describe "Resque" do

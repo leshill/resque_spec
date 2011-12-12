@@ -90,3 +90,24 @@ Spec::Matchers.define :have_queued do |*expected_args|
   end
 end
 
+Spec::Matchers.define :have_queue_size_of do |size|
+  match do |actual|
+    queue(actual).size == size
+  end
+
+  failure_message_for_should do |actual|
+    "expected that #{actual} would have #{size} entries queued, but got #{queue(actual).size} instead"
+  end
+
+  failure_message_for_should_not do |actual|
+    "expected that #{actual} would not have #{size} entries queued, but got #{queue(actual).size} instead"
+  end
+
+  description do
+    "have a queue size of #{size}"
+  end
+
+  def queue(actual)
+    ResqueSpec.queue_for(actual)
+  end
+end

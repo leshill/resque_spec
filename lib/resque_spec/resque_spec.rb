@@ -4,6 +4,17 @@ require 'spec'
 module ResqueSpec
   extend self
 
+  def perform_all(queue_name)
+    queue = queue_by_name(queue_name)
+    until queue.empty?
+      perform(queue_name, queue.shift)
+    end
+  end
+
+  def queue_by_name(name)
+    queues[name]
+  end
+
   def in_queue?(klass, *args)
     queue_for(klass).any? {|entry| entry[:klass] == klass && entry[:args] == args}
   end
@@ -34,6 +45,22 @@ module ResqueSpec
 
   private
 
+  def new_job(queue_name, payload)
+    ::Resque::Job.new(queue_name, payload_with_string_keys(payload))
+  end
+
+  def perform(queue_name, payload)
+    job = new_job(queue_name, payload)
+    job.perform
+  end
+
+  def payload_with_string_keys(payload)
+    {
+      'class' => payload[:klass],
+      'args' => payload[:args]
+    }
+  end
+
   def name_from_instance_var(klass)
     klass.instance_variable_get(:@queue)
   end
@@ -63,3 +90,24 @@ Spec::Matchers.define :have_queued do |*expected_args|
   end
 end
 
+Spec::Matchers.define :have_queue_size_of do |size|
+  match do |actual|
+    queue(actual).size == size
+  end
+
+  failure_message_for_should do |actual|
+    "expected that #{actual} would have #{size} entries queued, but got #{queue(actual).size} instead"
+  end
+
+  failure_message_for_should_not do |actual|
+    "expected that #{actual} would not have #{size} entries queued, but got #{queue(actual).size} instead"
+  end
+
+  description do
+    "have a queue size of #{size}"
+  end
+
+  def queue(actual)
+    ResqueSpec.queue_for(actual)
+  end
+end

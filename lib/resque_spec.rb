@@ -87,13 +87,15 @@ module ResqueSpec
   end
 
   def store(queue_name, payload)
+    encoded_args = MultiJson.encode payload[:args]
+    payload[:args] = encoded_args
     queue_by_name(queue_name) << payload
   end
 
   def payload_with_string_keys(payload)
     {
       'class' => payload[:class],
-      'args' => payload[:args]
+      'args' => MultiJson.decode(payload[:args])
     }
   end
 end

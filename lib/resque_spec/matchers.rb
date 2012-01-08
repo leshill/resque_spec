@@ -100,3 +100,21 @@ RSpec::Matchers.define :have_scheduled_at do |*expected_args|
     "have scheduled at the given time the arguments"
   end
 end
+
+RSpec::Matchers.define :have_schedule_size_of do |size|
+  match do |actual|
+    ResqueSpec.schedule_for(actual).size == size
+  end
+
+  failure_message_for_should do |actual|
+    "expected that #{actual} would have #{size} scheduled entries, but got #{ResqueSpec.schedule_for(actual).size} instead"
+  end
+
+  failure_message_for_should_not do |actual|
+    "expected that #{actual} would have #{size} scheduled entries."
+  end
+
+  description do
+    "have schedule size of #{size}"
+  end
+end

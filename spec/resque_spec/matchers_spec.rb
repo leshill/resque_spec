@@ -152,4 +152,24 @@ describe "ResqueSpec Matchers" do
       Person.should_not have_scheduled(last_name, first_name)
     end
   end
+  
+  describe "#have_schedule_size_of" do
+    before do
+      Resque.enqueue_at(Time.now + 5 * 60, Person, first_name, last_name)
+    end
+
+    it "raises the approrpiate exception" do
+      lambda {
+        Person.should have_schedule_size_of(2)
+      }.should raise_error(RSpec::Expectations::ExpectationNotMetError)
+    end
+
+    it "returns true if actual schedule size matches positive expectation" do
+      Person.should have_schedule_size_of(1)
+    end
+    
+    it "returns true if actual schedule size matches negative expectation" do
+      Person.should_not have_schedule_size_of(2)
+    end
+  end
 end

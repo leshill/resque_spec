@@ -133,7 +133,7 @@ And I write this spec using the `resque_spec` matcher
 
 (And I take note of the `before` block that is calling `reset!` for every spec)
 
-*(There is also a **have_scheduled_at** matcher)*
+*(There are also **have_scheduled_at**  **have_schedule_size_of** matchers)*
 
 And I might write this as a Cucumber step
 

@@ -25,8 +25,10 @@ What is ResqueSpec?
 ===================
 
 ResqueSpec implements the *stable API* for Resque 1.19.x (which is `enqueue`,
-`enqueue_to` (*unreleased*), `dequeue`, `reserve`, and the Resque hooks). It
-does not have a test double for Redis, so this may lead to some interesting and
+`enqueue_to` (*unreleased*), `dequeue`, `reserve`, the Resque hooks, and
+because of the way `resque_scheduler` works `Job.create` and `Job.destroy`).
+
+It does not have a test double for Redis, so this may lead to some interesting and
 puzzling behaviour if you use some of the popular Resque plugins (such as
 `resque_lock`).
 

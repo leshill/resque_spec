@@ -26,22 +26,27 @@ describe "Resque Extensions" do
     end
 
     describe "#enqueue_to" do
-      context "queues" do
-        before do
+      context "successfully queues" do
+        subject do
           Resque.enqueue_to(:specified, Person, first_name, last_name)
         end
 
         it "adds to the queue hash" do
+          subject
           ResqueSpec.queue_by_name(:specified).should_not be_empty
         end
 
         it "sets the klass on the queue" do
+          subject
           ResqueSpec.queue_by_name(:specified).last.should include(:class => Person.to_s)
         end
 
         it "sets the arguments on the queue" do
+          subject
           ResqueSpec.queue_by_name(:specified).last.should include(:args => [first_name, last_name])
         end
+
+        it { should eq(true) }
       end
 
       context "hooks" do
@@ -72,6 +77,11 @@ describe "Resque Extensions" do
             ResqueSpec.reset!
             Resque.enqueue(Person, first_name, last_name)
             ResqueSpec.queue_for(Person).count.should == 0
+          end
+
+          it "returns nil" do
+            ResqueSpec.reset!
+            Resque.enqueue(Person, first_name, last_name).should be_nil
           end
         end
 

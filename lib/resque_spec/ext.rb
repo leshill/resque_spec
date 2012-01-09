@@ -33,6 +33,7 @@ module Resque
       return if run_before_enqueue(klass, *args)
       Job.create(queue, klass, *args)
       run_after_enqueue(klass, *args)
+      true
     end
   end
 

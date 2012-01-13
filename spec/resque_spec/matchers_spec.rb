@@ -140,8 +140,10 @@ describe "ResqueSpec Matchers" do
   end
 
   describe "#have_scheduled" do
+    let(:scheduled_at) { Time.now + 5 * 60 }
+    
     before do
-      Resque.enqueue_at(Time.now + 5 * 60, Person, first_name, last_name)
+      Resque.enqueue_at(scheduled_at, Person, first_name, last_name)
     end
 
     it "returns true if the arguments are found in the queue" do
@@ -150,6 +152,32 @@ describe "ResqueSpec Matchers" do
 
     it "returns false if the arguments are not found in the queue" do
       Person.should_not have_scheduled(last_name, first_name)
+    end
+    
+    context "with #at(timestamp)" do
+      it "returns true if arguments and timestamp matches positive expectation" do
+        Person.should have_scheduled(first_name, last_name).at(scheduled_at)
+      end
+      
+      it "returns true if arguments and timestamp matches negative expectation" do
+        Person.should_not have_scheduled(first_name, last_name).at(scheduled_at + 5 * 60)
+      end
+    end
+    
+    context "with #in(interval)" do
+      let(:interval) { 10 * 60 }
+      
+      before(:each) do
+        Resque.enqueue_in(interval, Person, first_name, last_name)
+      end
+      
+      it "returns true if arguments and interval matches positive expectation" do
+        Person.should have_scheduled(first_name, last_name).in(interval)
+      end
+      
+      it "returns true if arguments and interval matches negative expectation" do
+        Person.should_not have_scheduled(first_name, last_name).in(interval + 5 * 60)
+      end
     end
   end
   

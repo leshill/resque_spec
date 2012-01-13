@@ -63,17 +63,42 @@ RSpec::Matchers.define :have_queue_size_of do |size|
   end
 end
 
-RSpec::Matchers.define :have_scheduled do |*expected_args|
+RSpec::Matchers.define :have_scheduled do |*expected_args|  
+  chain :at do |timestamp|
+    @interval = nil
+    @time = timestamp
+    @time_info = "at #{@time}"
+  end
+  
+  chain :in do |interval|
+    @time = nil
+    @interval = interval
+    @time_info = "in #{@interval} seconds"
+  end
+    
   match do |actual|
-    ResqueSpec.schedule_for(actual).any? { |entry| entry[:class].to_s == actual.to_s && entry[:args] == expected_args }
+    ResqueSpec.schedule_for(actual).any? do |entry| 
+      class_matches = entry[:class].to_s == actual.to_s
+      args_match = entry[:args] == expected_args
+      
+      time_matches = if @time
+        entry[:time] == @time
+      elsif @interval
+        entry[:time].to_i == entry[:stored_at].to_i + @interval
+      else
+        true
+      end
+      
+      class_matches && args_match && time_matches
+    end
   end
 
   failure_message_for_should do |actual|
-    "expected that #{actual} would have [#{expected_args.join(', ')}] scheduled"
+    ["expected that #{actual} would have [#{expected_args.join(', ')}] scheduled", @time_info].join(' ')
   end
 
   failure_message_for_should_not do |actual|
-    "expected that #{actual} would not have [#{expected_args.join(', ')}] scheduled"
+    ["expected that #{actual} would not have [#{expected_args.join(', ')}] scheduled", @time_info].join(' ')
   end
 
   description do

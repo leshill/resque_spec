@@ -22,5 +22,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency('rspec', ['>= 2.5.0'])
   s.add_development_dependency('ruby-debug19')
   s.add_development_dependency('timecop')
+  s.add_development_dependency('rake')
 end
 

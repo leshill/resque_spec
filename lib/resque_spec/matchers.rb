@@ -107,6 +107,8 @@ RSpec::Matchers.define :have_scheduled do |*expected_args|
 end
 
 RSpec::Matchers.define :have_scheduled_at do |*expected_args|
+  warn "DEPRECATION WARNING: have_scheduled_at(time, *args) is deprecated and will be removed in future. Please use have_scheduled(*args).at(time) instead."
+  
   match do |actual|
     time = expected_args.first
     other_args = expected_args[1..-1]

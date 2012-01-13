@@ -93,7 +93,8 @@ module ResqueSpec
   def payload_with_string_keys(payload)
     {
       'class' => payload[:class],
-      'args' => payload[:args]
+      'args' => payload[:args],
+      'stored_at' => payload[:stored_at]
     }
   end
 end

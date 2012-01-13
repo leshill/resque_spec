@@ -49,7 +49,9 @@ describe ResqueSpec do
     describe "#enqueue_at" do
 
       before do
-        Resque.enqueue_at(scheduled_at, NameFromClassMethod, 1)
+        Timecop.travel(Time.at(0)) do
+          Resque.enqueue_at(scheduled_at, NameFromClassMethod, 1)
+        end
       end
 
       it "adds to the scheduled queue hash" do
@@ -66,6 +68,11 @@ describe ResqueSpec do
 
       it "sets the time on the scheduled queue" do
         ResqueSpec.schedule_for(NameFromClassMethod).first.should include(:time => scheduled_at)
+      end
+      
+      it "sets the stored_at on the scheduled queue" do
+        # Comparing this explicitly will fail (Timecop bug?)
+        ResqueSpec.schedule_for(NameFromClassMethod).first[:stored_at].to_i.should == Time.at(0).to_i
       end
 
     end

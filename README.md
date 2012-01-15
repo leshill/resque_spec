@@ -150,32 +150,32 @@ And I might use the `at` statement to specify the time:
 
 And I might use the `in` statement to specify time interval (in seconds):
 
-  describe "#recalculate" do
-    before do
-      ResqueSpec.reset!
-    end
+    describe "#recalculate" do
+      before do
+        ResqueSpec.reset!
+      end
 
-    it "adds person.calculate to the Person queue" do
-      person.recalculate
+      it "adds person.calculate to the Person queue" do
+        person.recalculate
 
-      # Is it scheduled to be executed in 5 minutes?
-      Person.should have_scheduled(person.id, :calculate).in(5 * 60)
+        # Is it scheduled to be executed in 5 minutes?
+        Person.should have_scheduled(person.id, :calculate).in(5 * 60)
+      end
     end
-  end
 
 You can also check the size of the schedule:
 
-  describe "#recalculate" do
-    before do
-      ResqueSpec.reset!
-    end
+    describe "#recalculate" do
+      before do
+        ResqueSpec.reset!
+      end
 
-    it "adds person.calculate to the Person queue" do
-      person.recalculate
+      it "adds person.calculate to the Person queue" do
+        person.recalculate
 
-      Person.should have_schedule_size_of(1)
+        Person.should have_schedule_size_of(1)
+      end
     end
-  end
 
 (And I take note of the `before` block that is calling `reset!` for every spec)
 

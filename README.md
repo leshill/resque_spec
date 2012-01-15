@@ -303,7 +303,7 @@ Contributors
 *                   (@RipTheJacker)  : remove_delayed support
 * Kurt Werle        (@kwerle)        : explicit require spec for v020
 *                   (@dwilkie)       : initial before_enqueue support
-* Marcin Balinski   (@marcinb)       : have_schedule_size_of matcher
+* Marcin Balinski   (@marcinb)       : have_schedule_size_of matcher, schedule matcher at, in
 
 Copyright
 =========

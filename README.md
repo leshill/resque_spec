@@ -133,9 +133,51 @@ And I write this spec using the `resque_spec` matcher
       end
     end
 
-(And I take note of the `before` block that is calling `reset!` for every spec)
+And I might use the `at` statement to specify the time:
 
-*(There are also **have_scheduled_at**  **have_schedule_size_of** matchers)*
+    describe "#recalculate" do
+      before do
+        ResqueSpec.reset!
+      end
+
+      it "adds person.calculate to the Person queue" do
+        person.recalculate
+        
+        # Is it scheduled to be executed at 2010-02-14 06:00:00 ?
+        Person.should have_scheduled(person.id, :calculate).at(Time.mktime(2010,2,14,6,0,0))
+      end
+    end
+
+And I might use the `in` statement to specify time interval (in seconds):
+
+  describe "#recalculate" do
+    before do
+      ResqueSpec.reset!
+    end
+
+    it "adds person.calculate to the Person queue" do
+      person.recalculate
+      
+      # Is it scheduled to be executed in 5 minutes?
+      Person.should have_scheduled(person.id, :calculate).in(5 * 60)
+    end
+  end
+
+You can also check the size of the schedule:
+
+  describe "#recalculate" do
+    before do
+      ResqueSpec.reset!
+    end
+
+    it "adds person.calculate to the Person queue" do
+      person.recalculate
+    
+      Person.should have_schedule_size_of(1)
+    end
+  end
+
+(And I take note of the `before` block that is calling `reset!` for every spec)
 
 And I might write this as a Cucumber step
 

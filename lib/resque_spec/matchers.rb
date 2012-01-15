@@ -63,24 +63,24 @@ RSpec::Matchers.define :have_queue_size_of do |size|
   end
 end
 
-RSpec::Matchers.define :have_scheduled do |*expected_args|  
+RSpec::Matchers.define :have_scheduled do |*expected_args|
   chain :at do |timestamp|
     @interval = nil
     @time = timestamp
     @time_info = "at #{@time}"
   end
-  
+
   chain :in do |interval|
     @time = nil
     @interval = interval
     @time_info = "in #{@interval} seconds"
   end
-    
+
   match do |actual|
-    ResqueSpec.schedule_for(actual).any? do |entry| 
+    ResqueSpec.schedule_for(actual).any? do |entry|
       class_matches = entry[:class].to_s == actual.to_s
       args_match = entry[:args] == expected_args
-      
+
       time_matches = if @time
         entry[:time] == @time
       elsif @interval
@@ -88,7 +88,7 @@ RSpec::Matchers.define :have_scheduled do |*expected_args|
       else
         true
       end
-      
+
       class_matches && args_match && time_matches
     end
   end
@@ -108,7 +108,7 @@ end
 
 RSpec::Matchers.define :have_scheduled_at do |*expected_args|
   warn "DEPRECATION WARNING: have_scheduled_at(time, *args) is deprecated and will be removed in future. Please use have_scheduled(*args).at(time) instead."
-  
+
   match do |actual|
     time = expected_args.first
     other_args = expected_args[1..-1]

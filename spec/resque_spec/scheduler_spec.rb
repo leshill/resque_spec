@@ -69,7 +69,7 @@ describe ResqueSpec do
       it "sets the time on the scheduled queue" do
         ResqueSpec.schedule_for(NameFromClassMethod).first.should include(:time => scheduled_at)
       end
-      
+
       it "sets the stored_at on the scheduled queue" do
         # Comparing this explicitly will fail (Timecop bug?)
         ResqueSpec.schedule_for(NameFromClassMethod).first[:stored_at].to_i.should == Time.at(0).to_i

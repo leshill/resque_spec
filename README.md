@@ -304,6 +304,7 @@ Contributors
 * Kurt Werle        (@kwerle)        : explicit require spec for v020
 *                   (@dwilkie)       : initial before_enqueue support
 * Marcin Balinski   (@marcinb)       : have_schedule_size_of matcher, schedule matcher at, in
+* Henrik Nyh        (@henrik)        : enqueue_in_with_queue, enqueue_at_with_queue
 
 Copyright
 =========

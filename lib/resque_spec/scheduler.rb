@@ -6,8 +6,16 @@ module ResqueSpec
       ResqueSpec.enqueue_at(time, klass, *args)
     end
 
+    def enqueue_at_with_queue(queue, time, klass, *args)
+      ResqueSpec.enqueue_at_with_queue(queue, time, klass, *args)
+    end
+
     def enqueue_in(time, klass, *args)
       ResqueSpec.enqueue_in(time, klass, *args)
+    end
+
+    def enqueue_in_with_queue(queue, time, klass, *args)
+      ResqueSpec.enqueue_in_with_queue(queue, time, klass, *args)
     end
 
     def remove_delayed(klass, *args)
@@ -16,11 +24,19 @@ module ResqueSpec
   end
 
   def enqueue_at(time, klass, *args)
-    perform_or_store(schedule_queue_name(klass), :class => klass.to_s, :time  => time, :stored_at => Time.now, :args => args)
+    enqueue_at_with_queue(schedule_queue_name(klass), time, klass, *args)
+  end
+
+  def enqueue_at_with_queue(queue, time, klass, *args)
+    perform_or_store(queue, :class => klass.to_s, :time  => time, :stored_at => Time.now, :args => args)
   end
 
   def enqueue_in(time, klass, *args)
     enqueue_at(Time.now + time, klass, *args)
+  end
+
+  def enqueue_in_with_queue(queue, time, klass, *args)
+    enqueue_at_with_queue(queue, Time.now + time, klass, *args)
   end
 
   def remove_delayed(klass, *args)

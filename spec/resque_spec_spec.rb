@@ -211,6 +211,19 @@ describe ResqueSpec do
         ResqueSpec.queue_by_name(:queue_name).map {|h| h[:args] }.flatten.should_not include(0)
       end
     end
+
+    context "when the args contain a hash with symbol keys" do
+      before {
+        ResqueSpec.enqueue(:queue_name,
+                           NameFromClassMethod,
+                           { :key1 => '1', 'key2' => 2 })
+      }
+
+      it "deserializes the args" do
+        job = subject
+        job.args[0].should == { 'key1' => '1', 'key2' => 2 }
+      end
+    end
   end
 
   describe "#reset!" do

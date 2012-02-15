@@ -58,6 +58,13 @@ describe "ResqueSpec Matchers" do
         it { should have_queued(first_name, last_name).in(:people) }
         it { should_not have_queued(last_name, first_name).in(:people) }
       end
+
+      context "without #in(:places) after #in(:people)" do
+        before { should have_queued(first_name, last_name).in(:people) }
+        before { Resque.enqueue(Place) }
+
+        specify { Place.should have_queued }
+      end
     end
   end
 

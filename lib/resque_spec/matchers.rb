@@ -3,6 +3,7 @@ require 'rspec'
 module InQueueHelper
   def self.extended(klass)
     klass.instance_eval do
+      self.queue_name = nil
       chain :in do |queue_name|
         self.queue_name = queue_name
       end

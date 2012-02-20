@@ -288,22 +288,29 @@ Note on Patches/Pull Requests
   (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
 * Send me a pull request. Bonus points for topic branches.
 
+Author
+======
+
+I made `resque_spec` because **resque** is awesome and should be easy to spec.
+Follow me on [Github](https://github.com/leshill) and
+[Twitter](https://twitter.com/leshill).
+
 Contributors
 ============
 
-* Les Hill          (@leshill)       : author
-* Kenneth Kalmer    (@kennethkalmer) : rspec dependency fix
-* Brian Cardarella  (@bcardarella)   : fix mutation bug
-* Joshua Davey      (@joshdavey)     : with_resque helper
-* Lar Van Der Jagt  (@supaspoida)    : with_resque helper
-* Evan Sagge        (@evansagge)     : Hook in via Job.create, have_queued.in
-* Jon Larkowski     (@l4rk)          : inline perform
-* James Conroy-Finn (@jcf)           : spec fix
-* Dennis Walters    (@ess)           : enqueue_in support
-*                   (@RipTheJacker)  : remove_delayed support
-* Kurt Werle        (@kwerle)        : explicit require spec for v020
-*                   (@dwilkie)       : initial before_enqueue support
-* Marcin Balinski   (@marcinb)       : have_schedule_size_of matcher, schedule matcher at, in
+* Kenneth Kalmer   (@kennethkalmer) : rspec dependency fix
+* Brian Cardarella (@bcardarella)   : fix mutation bug
+* Joshua Davey     (@joshdavey)     : with_resque helper
+* Lar Van Der Jagt (@supaspoida)    : with_resque helper
+* Evan Sagge       (@evansagge)     : Hook in via Job.create, have_queued.in
+* Jon Larkowski    (@l4rk)          : inline perform
+* James Conroy-Finn(@jcf)           : spec fix
+* Dennis Walters   (@ess)           : enqueue_in support
+*                  (@RipTheJacker)  : remove_delayed support
+* Kurt Werle       (@kwerle)        : explicit require spec for v020
+*                  (@dwilkie)       : initial before_enqueue support
+* Marcin Balinski  (@marcinb)       : have_schedule_size_of matcher, schedule matcher at, in
+*                  (@alexeits)      : fix matcher in bug with RSpec 2.8.0
 
 Copyright
 =========

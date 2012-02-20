@@ -3,6 +3,7 @@ require 'resque_spec/helpers'
 require 'resque_spec/matchers'
 
 module ResqueSpec
+  include Resque::Helpers
   extend self
 
   attr_accessor :inline
@@ -93,7 +94,7 @@ module ResqueSpec
   def payload_with_string_keys(payload)
     {
       'class' => payload[:class],
-      'args' => payload[:args],
+      'args' => decode(encode(payload[:args])),
       'stored_at' => payload[:stored_at]
     }
   end

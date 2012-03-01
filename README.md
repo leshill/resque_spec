@@ -311,6 +311,7 @@ Contributors
 *                  (@dwilkie)       : initial before_enqueue support
 * Marcin Balinski  (@marcinb)       : have_schedule_size_of matcher, schedule matcher at, in
 *                  (@alexeits)      : fix matcher in bug with RSpec 2.8.0
+*                  (@ToadJamb)      : encode/decode of Resque job arguments
 
 Copyright
 =========

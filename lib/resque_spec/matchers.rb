@@ -28,7 +28,7 @@ RSpec::Matchers.define :have_queued do |*expected_args|
   extend InQueueHelper
 
   match do |actual|
-    queue(actual).any? { |entry| entry[:class].to_s == actual.to_s && entry[:args] == expected_args }
+    queue(actual).any? { |entry| entry[:class].to_s == actual.to_s && expected_args == entry[:args] }
   end
 
   failure_message_for_should do |actual|
@@ -80,7 +80,7 @@ RSpec::Matchers.define :have_scheduled do |*expected_args|
   match do |actual|
     ResqueSpec.schedule_for(actual).any? do |entry|
       class_matches = entry[:class].to_s == actual.to_s
-      args_match = entry[:args] == expected_args
+      args_match = expected_args == entry[:args]
 
       time_matches = if @time
         entry[:time] == @time
@@ -113,7 +113,7 @@ RSpec::Matchers.define :have_scheduled_at do |*expected_args|
   match do |actual|
     time = expected_args.first
     other_args = expected_args[1..-1]
-    ResqueSpec.schedule_for(actual).any? { |entry| entry[:class].to_s == actual.to_s && entry[:time] == time && entry[:args] == other_args }
+    ResqueSpec.schedule_for(actual).any? { |entry| entry[:class].to_s == actual.to_s && entry[:time] == time && other_args == entry[:args] }
   end
 
   failure_message_for_should do |actual|

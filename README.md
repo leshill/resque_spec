@@ -109,10 +109,14 @@ environment. Your initializer will probably end up looking like:
     # config/initializers/resque_mailer.rb
     Resque::Mailer.excluded_environments = []
 
-ResqueScheduler with Specs
+resque-scheduler with Specs
 ==========================
 
-To use with ResqueScheduler, add this require `require 'resque_spec/scheduler'`
+To use with resque-scheduler, add this require `require 'resque_spec/scheduler'`
+
+*n.b.* Yes, you also need to require resque-scheduler, this works (check the docs for other ways):
+
+    gem "resque-scheduler", :require => "resque_scheduler"
 
 Given this scenario
 
@@ -273,7 +277,7 @@ not be queued and `after_enqueue` will not be called.
 The `perform` hooks: before, around, after, and on failure are fired by
 ResqueSpec if you are using the `with_resque` helper or set `ResqueSpec.inline = true`.
 
-Important! If you are using ResqueScheduler, `Resque#enqueue_at/enqueue_in`
+Important! If you are using resque-scheduler, `Resque#enqueue_at/enqueue_in`
 does not fire the after enqueue hook (the job has not been queued yet!), but
 will fire the `perform` hooks if you are using `inline` mode.
 

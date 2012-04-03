@@ -302,20 +302,21 @@ Follow me on [Github](https://github.com/leshill) and
 Contributors
 ============
 
-* Kenneth Kalmer   (@kennethkalmer) : rspec dependency fix
-* Brian Cardarella (@bcardarella)   : fix mutation bug
-* Joshua Davey     (@joshdavey)     : with_resque helper
-* Lar Van Der Jagt (@supaspoida)    : with_resque helper
-* Evan Sagge       (@evansagge)     : Hook in via Job.create, have_queued.in
-* Jon Larkowski    (@l4rk)          : inline perform
-* James Conroy-Finn(@jcf)           : spec fix
-* Dennis Walters   (@ess)           : enqueue_in support
-*                  (@RipTheJacker)  : remove_delayed support
-* Kurt Werle       (@kwerle)        : explicit require spec for v020
-*                  (@dwilkie)       : initial before_enqueue support
-* Marcin Balinski  (@marcinb)       : have_schedule_size_of matcher, schedule matcher at, in
-*                  (@alexeits)      : fix matcher in bug with RSpec 2.8.0
-*                  (@ToadJamb)      : encode/decode of Resque job arguments
+* Kenneth Kalmer     (@kennethkalmer) : rspec dependency fix
+* Brian Cardarella   (@bcardarella)   : fix mutation bug
+* Joshua Davey       (@joshdavey)     : with_resque helper
+* Lar Van Der Jagt   (@supaspoida)    : with_resque helper
+* Evan Sagge         (@evansagge)     : Hook in via Job.create, have_queued.in
+* Jon Larkowski      (@l4rk)          : inline perform
+* James Conroy-Finn  (@jcf)           : spec fix
+* Dennis Walters     (@ess)           : enqueue_in support
+*                    (@RipTheJacker)  : remove_delayed support
+* Kurt Werle         (@kwerle)        : explicit require spec for v020
+*                    (@dwilkie)       : initial before_enqueue support
+* Marcin Balinski    (@marcinb)       : have_schedule_size_of matcher, schedule matcher at, in
+*                    (@alexeits)      : fix matcher in bug with RSpec 2.8.0
+*                    (@ToadJamb)      : encode/decode of Resque job arguments
+* Mateusz Konikowski (@mkonikowski)   : support for anything matcher
 
 Copyright
 =========

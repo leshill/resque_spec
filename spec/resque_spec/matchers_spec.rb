@@ -38,6 +38,16 @@ describe "ResqueSpec Matchers" do
         it { should have_queued(first_name, last_name) }
         it { should_not have_queued(last_name, first_name) }
       end
+
+      context "with anything matcher" do
+        subject { "Person" }
+
+        it { should have_queued(anything, anything) }
+        it { should have_queued(anything, last_name) }
+        it { should have_queued(first_name, anything) }
+        it { should_not have_queued(anything) }
+        it { should_not have_queued(anything, anything, anything) }
+      end
     end
 
     context "#in" do
@@ -66,6 +76,7 @@ describe "ResqueSpec Matchers" do
         specify { Place.should have_queued }
       end
     end
+
   end
 
   describe "#have_queue_size_of" do
@@ -141,6 +152,12 @@ describe "ResqueSpec Matchers" do
       Person.should have_scheduled_at(scheduled_at, first_name, last_name)
     end
 
+    it "returns true if the arguments are found in the queue with anything matcher" do
+      Person.should have_scheduled_at(scheduled_at, anything, anything)
+      Person.should have_scheduled_at(scheduled_at, anything, last_name)
+      Person.should have_scheduled_at(scheduled_at, first_name, anything)
+    end
+
     it "returns false if the arguments are not found in the queue" do
       Person.should_not have_scheduled_at(scheduled_at, last_name, first_name)
     end
@@ -155,6 +172,12 @@ describe "ResqueSpec Matchers" do
 
     it "returns true if the arguments are found in the queue" do
       Person.should have_scheduled(first_name, last_name)
+    end
+
+    it "returns true if arguments are found in the queue with anything matcher" do
+      Person.should have_scheduled(anything, anything).at(scheduled_at)
+      Person.should have_scheduled(anything, last_name).at(scheduled_at)
+      Person.should have_scheduled(first_name, anything).at(scheduled_at)
     end
 
     it "returns false if the arguments are not found in the queue" do

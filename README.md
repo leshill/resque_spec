@@ -99,6 +99,31 @@ You can check the size of the queue in your specs too.
       end
     end
 
+Turning off ResqueSpec and calling directly to Resque
+-----------------------------------------------------
+
+Occasionally, you want to run your specs directly against Resque instead of
+ResqueSpec. For one at a time use, pass a block to the `without_resque_spec`
+helper:
+
+    describe "#recalculate" do
+      it "recalculates the persons score" do
+        without_resque_spec do
+          person.recalculate
+        end
+        ... assert recalculation after job done
+      end
+    end
+
+Or you can manage when ResqueSpec is disabled by flipping the
+`ResqueSpec.disable_ext` flag:
+
+    # disable ResqueSpec
+    ResqueSpec.disable_ext = true
+
+You will most likely (but not always, see the Resque docs) need to ensure that
+you have `redis` running.
+
 ResqueMailer with Specs
 =======================
 

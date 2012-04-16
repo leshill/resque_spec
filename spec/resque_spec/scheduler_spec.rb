@@ -130,4 +130,33 @@ describe ResqueSpec do
 
     end
   end
+
+  context "when disable_ext is set to get the default behavior of Resque" do
+    around { |example| without_resque_spec { example.run } }
+
+    describe "Resque" do
+      describe ".enqueue_at" do
+        it "calls the original Resque.enqueue_at method" do
+          timestamp = Time.now
+          Resque.should_receive(:enqueue_at_without_resque_spec).with(NameFromClassMethod, 1)
+          Resque.enqueue_at(NameFromClassMethod, 1)
+        end
+      end
+
+      describe ".enqueue_in" do
+        it "calls the original Resque.enqueue_in method" do
+          wait_time = 500
+          Resque.should_receive(:enqueue_in_without_resque_spec).with(wait_time, NameFromClassMethod, 1)
+          Resque.enqueue_in(wait_time, NameFromClassMethod, 1)
+        end
+      end
+
+      describe ".remove_delayed" do
+        it "calls the original Resque.remove_delayed method" do
+          Resque.should_receive(:remove_delayed_without_resque_spec).with(NameFromClassMethod, 1)
+          Resque.remove_delayed(NameFromClassMethod, 1)
+        end
+      end
+    end
+  end
 end

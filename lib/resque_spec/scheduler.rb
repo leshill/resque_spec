@@ -2,15 +2,34 @@ require 'resque_spec'
 
 module ResqueSpec
   module SchedulerExt
+    def self.extended(klass)
+      if klass.respond_to? :enqueue_at
+        klass.instance_eval do
+          alias :enqueue_at_without_resque_spec :enqueue_at
+          alias :enqueue_in_without_resque_spec :enqueue_in
+          alias :remove_delayed_without_resque_spec :remove_delayed
+        end
+      end
+      klass.extend(ResqueSpec::SchedulerExtMethods)
+    end
+  end
+
+  module SchedulerExtMethods
     def enqueue_at(time, klass, *args)
+      return enqueue_at_without_resque_spec(time, klass, *args) if ResqueSpec.disable_ext && respond_to?(:enqueue_at_without_resque_spec)
+
       ResqueSpec.enqueue_at(time, klass, *args)
     end
 
     def enqueue_in(time, klass, *args)
+      return enqueue_in_without_resque_spec(time, klass, *args) if ResqueSpec.disable_ext && respond_to?(:enqueue_in_without_resque_spec)
+
       ResqueSpec.enqueue_in(time, klass, *args)
     end
 
     def remove_delayed(klass, *args)
+      return remove_delayed_without_resque_spec(klass, *args) if ResqueSpec.disable_ext && respond_to?(:remove_delayed_without_resque_spec)
+
       ResqueSpec.remove_delayed(klass, *args)
     end
   end

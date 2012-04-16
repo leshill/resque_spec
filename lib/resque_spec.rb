@@ -7,6 +7,7 @@ module ResqueSpec
   extend self
 
   attr_accessor :inline
+  attr_accessor :disable_ext
 
   def dequeue(queue_name, klass, *args)
     queue_by_name(queue_name).delete_if do |job|

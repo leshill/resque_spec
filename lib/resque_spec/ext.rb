@@ -2,13 +2,22 @@ require 'resque'
 
 module Resque
   class Job
+    class << self
+      alias :create_without_resque_spec :create
+      alias :destroy_without_resque_spec :destroy
+    end
+
     def self.create(queue, klass, *args)
+      return create_without_resque_spec(queue, klass, *args) if ResqueSpec.disable_ext
+
       raise ::Resque::NoQueueError.new("Jobs must be placed onto a queue.") if !queue
       raise ::Resque::NoClassError.new("Jobs must be given a class.") if klass.to_s.empty?
       ResqueSpec.enqueue(queue, klass, *args)
     end
 
     def self.destroy(queue, klass, *args)
+      return destroy_without_resque_spec(queue, klass, *args) if ResqueSpec.disable_ext
+
       raise ::Resque::NoQueueError.new("Jobs must have been placed onto a queue.") if !queue
       raise ::Resque::NoClassError.new("Jobs must have been given a class.") if klass.to_s.empty?
 
@@ -20,11 +29,19 @@ module Resque
     end
   end
 
+  alias :enqueue_without_resque_spec :enqueue
+  alias :enqueue_to_without_resque_spec :enqueue_to if Resque.respond_to? :enqueue_to
+  alias :reserve_without_resque_spec :reserve
+
   def enqueue(klass, *args)
+    return enqueue_without_resque_spec(klass, *args) if ResqueSpec.disable_ext
+
     enqueue_to(queue_from_class(klass), klass, *args)
   end
 
   def enqueue_to(queue, klass, *args)
+    return enqueue_to_without_resque_spec(queue, klass, *args) if ResqueSpec.disable_ext
+
     if ResqueSpec.inline
       return if run_before_enqueue(klass, *args)
       run_after_enqueue(klass, *args)
@@ -38,6 +55,8 @@ module Resque
   end
 
   def reserve(queue_name)
+    return reserve_without_resque_spec(queue_name) if ResqueSpec.disable_ext
+
     ResqueSpec.pop(queue_name)
   end
 

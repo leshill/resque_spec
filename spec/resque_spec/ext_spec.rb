@@ -271,4 +271,47 @@ describe "Resque Extensions" do
       end
     end
   end
+
+  context "when disable_ext is set to get the default behavior of Resque" do
+    around { |example| without_resque_spec { example.run } }
+
+    describe "Resque" do
+      describe ".enqueue" do
+        it "calls the original Resque.enqueue method" do
+          Resque.should_receive(:enqueue_without_resque_spec).with(Person, first_name, last_name)
+          Resque.enqueue(Person, first_name, last_name)
+        end
+      end
+
+      describe ".enqueue_to" do
+        it "calls the original Resque.enqueue_to method" do
+          Resque.should_receive(:enqueue_to_without_resque_spec).with(:specified, Person, first_name, last_name)
+          Resque.enqueue_to(:specified, Person, first_name, last_name)
+        end
+      end
+
+      describe ".reserve" do
+        it "calls the original Resque.reserve method" do
+          Resque.should_receive(:reserve_without_resque_spec).with(Person.queue)
+          Resque.reserve(Person.queue)
+        end
+      end
+    end
+
+    describe "Resque::Job" do
+      describe ".create" do
+        it "calls the original Resque::Job.create method" do
+          Resque::Job.should_receive(:create_without_resque_spec).with(:people, Person, first_name, last_name)
+          Resque::Job.create(:people, Person, first_name, last_name)
+        end
+      end
+
+      describe ".destroy" do
+        it "calls the original Resque::Job.destroy method" do
+          Resque::Job.should_receive(:destroy_without_resque_spec).with(:people, Person, first_name, last_name)
+          Resque::Job.destroy(:people, Person, first_name, last_name)
+        end
+      end
+    end
+  end
 end

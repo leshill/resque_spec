@@ -317,6 +317,7 @@ Contributors
 *                    (@alexeits)      : fix matcher in bug with RSpec 2.8.0
 *                    (@ToadJamb)      : encode/decode of Resque job arguments
 * Mateusz Konikowski (@mkonikowski)   : support for anything matcher
+* Mathieu Ravaux     (@mathieuravaux) : without_resque_spec support
 
 Copyright
 =========

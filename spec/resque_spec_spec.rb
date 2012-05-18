@@ -99,6 +99,48 @@ describe ResqueSpec do
     end
   end
 
+  describe '#peek' do
+    context 'when inline' do
+      before { ResqueSpec.inline = true }
+
+      it 'should return an empty array after queuing a job' do
+        ResqueSpec.enqueue(:queue_name, NameFromClassMethod, 1)
+        ResqueSpec.peek(:queue_name).should == []
+      end
+    end
+
+    context 'when not inline' do
+      before { ResqueSpec.inline = false }
+
+      it 'should return an empty array when there are no jobs' do
+        ResqueSpec.peek(:queue_name).should == []
+      end
+
+      it 'should return array with jobs' do
+        ResqueSpec.enqueue(:queue_name, NameFromClassMethod, 1)
+        ResqueSpec.peek(:queue_name).should include({ class: NameFromClassMethod.to_s, args: [1] })
+      end
+
+      it 'should allow start and count params' do
+        ResqueSpec.enqueue(:queue_name, NameFromClassMethod, 1)
+        ResqueSpec.enqueue(:queue_name, NameFromClassMethod, 2)
+        ResqueSpec.enqueue(:queue_name, NameFromClassMethod, 3)
+        ResqueSpec.peek(:queue_name, 2, 1).should have(1).jobs
+        ResqueSpec.peek(:queue_name, 2, 1).should include({ class: NameFromClassMethod.to_s, args: [3] })
+        ResqueSpec.peek(:queue_name, 0, 2).should have(2).jobs
+        ResqueSpec.peek(:queue_name, 0, 2).should include({ class: NameFromClassMethod.to_s, args: [1] })
+        ResqueSpec.peek(:queue_name, 0, 2).should include({ class: NameFromClassMethod.to_s, args: [2] })
+      end
+
+      it 'should default to the first job' do
+        ResqueSpec.enqueue(:queue_name, NameFromClassMethod, 1)
+        ResqueSpec.enqueue(:queue_name, NameFromClassMethod, 2)
+        ResqueSpec.peek(:queue_name).should have(1).jobs
+        ResqueSpec.peek(:queue_name).should include({ class: NameFromClassMethod.to_s, args: [1] })
+      end
+    end
+  end
+
   describe "#perform_all" do
     before do
       ResqueSpec.enqueue(:queue_name, NameFromClassMethod, 1)

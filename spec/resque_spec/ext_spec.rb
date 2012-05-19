@@ -165,23 +165,45 @@ describe "Resque Extensions" do
     end
 
     describe "#dequeue" do
-      describe "without arguments" do
-        it "should remove all items from queue with the given class" do
-          ResqueSpec.queue_for(Person).count.should == 3
-          expect do
-            Resque.dequeue(Person).should == 3
-          end.should change(ResqueSpec.queue_for(Person), :count).by(-3)
-          ResqueSpec.queue_for(Person).count.should == 0
+      if Resque::VERSION > "1.19.0"
+        describe "without arguments" do
+          it "should remove all items from queue with the given class" do
+            ResqueSpec.queue_for(Person).count.should == 3
+            expect do
+              Resque.dequeue(Person)
+            end.should change(ResqueSpec.queue_for(Person), :count).by(-3)
+            ResqueSpec.queue_for(Person).count.should == 0
+          end
         end
-      end
 
-      describe "with arguments" do
-        it "should remove items from queue with the given class and arguments" do
-          ResqueSpec.queue_for(Person).count.should == 3
-          expect do
-            Resque.dequeue(Person, "xyz", "lmn").should == 2
-          end.should change(ResqueSpec.queue_for(Person), :size).by(-2)
-          ResqueSpec.queue_for(Person).count.should == 1
+        describe "with arguments" do
+          it "should remove items from queue with the given class and arguments" do
+            ResqueSpec.queue_for(Person).count.should == 3
+            expect do
+              Resque.dequeue(Person, "xyz", "lmn")
+            end.should change(ResqueSpec.queue_for(Person), :size).by(-2)
+            ResqueSpec.queue_for(Person).count.should == 1
+          end
+        end
+      else
+        describe "without arguments" do
+          it "should remove all items from queue with the given class" do
+            ResqueSpec.queue_for(Person).count.should == 3
+            expect do
+              Resque.dequeue(Person).should == 3
+            end.should change(ResqueSpec.queue_for(Person), :count).by(-3)
+            ResqueSpec.queue_for(Person).count.should == 0
+          end
+        end
+
+        describe "with arguments" do
+          it "should remove items from queue with the given class and arguments" do
+            ResqueSpec.queue_for(Person).count.should == 3
+            expect do
+              Resque.dequeue(Person, "xyz", "lmn").should == 2
+            end.should change(ResqueSpec.queue_for(Person), :size).by(-2)
+            ResqueSpec.queue_for(Person).count.should == 1
+          end
         end
       end
     end

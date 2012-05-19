@@ -24,8 +24,8 @@ your tests!)
 What is ResqueSpec?
 ===================
 
-ResqueSpec implements the *stable API* for Resque 1.19.x (which is `enqueue`,
-`enqueue_to` (*unreleased*), `dequeue`, `reserve`, the Resque hooks, and
+ResqueSpec implements the *stable API* for Resque 1.19+ (which is `enqueue`,
+`enqueue_to`,  `dequeue`, `peek`, `reserve`, the Resque hooks, and
 because of the way `resque_scheduler` works `Job.create` and `Job.destroy`).
 
 It does not have a test double for Redis, so this may lead to some interesting and
@@ -343,6 +343,7 @@ Contributors
 * @ToadJamb                           : encode/decode of Resque job arguments
 * @mkonikowski   (Mateusz Konikowski) : support for anything matcher
 * @mathieuravaux (Mathieu Ravaux)     : without_resque_spec support
+* @avdgaag       (Arjan van der Gaag) : peek support
 
 Copyright
 =========

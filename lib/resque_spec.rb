@@ -43,6 +43,10 @@ module ResqueSpec
     queue_by_name(queue_name(klass))
   end
 
+  def peek(queue_name, start = 0, count = 1)
+    queue_by_name(queue_name).slice(start, count)
+  end
+
   def queue_name(klass)
     if klass.is_a?(String)
       klass = Kernel.const_get(klass) rescue nil

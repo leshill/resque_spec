@@ -32,6 +32,7 @@ module Resque
   alias :enqueue_without_resque_spec :enqueue
   alias :enqueue_to_without_resque_spec :enqueue_to if Resque.respond_to? :enqueue_to
   alias :reserve_without_resque_spec :reserve
+  alias :peek_without_resque_spec :peek
 
   def enqueue(klass, *args)
     return enqueue_without_resque_spec(klass, *args) if ResqueSpec.disable_ext
@@ -51,6 +52,13 @@ module Resque
       Job.create(queue, klass, *args)
       run_after_enqueue(klass, *args)
       true
+    end
+  end
+
+  def peek(queue, start = 0, count = 1)
+    return peek_without_resque_spec(queue, start, count) if ResqueSpec.disable_ext
+    ResqueSpec.peek(queue, start, count).map do |job|
+      job.inject({}) { |a, (k, v)| a[k.to_s] = v; a }
     end
   end
 

@@ -25,6 +25,22 @@ describe "Resque Extensions" do
       end
     end
 
+    describe '#peek' do
+      before do
+        Resque.enqueue(Person, first_name, last_name)
+      end
+
+      it 'should return the queued task' do
+        Resque.peek(:people).should have(1).elements
+      end
+
+      it 'should return a job with string keys' do
+        job = Resque.peek(:people).first
+        job.should have_key('args')
+        job.should have_key('class')
+      end
+    end
+
     describe "#enqueue_to" do
       context "successfully queues" do
         subject do

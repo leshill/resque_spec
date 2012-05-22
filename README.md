@@ -331,7 +331,7 @@ Contributors
 * @bcardarella   (Brian Cardarella)   : fix mutation bug
 * @joshdavey     (Joshua Davey)       : with\_resque helper
 * @supaspoida    (Lar Van Der Jagt)   : with\_resque helper
-* @evansagge     (Evan Sagge)         : Hook in via Job.create, have_queued.in
+* @evansagge     (Evan Sagge)         : Hook in via Job.create, have\_queued.in
 * @l4rk          (Jon Larkowski)      : inline perform
 * @jcf           (James Conroy-Finn)  : spec fix
 * @ess           (Dennis Walters)     : enqueue\_in support
@@ -342,11 +342,11 @@ Contributors
 * @alexeits                           : fix matcher in bug with RSpec 2.8.0
 * @ToadJamb                           : encode/decode of Resque job arguments
 * @mkonikowski   (Mateusz Konikowski) : support for anything matcher
-* @mathieuravaux (Mathieu Ravaux)     : without_resque_spec support
+* @mathieuravaux (Mathieu Ravaux)     : without\_resque\_spec support
 * @avdgaag       (Arjan van der Gaag) : peek support
 * @dtsiknis                           : Updated removed\_delayed
 
 Copyright
 =========
 
-Copyright (c) 2010-2011 Les Hill. See LICENSE for details.
+Copyright (c) 2010-2012 Les Hill. See LICENSE for details.

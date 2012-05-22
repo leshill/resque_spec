@@ -344,6 +344,7 @@ Contributors
 * @mkonikowski   (Mateusz Konikowski) : support for anything matcher
 * @mathieuravaux (Mathieu Ravaux)     : without_resque_spec support
 * @avdgaag       (Arjan van der Gaag) : peek support
+* @dtsiknis                           : Updated removed\_delayed
 
 Copyright
 =========

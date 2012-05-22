@@ -110,6 +110,10 @@ describe ResqueSpec do
           Resque.remove_delayed(NameFromClassMethod, 1)
           ResqueSpec.schedule_for(NameFromClassMethod).should be_empty
         end
+
+        it "should return the number of removed items" do
+          Resque.remove_delayed(NameFromClassMethod, 1).should == 1
+        end
       end
 
       describe "with #enqueue_in" do
@@ -125,6 +129,10 @@ describe ResqueSpec do
         it "should remove a scheduled item from the queue" do
           Resque.remove_delayed(NameFromClassMethod, 1)
           ResqueSpec.schedule_for(NameFromClassMethod).should be_empty
+        end
+
+        it "should return the number of removed items" do
+          Resque.remove_delayed(NameFromClassMethod, 1).should == 1
         end
       end
 

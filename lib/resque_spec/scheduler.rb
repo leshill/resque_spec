@@ -43,9 +43,13 @@ module ResqueSpec
   end
 
   def remove_delayed(klass, *args)
-    queue_by_name(schedule_queue_name(klass)).delete_if do |job|
+    sched_queue = queue_by_name(schedule_queue_name(klass))
+    count_before_remove = sched_queue.length
+    sched_queue.delete_if do |job|
       job[:class] == klass.to_s && job[:args] == args
     end
+    # Return number of removed items to match Resque Scheduler behaviour
+    count_before_remove - sched_queue.length
   end
 
   def schedule_for(klass)

@@ -1,6 +1,6 @@
 ## 0.12.1 (2012-05-22)
 
-* Implement Resque.peek
+* Implement Resque.peek (@avdgaag)
 
 ## 0.12.0 (2012-05-21)
 

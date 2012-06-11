@@ -35,6 +35,7 @@ module ResqueSpec
   end
 
   def enqueue_at(time, klass, *args)
+    is_time?(time)
     perform_or_store(schedule_queue_name(klass), :class => klass.to_s, :time  => time, :stored_at => Time.now, :args => args)
   end
 
@@ -57,6 +58,10 @@ module ResqueSpec
   end
 
   private
+
+  def is_time?(time)
+    time.to_i
+  end
 
   def schedule_queue_name(klass)
     "#{queue_name(klass)}_scheduled"

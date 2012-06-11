@@ -1,3 +1,7 @@
+## 0.12.2 (2012-06-11)
+
+* #56 - Fix handling of resque-scheduler API: does not allow Date to be used (uses to_i for Redis keys)
+
 ## 0.12.1 (2012-05-22)
 
 * Implement Resque.peek (@avdgaag)

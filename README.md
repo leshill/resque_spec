@@ -345,6 +345,7 @@ Contributors
 * @mathieuravaux (Mathieu Ravaux)     : without\_resque\_spec support
 * @avdgaag       (Arjan van der Gaag) : peek support
 * @dtsiknis                           : Updated removed\_delayed
+* @lellisga      (Li Ellis Gallardo)  : fix inline/disable\_ext bug
 
 Copyright
 =========

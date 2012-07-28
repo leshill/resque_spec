@@ -69,12 +69,23 @@ describe ResqueSpec::Helpers do
 
     context "shouldn't edit global variable" do
       [true, false].each do |status|
-        describe "when globla variable is #{status}" do
+        describe "when global variable is #{status}" do
 
           it "keeps global variable #{status}" do
             ResqueSpec.inline = status
             with_resque do
               # do something
+            end
+            ResqueSpec.inline.should eq status
+          end
+
+          it "keeps global variable #{status} when it raises an exception" do
+            ResqueSpec.inline = status
+            begin
+              with_resque do
+                raise "here's an exception"
+              end
+            rescue
             end
             ResqueSpec.inline.should eq status
           end
@@ -86,7 +97,7 @@ describe ResqueSpec::Helpers do
   describe "#without_resque_spec" do
     context "shouldn't edit global variable" do
       [true, false].each do |status|
-        describe "when globla variable is #{status}" do
+        describe "when global variable is #{status}" do
 
           it "keeps global variable #{status}" do
             ResqueSpec.disable_ext = status
@@ -94,6 +105,17 @@ describe ResqueSpec::Helpers do
               # do something
             end
             ResqueSpec.disable_ext.should eq status
+          end
+
+          it "keeps global variable #{status} when it raises an exception" do
+            ResqueSpec.inline = status
+            begin
+              with_resque do
+                raise "here's an exception"
+              end
+            rescue
+            end
+            ResqueSpec.inline.should eq status
           end
         end
       end

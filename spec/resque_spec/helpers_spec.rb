@@ -67,16 +67,17 @@ describe ResqueSpec::Helpers do
       end
     end
 
-    context "shouldn't edit global variable" do
+    context "does not modify inline config" do
       [true, false].each do |status|
-        describe "when globla variable is #{status}" do
+        describe "when inline is #{status}" do
 
-          it "keeps global variable #{status}" do
+          it "leaves inline as #{status}" do
             ResqueSpec.inline = status
-            with_resque do
-              # do something
-            end
-            ResqueSpec.inline.should eq status
+            expect do
+              with_resque do
+                # do something
+              end
+            end.to_not change(ResqueSpec, :inline)
           end
         end
       end
@@ -84,16 +85,17 @@ describe ResqueSpec::Helpers do
   end
 
   describe "#without_resque_spec" do
-    context "shouldn't edit global variable" do
+    context "does not modify disable_ext config" do
       [true, false].each do |status|
-        describe "when globla variable is #{status}" do
+        describe "when disable_ext is #{status}" do
 
-          it "keeps global variable #{status}" do
+          it "leaves disable_ext as #{status}" do
             ResqueSpec.disable_ext = status
-            without_resque_spec do
-              # do something
-            end
-            ResqueSpec.disable_ext.should eq status
+            expect do
+              without_resque_spec do
+                # do something
+              end
+            end.to_not change(ResqueSpec, :disable_ext)
           end
         end
       end

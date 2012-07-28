@@ -2,11 +2,12 @@ module ResqueSpec
   module Helpers
 
     def with_resque
+      global = ResqueSpec.inline
       begin
         ResqueSpec.inline = true
         yield
       ensure
-        ResqueSpec.inline = false
+        ResqueSpec.inline = global
       end
     end
 

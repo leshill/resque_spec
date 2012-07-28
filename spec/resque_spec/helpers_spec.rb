@@ -66,5 +66,20 @@ describe ResqueSpec::Helpers do
         ResqueSpec.schedule_for(NameFromClassMethod).should have(1).item
       end
     end
+
+    context "shouldn't edit global variable" do
+      [true, false].each do |status|
+        describe "when globla variable is #{status}" do
+
+          it "keeps global variable #{status}" do
+            ResqueSpec.inline = status
+            with_resque do
+              # do something
+            end
+            ResqueSpec.inline.should eq status
+          end
+        end
+      end
+    end
   end
 end

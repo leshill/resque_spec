@@ -70,7 +70,6 @@ describe ResqueSpec::Helpers do
     context "does not modify inline config" do
       [true, false].each do |status|
         describe "when inline is #{status}" do
-
           it "leaves inline as #{status}" do
             ResqueSpec.inline = status
             expect do
@@ -78,6 +77,17 @@ describe ResqueSpec::Helpers do
                 # do something
               end
             end.to_not change(ResqueSpec, :inline)
+          end
+
+          it "leaves inline as #{status} when it raises an exception" do
+            ResqueSpec.inline = status
+            begin
+              with_resque do
+                raise "here's an exception"
+              end
+            rescue
+            end
+            ResqueSpec.inline.should eq status
           end
         end
       end
@@ -88,7 +98,6 @@ describe ResqueSpec::Helpers do
     context "does not modify disable_ext config" do
       [true, false].each do |status|
         describe "when disable_ext is #{status}" do
-
           it "leaves disable_ext as #{status}" do
             ResqueSpec.disable_ext = status
             expect do
@@ -96,6 +105,17 @@ describe ResqueSpec::Helpers do
                 # do something
               end
             end.to_not change(ResqueSpec, :disable_ext)
+          end
+
+          it "leaves disable_ext as  #{status} when it raises an exception" do
+            ResqueSpec.inline = status
+            begin
+              with_resque do
+                raise "here's an exception"
+              end
+            rescue
+            end
+            ResqueSpec.inline.should eq status
           end
         end
       end

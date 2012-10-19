@@ -260,6 +260,17 @@ describe "Resque Extensions" do
         end
       end
     end
+
+    describe "#size" do
+      context "given a valid queue" do
+        subject { Resque.size(Person.queue) }
+        it { should eq(3) }
+      end
+      context "given an invalid queue" do
+        subject { Resque.size("not_a_queue")}
+        it { should eq(0) }
+      end
+    end
   end
 
   describe Resque::Job do

@@ -1,3 +1,7 @@
+## 0.12.4 (2012-10-19)
+
+* #60 - `Resque.size` support (@jeffdeville)
+
 ## 0.12.3 (2012-07-27)
 
 * #57 - Fix bug in with\_resque and without\_resque helpers (@lellisga)

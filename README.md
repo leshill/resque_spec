@@ -25,7 +25,7 @@ What is ResqueSpec?
 ===================
 
 ResqueSpec implements the *stable API* for Resque 1.19+ (which is `enqueue`,
-`enqueue_to`,  `dequeue`, `peek`, `reserve`, the Resque hooks, and
+`enqueue_to`,  `dequeue`, `peek`, `reserve`, `size`, the Resque hooks, and
 because of the way `resque_scheduler` works `Job.create` and `Job.destroy`).
 
 It does not have a test double for Redis, so this may lead to some interesting and
@@ -346,6 +346,7 @@ Contributors
 * @avdgaag       (Arjan van der Gaag) : peek support
 * @dtsiknis                           : Updated removed\_delayed
 * @lellisga      (Li Ellis Gallardo)  : fix inline/disable\_ext bug
+* @jeffdeville   (Jeff Deville)       : Resque.size
 
 Copyright
 =========

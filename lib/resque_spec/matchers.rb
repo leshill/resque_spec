@@ -32,6 +32,11 @@ RSpec::Matchers.define :have_queued do |*expected_args|
     @times_info = @times == 1 ? ' once' : " #{@times} times"
   end
 
+  chain :once do |num_times_queued|
+    @times = 1
+    @times_info = ' once'
+  end
+
   match do |actual|
     matched = queue(actual).select do |entry|
       klass = entry.fetch(:class)

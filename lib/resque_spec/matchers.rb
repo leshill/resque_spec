@@ -27,20 +27,35 @@ end
 RSpec::Matchers.define :have_queued do |*expected_args|
   extend InQueueHelper
 
+  chain :times do |num_times_queued|
+    @times = num_times_queued
+    @times_info = @times == 1 ? ' once' : " #{@times} times"
+  end
+
   match do |actual|
-    queue(actual).any? { |entry| entry[:class].to_s == actual.to_s && expected_args == entry[:args] }
+    matched = queue(actual).select do |entry|
+      klass = entry.fetch(:class)
+      args = entry.fetch(:args)
+      klass.to_s == actual.to_s && expected_args == args
+    end
+
+    if @times
+      matched.size == @times
+    else
+      matched.size > 0
+    end
   end
 
   failure_message_for_should do |actual|
-    "expected that #{actual} would have [#{expected_args.join(', ')}] queued"
+    "expected that #{actual} would have [#{expected_args.join(', ')}] queued#{@times_info}"
   end
 
   failure_message_for_should_not do |actual|
-    "expected that #{actual} would not have [#{expected_args.join(', ')}] queued"
+    "expected that #{actual} would not have [#{expected_args.join(', ')}] queued#{@times_info}"
   end
 
   description do
-    "have queued arguments of [#{expected_args.join(', ')}]"
+    "have queued arguments of [#{expected_args.join(', ')}]#{@times_info}"
   end
 end
 

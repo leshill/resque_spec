@@ -327,26 +327,28 @@ Follow me on [Github](https://github.com/leshill) and
 Contributors
 ============
 
-* @kennethkalmer (Kenneth Kalmer)     : rspec dependency fix
-* @bcardarella   (Brian Cardarella)   : fix mutation bug
-* @joshdavey     (Joshua Davey)       : with\_resque helper
-* @supaspoida    (Lar Van Der Jagt)   : with\_resque helper
-* @evansagge     (Evan Sagge)         : Hook in via Job.create, have\_queued.in
-* @l4rk          (Jon Larkowski)      : inline perform
-* @jcf           (James Conroy-Finn)  : spec fix
-* @ess           (Dennis Walters)     : enqueue\_in support
-* @RipTheJacker                       : remove\_delayed support
-* @kwerle        (Kurt Werle)         : explicit require spec for v020
-* @dwilkie                            : initial before\_enqueue support
-* @marcinb       (Marcin Balinski)    : have\_schedule\_size\_of matcher, schedule matcher at, in
-* @alexeits                           : fix matcher in bug with RSpec 2.8.0
-* @ToadJamb                           : encode/decode of Resque job arguments
-* @mkonikowski   (Mateusz Konikowski) : support for anything matcher
-* @mathieuravaux (Mathieu Ravaux)     : without\_resque\_spec support
-* @avdgaag       (Arjan van der Gaag) : peek support
-* @dtsiknis                           : Updated removed\_delayed
-* @lellisga      (Li Ellis Gallardo)  : fix inline/disable\_ext bug
-* @jeffdeville   (Jeff Deville)       : Resque.size
+* @kennethkalmer (Kenneth Kalmer)     :rspec dependency fix
+* @bcardarella   (Brian Cardarella)   :fix mutation bug
+* @joshdavey     (Joshua Davey)       :with\_resque helper
+* @supaspoida    (Lar Van Der Jagt)   :with\_resque helper
+* @evansagge     (Evan Sagge)         :Hook in via Job.create, have\_queued.in
+* @l4rk          (Jon Larkowski)      :inline perform
+* @jcf           (James Conroy-Finn)  :spec fix
+* @ess           (Dennis Walters)     :enqueue\_in support
+* @RipTheJacker                       :remove\_delayed support
+* @kwerle        (Kurt Werle)         :explicit require spec for v020
+* @dwilkie                            :initial before\_enqueue support
+* @marcinb       (Marcin Balinski)    :have\_schedule\_size\_of matcher, schedule matcher at, in
+* @alexeits                           :fix matcher in bug with RSpec 2.8.0
+* @ToadJamb                           :encode/decode of Resque job arguments
+* @mkonikowski   (Mateusz Konikowski) :support for anything matcher
+* @mathieuravaux (Mathieu Ravaux)     :without\_resque\_spec support
+* @avdgaag       (Arjan van der Gaag) :peek support
+* @dtsiknis                           :Updated removed\_delayed
+* @lellisga      (Li Ellis Gallardo)  :fix inline/disable\_ext bug
+* @jeffdeville   (Jeff Deville)       :Resque.size
+* @opinel        (Frank Wambutt)      :Fix DST problem in `have\_scheduled`
+* @lukemelia     (Luke Melia)         :Add `times` chained matcher
 
 Copyright
 =========

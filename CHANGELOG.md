@@ -1,3 +1,8 @@
+## 0.12.5 (2012-11-04)
+
+* #61 - Fix DST problem in `have\_scheduled` (@opinel)
+* #62 - Add `times` chained matcher "it { should have\_queued(first\_name, last\_name).times(1) }" (@lukemelia)
+
 ## 0.12.4 (2012-10-19)
 
 * #60 - `Resque.size` support (@jeffdeville)

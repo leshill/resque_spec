@@ -77,6 +77,42 @@ describe "ResqueSpec Matchers" do
       end
     end
 
+    context "#times" do
+
+      subject { Person }
+
+      context "job queued once" do
+        before do
+          Resque.enqueue(Person, first_name, last_name)
+        end
+
+        it { should_not have_queued(first_name, last_name).times(0) }
+        it { should have_queued(first_name, last_name).times(1) }
+        it { should_not have_queued(first_name, last_name).times(2) }
+      end
+
+      context "no job queued" do
+        it { should have_queued(first_name, last_name).times(0) }
+        it { should_not have_queued(first_name, last_name).times(1) }
+      end
+    end
+
+    context "#once" do
+
+      subject { Person }
+
+      context "job queued once" do
+        before do
+          Resque.enqueue(Person, first_name, last_name)
+        end
+
+        it { should have_queued(first_name, last_name).once }
+      end
+
+      context "no job queued" do
+        it { should_not have_queued(first_name, last_name).once }
+      end
+    end
   end
 
   describe "#have_queue_size_of" do

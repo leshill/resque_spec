@@ -85,7 +85,7 @@ RSpec::Matchers.define :have_scheduled do |*expected_args|
       time_matches = if @time
         entry[:time] == @time
       elsif @interval
-        entry[:time].to_i == entry[:stored_at].to_i + @interval
+        entry[:time].to_i == (entry[:stored_at] + @interval).to_i
       else
         true
       end

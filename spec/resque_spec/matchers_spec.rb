@@ -155,6 +155,46 @@ describe "ResqueSpec Matchers" do
     end
   end
 
+  describe "#have_queue_size_of_at_least" do
+    context "when nothing is queued" do
+      subject { Person }
+
+      it "raises the approrpiate exception" do
+        expect do
+          should have_queue_size_of_at_least(1)
+        end.to raise_error(RSpec::Expectations::ExpectationNotMetError)
+      end
+    end
+
+    context "queued with a class" do
+      before do
+        Resque.enqueue(Person, first_name, last_name)
+      end
+
+      subject { Person }
+
+      it { should have_queue_size_of_at_least(1) }
+    end
+
+    describe "queued with a string" do
+      before do
+        2.times { Resque::Job.create(:people, "Person", first_name, last_name) }
+      end
+
+      context "asserted with a class" do
+        subject { Person }
+
+        it { should have_queue_size_of_at_least(2) }
+      end
+
+      context "asserted with a string" do
+        subject { "Person" }
+
+        it { should have_queue_size_of_at_least(1) }
+      end
+    end
+  end
+
   describe "#in" do
     before do
       Resque::Job.create(:people, "User", first_name, last_name)
@@ -264,6 +304,26 @@ describe "ResqueSpec Matchers" do
 
     it "returns true if actual schedule size matches negative expectation" do
       Person.should_not have_schedule_size_of(2)
+    end
+  end
+
+  describe "#have_schedule_size_of_at_least" do
+    before do
+      Resque.enqueue_at(Time.now + 5 * 60, Person, first_name, last_name)
+    end
+
+    it "raises the approrpiate exception" do
+      lambda {
+        Person.should have_schedule_size_of_at_least(2)
+      }.should raise_error(RSpec::Expectations::ExpectationNotMetError)
+    end
+
+    it "returns true if actual schedule size matches positive expectation" do
+      Person.should have_schedule_size_of_at_least(1)
+    end
+
+    it "returns true if actual schedule size matches negative expectation" do
+      Person.should_not have_schedule_size_of_at_least(5)
     end
   end
 end

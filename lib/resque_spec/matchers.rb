@@ -84,6 +84,26 @@ RSpec::Matchers.define :have_queue_size_of do |size|
   end
 end
 
+RSpec::Matchers.define :have_queue_size_of_at_least do |size|
+  extend InQueueHelper
+
+  match do |actual|
+    queue(actual).size >= size
+  end
+
+  failure_message_for_should do |actual|
+    "expected that #{actual} would have at least #{size} entries queued, but got #{queue(actual).size} instead"
+  end
+
+  failure_message_for_should_not do |actual|
+    "expected that #{actual} would not have at least #{size} entries queued, but got #{queue(actual).size} instead"
+  end
+
+  description do
+    "have a queue size of at least #{size}"
+  end
+end
+
 RSpec::Matchers.define :have_scheduled do |*expected_args|
   chain :at do |timestamp|
     @interval = nil
@@ -160,6 +180,24 @@ RSpec::Matchers.define :have_schedule_size_of do |size|
 
   failure_message_for_should_not do |actual|
     "expected that #{actual} would have #{size} scheduled entries."
+  end
+
+  description do
+    "have schedule size of #{size}"
+  end
+end
+
+RSpec::Matchers.define :have_schedule_size_of_at_least do |size|
+  match do |actual|
+    ResqueSpec.schedule_for(actual).size >= size
+  end
+
+  failure_message_for_should do |actual|
+    "expected that #{actual} would have at least #{size} scheduled entries, but got #{ResqueSpec.schedule_for(actual).size} instead"
+  end
+
+  failure_message_for_should_not do |actual|
+    "expected that #{actual} would have at least #{size} scheduled entries."
   end
 
   description do

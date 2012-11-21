@@ -349,6 +349,7 @@ Contributors
 * @jeffdeville   (Jeff Deville)       :Resque.size
 * @opinel        (Frank Wambutt)      :Fix DST problem in `have\_scheduled`
 * @lukemelia     (Luke Melia)         :Add `times` chained matcher
+* @heelhook      (Pablo Fernandez)    :Add `have_queue_size_of_at_least` and `have_schedule_size_of_at_least` matchers
 
 Copyright
 =========

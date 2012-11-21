@@ -1,3 +1,7 @@
+## 0.12.6 (2012-11-21)
+
+* #65 - Add `have_queue_size_of_at_least` and `have_schedule_size_of_at_least` matchers (@heelhook)
+
 ## 0.12.5 (2012-11-04)
 
 * #61 - Fix DST problem in `have\_scheduled` (@opinel)

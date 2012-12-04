@@ -107,6 +107,57 @@ describe ResqueSpec do
         ResqueSpec.schedule_for(NameFromClassMethod).first.should include(:time => Time.now + scheduled_in)
       end
     end
+    
+    describe "#enqueue_at_with_queue" do
+      before do
+        Timecop.travel(Time.at(0)) do
+          Resque.enqueue_at_with_queue(:test_queue, scheduled_at, NameFromClassMethod, 1)
+        end
+      end
+
+      it "adds to the scheduled queue hash" do
+        ResqueSpec.queue_by_name(:test_queue).should_not be_empty
+      end
+
+      it "sets the klass on the queue" do
+        ResqueSpec.queue_by_name(:test_queue).first.should include(:class => NameFromClassMethod.to_s)
+      end
+
+      it "sets the arguments on the queue" do
+        ResqueSpec.queue_by_name(:test_queue).first.should include(:time => scheduled_at)
+      end
+      
+      it "uses the correct queue" do 
+        ResqueSpec.queue_by_name(:test_queue).should_not be_empty
+      end
+    end
+    
+    describe "#enqueue_in_with_queue" do
+      before do
+        Timecop.freeze(Time.now)
+        Resque.enqueue_in_with_queue(:test_queue, scheduled_in, NameFromClassMethod, 1)
+      end
+
+      after do
+        Timecop.return
+      end
+
+      it "adds to the scheduled queue hash" do
+        ResqueSpec.queue_by_name(:test_queue).should_not be_empty
+      end
+
+      it "sets the klass on the queue" do
+        ResqueSpec.queue_by_name(:test_queue).first.should include(:class => NameFromClassMethod.to_s)
+      end
+
+      it "sets the arguments on the queue" do
+        ResqueSpec.queue_by_name(:test_queue).first.should include(:time => Time.now + scheduled_in)
+      end
+      
+      it "uses the correct queue" do 
+        ResqueSpec.queue_by_name(:test_queue).should_not be_empty
+      end
+    end
 
     describe "#remove_delayed" do
       describe "with #enqueue_at" do

@@ -1,3 +1,7 @@
+## 0.12.7 (2012-12-04)
+
+* #66 - Add support for enqueue_at_with_queue/enqueue_in_with_queue (@k1w1)
+
 ## 0.12.6 (2012-11-21)
 
 * #65 - Add `have_queue_size_of_at_least` and `have_schedule_size_of_at_least` matchers (@heelhook)

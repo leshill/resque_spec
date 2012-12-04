@@ -36,6 +36,19 @@ class NameFromClassMethod
   self.invocations = 0
 end
 
+class NoQueueClass
+  class << self
+    attr_accessor :invocations
+
+    def perform(*args)
+      self.invocations += 1
+    end
+
+  end
+
+  self.invocations = 0
+end
+
 class NameFromInstanceVariable
   @queue = "name_from_instance_variable"
 end

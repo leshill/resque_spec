@@ -208,6 +208,21 @@ You can also check the size of the schedule:
 
 (And I take note of the `before` block that is calling `reset!` for every spec)
 
+You can explicitly specify the queue when using enqueue_at_with_queue and 
+enqueue_in_with_queue:
+
+    describe "#recalculate_in_future" do
+      before do
+        ResqueSpec.reset!
+      end
+
+      it "adds person.calculate to the :future queue" do
+        person.recalculate_in_future
+
+        Person.should have_schedule_size_of(1).queue(:future)
+      end
+    end
+
 And I might write this as a Cucumber step
 
     Then /the (\w?) has (\w?) scheduled/ do |thing, method|
@@ -222,6 +237,10 @@ Then I write some code to make it pass:
 
       def recalculate
         Resque.enqueue_at(Time.now + 3600, Person, id, :calculate)
+      end
+      
+      def recalculate_in_future
+        Resque.enqueue_at_with_queue(:future, Time.now + 3600, Person, id, :calculate)
       end
     end
 
@@ -350,6 +369,7 @@ Contributors
 * @opinel        (Frank Wambutt)      :Fix DST problem in `have\_scheduled`
 * @lukemelia     (Luke Melia)         :Add `times` chained matcher
 * @heelhook      (Pablo Fernandez)    :Add `have_queue_size_of_at_least` and `have_schedule_size_of_at_least` matchers
+* @k1w1                               :Added support for enqueue_at_with_queue/enqueue_in_with_queue
 
 Copyright
 =========

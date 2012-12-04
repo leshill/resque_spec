@@ -369,7 +369,7 @@ Contributors
 * @opinel        (Frank Wambutt)      :Fix DST problem in `have\_scheduled`
 * @lukemelia     (Luke Melia)         :Add `times` chained matcher
 * @heelhook      (Pablo Fernandez)    :Add `have_queue_size_of_at_least` and `have_schedule_size_of_at_least` matchers
-* @k1w1                               :Added support for enqueue_at_with_queue/enqueue_in_with_queue
+* @k1w1                               :Add support for enqueue_at_with_queue/enqueue_in_with_queue
 
 Copyright
 =========

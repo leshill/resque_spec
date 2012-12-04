@@ -285,6 +285,18 @@ describe "ResqueSpec Matchers" do
         Person.should_not have_scheduled(first_name, last_name).in(interval + 5 * 60)
       end
     end
+    
+    context "with #queue(queue_name)" do
+      let(:interval) { 10 * 60 }
+      
+      before(:each) do
+        Resque.enqueue_in_with_queue(:test_queue, interval, NoQueueClass, 1)
+      end
+
+      it "uses queue from chained method" do
+        NoQueueClass.should have_scheduled(1).in(interval).queue(:test_queue)
+      end
+    end
   end
 
   describe "#have_schedule_size_of" do
@@ -304,6 +316,16 @@ describe "ResqueSpec Matchers" do
 
     it "returns true if actual schedule size matches negative expectation" do
       Person.should_not have_schedule_size_of(2)
+    end
+    
+    context "with #queue(queue_name)" do
+      before(:each) do
+        Resque.enqueue_in_with_queue(:test_queue, 10 * 60, NoQueueClass, 1)
+      end
+
+      it "returns true if actual schedule size matches positive expectation" do
+        NoQueueClass.should have_schedule_size_of(1).queue(:test_queue)
+      end
     end
   end
 
@@ -325,5 +347,16 @@ describe "ResqueSpec Matchers" do
     it "returns true if actual schedule size matches negative expectation" do
       Person.should_not have_schedule_size_of_at_least(5)
     end
+    
+    context "with #queue(queue_name)" do
+      before(:each) do
+        Resque.enqueue_in_with_queue(:test_queue, 10 * 60, NoQueueClass, 1)
+      end
+
+      it "returns true if actual schedule size matches positive expectation" do
+        NoQueueClass.should have_schedule_size_of_at_least(1).queue(:test_queue)
+      end
+    end
+    
   end
 end

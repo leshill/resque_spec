@@ -111,7 +111,7 @@ describe ResqueSpec do
     describe "#enqueue_at_with_queue" do
       before do
         Timecop.travel(Time.at(0)) do
-          Resque.enqueue_at_with_queue(:test_queue, scheduled_at, NameFromClassMethod, 1)
+          Resque.enqueue_at_with_queue(:test_queue, scheduled_at, NoQueueClass, 1)
         end
       end
 
@@ -120,7 +120,7 @@ describe ResqueSpec do
       end
 
       it "sets the klass on the queue" do
-        ResqueSpec.queue_by_name(:test_queue).first.should include(:class => NameFromClassMethod.to_s)
+        ResqueSpec.queue_by_name(:test_queue).first.should include(:class => NoQueueClass.to_s)
       end
 
       it "sets the arguments on the queue" do
@@ -135,7 +135,7 @@ describe ResqueSpec do
     describe "#enqueue_in_with_queue" do
       before do
         Timecop.freeze(Time.now)
-        Resque.enqueue_in_with_queue(:test_queue, scheduled_in, NameFromClassMethod, 1)
+        Resque.enqueue_in_with_queue(:test_queue, scheduled_in, NoQueueClass, 1)
       end
 
       after do
@@ -147,7 +147,7 @@ describe ResqueSpec do
       end
 
       it "sets the klass on the queue" do
-        ResqueSpec.queue_by_name(:test_queue).first.should include(:class => NameFromClassMethod.to_s)
+        ResqueSpec.queue_by_name(:test_queue).first.should include(:class => NoQueueClass.to_s)
       end
 
       it "sets the arguments on the queue" do

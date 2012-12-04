@@ -104,7 +104,33 @@ RSpec::Matchers.define :have_queue_size_of_at_least do |size|
   end
 end
 
+module ScheduleQueueHelper
+  def self.extended(klass)
+    klass.instance_eval do
+      self.queue_name = nil
+      chain :queue do |queue_name|
+        self.queue_name = queue_name
+      end
+    end
+  end
+
+  private
+
+  attr_accessor :queue_name
+
+  def schedule_queue_for(actual)
+    if @queue_name
+      ResqueSpec.queue_by_name(@queue_name)
+    else
+      ResqueSpec.schedule_for(actual)
+    end
+  end
+
+end
+
 RSpec::Matchers.define :have_scheduled do |*expected_args|
+  extend ScheduleQueueHelper
+  
   chain :at do |timestamp|
     @interval = nil
     @time = timestamp
@@ -118,7 +144,7 @@ RSpec::Matchers.define :have_scheduled do |*expected_args|
   end
 
   match do |actual|
-    ResqueSpec.schedule_for(actual).any? do |entry|
+    schedule_queue_for(actual).any? do |entry|
       class_matches = entry[:class].to_s == actual.to_s
       args_match = expected_args == entry[:args]
 
@@ -148,12 +174,13 @@ RSpec::Matchers.define :have_scheduled do |*expected_args|
 end
 
 RSpec::Matchers.define :have_scheduled_at do |*expected_args|
+  extend ScheduleQueueHelper
   warn "DEPRECATION WARNING: have_scheduled_at(time, *args) is deprecated and will be removed in future. Please use have_scheduled(*args).at(time) instead."
 
   match do |actual|
     time = expected_args.first
     other_args = expected_args[1..-1]
-    ResqueSpec.schedule_for(actual).any? { |entry| entry[:class].to_s == actual.to_s && entry[:time] == time && other_args == entry[:args] }
+    schedule_queue_for(actual).any? { |entry| entry[:class].to_s == actual.to_s && entry[:time] == time && other_args == entry[:args] }
   end
 
   failure_message_for_should do |actual|
@@ -170,12 +197,14 @@ RSpec::Matchers.define :have_scheduled_at do |*expected_args|
 end
 
 RSpec::Matchers.define :have_schedule_size_of do |size|
+  extend ScheduleQueueHelper
+  
   match do |actual|
-    ResqueSpec.schedule_for(actual).size == size
+    schedule_queue_for(actual).size == size
   end
 
   failure_message_for_should do |actual|
-    "expected that #{actual} would have #{size} scheduled entries, but got #{ResqueSpec.schedule_for(actual).size} instead"
+    "expected that #{actual} would have #{size} scheduled entries, but got #{schedule_queue_for(actual).size} instead"
   end
 
   failure_message_for_should_not do |actual|
@@ -188,12 +217,14 @@ RSpec::Matchers.define :have_schedule_size_of do |size|
 end
 
 RSpec::Matchers.define :have_schedule_size_of_at_least do |size|
+  extend ScheduleQueueHelper
+  
   match do |actual|
-    ResqueSpec.schedule_for(actual).size >= size
+    schedule_queue_for(actual).size >= size
   end
 
   failure_message_for_should do |actual|
-    "expected that #{actual} would have at least #{size} scheduled entries, but got #{ResqueSpec.schedule_for(actual).size} instead"
+    "expected that #{actual} would have at least #{size} scheduled entries, but got #{schedule_queue_for(actual).size} instead"
   end
 
   failure_message_for_should_not do |actual|

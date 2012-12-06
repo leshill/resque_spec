@@ -130,7 +130,7 @@ end
 
 RSpec::Matchers.define :have_scheduled do |*expected_args|
   extend ScheduleQueueHelper
-  
+
   chain :at do |timestamp|
     @interval = nil
     @time = timestamp
@@ -198,7 +198,7 @@ end
 
 RSpec::Matchers.define :have_schedule_size_of do |size|
   extend ScheduleQueueHelper
-  
+
   match do |actual|
     schedule_queue_for(actual).size == size
   end
@@ -218,7 +218,7 @@ end
 
 RSpec::Matchers.define :have_schedule_size_of_at_least do |size|
   extend ScheduleQueueHelper
-  
+
   match do |actual|
     schedule_queue_for(actual).size >= size
   end

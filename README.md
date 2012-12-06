@@ -208,7 +208,7 @@ You can also check the size of the schedule:
 
 (And I take note of the `before` block that is calling `reset!` for every spec)
 
-You can explicitly specify the queue when using enqueue_at_with_queue and 
+You can explicitly specify the queue when using enqueue_at_with_queue and
 enqueue_in_with_queue:
 
     describe "#recalculate_in_future" do
@@ -238,7 +238,7 @@ Then I write some code to make it pass:
       def recalculate
         Resque.enqueue_at(Time.now + 3600, Person, id, :calculate)
       end
-      
+
       def recalculate_in_future
         Resque.enqueue_at_with_queue(:future, Time.now + 3600, Person, id, :calculate)
       end

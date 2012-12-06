@@ -107,7 +107,7 @@ describe ResqueSpec do
         ResqueSpec.schedule_for(NameFromClassMethod).first.should include(:time => Time.now + scheduled_in)
       end
     end
-    
+
     describe "#enqueue_at_with_queue" do
       before do
         Timecop.travel(Time.at(0)) do
@@ -126,12 +126,12 @@ describe ResqueSpec do
       it "sets the arguments on the queue" do
         ResqueSpec.queue_by_name(:test_queue).first.should include(:time => scheduled_at)
       end
-      
-      it "uses the correct queue" do 
+
+      it "uses the correct queue" do
         ResqueSpec.queue_by_name(:test_queue).should_not be_empty
       end
     end
-    
+
     describe "#enqueue_in_with_queue" do
       before do
         Timecop.freeze(Time.now)
@@ -153,8 +153,8 @@ describe ResqueSpec do
       it "sets the arguments on the queue" do
         ResqueSpec.queue_by_name(:test_queue).first.should include(:time => Time.now + scheduled_in)
       end
-      
-      it "uses the correct queue" do 
+
+      it "uses the correct queue" do
         ResqueSpec.queue_by_name(:test_queue).should_not be_empty
       end
     end

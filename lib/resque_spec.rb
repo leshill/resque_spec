@@ -107,5 +107,3 @@ end
 
 config = RSpec.configuration
 config.include ResqueSpec::Helpers
-
-World(ResqueSpec::Helpers) if defined?(World)

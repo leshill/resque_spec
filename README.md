@@ -21,6 +21,18 @@ your tests!)
       gem 'resque_spec'
     end
 
+Cucumber
+--------
+
+By default, the above will add the `ResqueSpec` module and make it available in
+Cucumber. If you want the `with_resque` and `without_resque` helpers, manually
+require the `resque\_spec/cucumber` module:
+
+    require 'resque\_spec/cucumber'
+
+This can be done in `features/support/env.rb` or in a specific support file
+such as `features/support/resque.rb`.
+
 What is ResqueSpec?
 ===================
 

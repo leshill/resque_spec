@@ -1,3 +1,7 @@
+## 0.13.0 (2013-01-07)
+
+* #9 - Add `resque_spec/cucumber` to expose `with_resque` helpers to `World`
+
 ## 0.12.7 (2012-12-04)
 
 * #66 - Add support for enqueue_at_with_queue/enqueue_in_with_queue (@k1w1)

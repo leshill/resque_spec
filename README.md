@@ -66,7 +66,10 @@ And I write this spec using the `resque_spec` matcher
       end
     end
 
-(And I take note of the `before` block that is calling `reset!` for every spec)
+
+And I see that the `have_queued` assertion is asserting that the `Person` queue has a job with arguments `person.id` and `:calculate`
+
+And I take note of the `before` block that is calling `reset!` for every spec
 
 And I might use the `in` statement to specify the queue:
 

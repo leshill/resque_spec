@@ -1,3 +1,7 @@
+## On master
+
+* #70 - RSpec 2.1x support (@ozeias)
+
 ## 0.13.0 (2013-01-07)
 
 * #9 - Add `resque_spec/cucumber` to expose `with_resque` helpers to `World`

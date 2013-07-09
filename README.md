@@ -361,30 +361,30 @@ Follow me on [Github](https://github.com/leshill) and
 Contributors
 ============
 
-* @kennethkalmer (Kenneth Kalmer)     :rspec dependency fix
-* @bcardarella   (Brian Cardarella)   :fix mutation bug
-* @joshdavey     (Joshua Davey)       :with\_resque helper
-* @supaspoida    (Lar Van Der Jagt)   :with\_resque helper
-* @evansagge     (Evan Sagge)         :Hook in via Job.create, have\_queued.in
-* @l4rk          (Jon Larkowski)      :inline perform
-* @jcf           (James Conroy-Finn)  :spec fix
-* @ess           (Dennis Walters)     :enqueue\_in support
-* @RipTheJacker                       :remove\_delayed support
-* @kwerle        (Kurt Werle)         :explicit require spec for v020
-* @dwilkie                            :initial before\_enqueue support
-* @marcinb       (Marcin Balinski)    :have\_schedule\_size\_of matcher, schedule matcher at, in
-* @alexeits                           :fix matcher in bug with RSpec 2.8.0
-* @ToadJamb                           :encode/decode of Resque job arguments
-* @mkonikowski   (Mateusz Konikowski) :support for anything matcher
-* @mathieuravaux (Mathieu Ravaux)     :without\_resque\_spec support
-* @avdgaag       (Arjan van der Gaag) :peek support
-* @dtsiknis                           :Updated removed\_delayed
-* @lellisga      (Li Ellis Gallardo)  :fix inline/disable\_ext bug
-* @jeffdeville   (Jeff Deville)       :Resque.size
-* @opinel        (Frank Wambutt)      :Fix DST problem in `have\_scheduled`
-* @lukemelia     (Luke Melia)         :Add `times` chained matcher
-* @heelhook      (Pablo Fernandez)    :Add `have_queue_size_of_at_least` and `have_schedule_size_of_at_least` matchers
-* @k1w1                               :Add support for enqueue_at_with_queue/enqueue_in_with_queue
+* Kenneth Kalmer     (@kennethkalmer) : rspec dependency fix
+* Brian Cardarella   (@bcardarella)   : fix mutation bug
+* Joshua Davey       (@joshdavey)     : with\_resque helper
+* Lar Van Der Jagt   (@supaspoida)    : with\_resque helper
+* Evan Sagge         (@evansagge)     : Hook in via Job.create, have\_queued.in
+* Jon Larkowski      (@l4rk)          : inline perform
+* James Conroy-Finn  (@jcf)           : spec fix
+* Dennis Walters     (@ess)           : enqueue\_in support
+*                    (@RipTheJacker)  : remove\_delayed support
+* Kurt Werle         (@kwerle)        : explicit require spec for v020
+*                    (@dwilkie)       : initial before\_enqueue support
+* Marcin Balinski    (@marcinb)       : have\_schedule\_size\_of matcher, schedule matcher at, in
+*                    (@alexeits)      : fix matcher in bug with RSpec 2.8.0
+*                    (@ToadJamb)      : encode/decode of Resque job arguments
+* Mateusz Konikowski (@mkonikowski)   : support for anything matcher
+* Mathieu Ravaux     (@mathieuravaux) : without\_resque\_spec support
+* Arjan van der Gaag (@avdgaag)       : peek support
+*                    (@dtsiknis)      : Updated removed\_delayed
+* Li Ellis Gallardo  (@lellisga)      : fix inline/disable\_ext bug
+* Jeff Deville       (@jeffdeville)   : Resque.size
+* Frank Wambutt      (@opinel)        : Fix DST problem in `have\_scheduled`
+* Luke Melia         (@lukemelia)     : Add `times` chained matcher
+* Pablo Fernandez    (@heelhook)      : Add `have_queue_size_of_at_least` and `have_schedule_size_of_at_least` matchers
+*                    (@k1w1)          : Add support for enqueue_at_with_queue/enqueue_in_with_queue
 
 Copyright
 =========

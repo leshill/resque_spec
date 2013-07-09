@@ -27,7 +27,7 @@ describe ResqueSpec do
 
           expect do
             ResqueSpec.dequeue(queue_name, klass)
-          end.should_not change { ResqueSpec.queue_by_name(queue_name) }
+          end.not_to change { ResqueSpec.queue_by_name(queue_name) }
         end
       end
     end
@@ -46,7 +46,7 @@ describe ResqueSpec do
         it "does nothing" do
           expect do
             ResqueSpec.dequeue(queue_name, klass, first_name)
-          end.should_not change { ResqueSpec.queue_by_name(queue_name) }
+          end.not_to change { ResqueSpec.queue_by_name(queue_name) }
         end
       end
     end
@@ -74,7 +74,7 @@ describe ResqueSpec do
       it "does not perform the queued action" do
         expect {
           ResqueSpec.enqueue(:queue_name, NameFromClassMethod, 1)
-        }.should_not change(NameFromClassMethod, :invocations)
+        }.not_to change(NameFromClassMethod, :invocations)
       end
 
       it "does not change the behavior of enqueue" do
@@ -89,7 +89,7 @@ describe ResqueSpec do
       it "performs the queued action" do
         expect {
           ResqueSpec.enqueue(:queue_name, NameFromClassMethod, 1)
-        }.should change(NameFromClassMethod, :invocations).by(1)
+        }.to change(NameFromClassMethod, :invocations).by(1)
       end
 
       it "does not enqueue" do
@@ -151,13 +151,13 @@ describe ResqueSpec do
     it "performs the enqueued job" do
       expect {
         ResqueSpec.perform_all(:queue_name)
-      }.should change(NameFromClassMethod, :invocations).by(3)
+      }.to change(NameFromClassMethod, :invocations).by(3)
     end
 
     it "removes all items from the queue" do
       expect {
         ResqueSpec.perform_all(:queue_name)
-      }.should change { ResqueSpec.queue_by_name(:queue_name).empty? }.from(false).to(true)
+      }.to change { ResqueSpec.queue_by_name(:queue_name).empty? }.from(false).to(true)
     end
   end
 
@@ -167,13 +167,13 @@ describe ResqueSpec do
     it "performs the enqueued job" do
       expect {
         ResqueSpec.perform_next(:queue_name)
-      }.should change(NameFromClassMethod, :invocations).by(1)
+      }.to change(NameFromClassMethod, :invocations).by(1)
     end
 
     it "removes an item from the queue" do
       expect {
         ResqueSpec.perform_next(:queue_name)
-      }.should change { ResqueSpec.queue_by_name(:queue_name).size }.by(-1)
+      }.to change { ResqueSpec.queue_by_name(:queue_name).size }.by(-1)
     end
   end
 
@@ -199,19 +199,19 @@ describe ResqueSpec do
     it "raises if there is no queue defined for a class" do
       expect do
         ResqueSpec.queue_for(String)
-      end.should raise_error(::Resque::NoQueueError)
+      end.to raise_error(::Resque::NoQueueError)
     end
 
     it "recognizes a queue defined as a class instance variable" do
       expect do
         ResqueSpec.queue_for(NameFromInstanceVariable)
-      end.should_not raise_error(::Resque::NoQueueError)
+      end.not_to raise_error()
     end
 
     it "recognizes a queue defined as a class method" do
       expect do
         ResqueSpec.queue_for(NameFromClassMethod)
-      end.should_not raise_error(::Resque::NoQueueError)
+      end.not_to raise_error()
     end
 
   end
@@ -220,7 +220,7 @@ describe ResqueSpec do
     it "raises if there is no queue defined for a class" do
       expect do
         ResqueSpec.queue_name(String)
-      end.should raise_error(::Resque::NoQueueError)
+      end.to raise_error()
     end
 
     it "returns the queue name if there is a queue defined as an instance var" do
@@ -281,5 +281,4 @@ describe ResqueSpec do
       ResqueSpec.inline.should be_false
     end
   end
-
 end

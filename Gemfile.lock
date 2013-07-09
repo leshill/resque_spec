@@ -6,7 +6,7 @@ PATH
       rspec (>= 2.5.0)
 
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
     archive-tar-minitar (0.5.2)
     columnize (0.3.6)

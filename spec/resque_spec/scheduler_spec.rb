@@ -15,19 +15,19 @@ describe ResqueSpec do
     it "raises if there is no schedule queue defined for a class" do
       expect do
         ResqueSpec.schedule_for(String)
-      end.should raise_error(::Resque::NoQueueError)
+      end.to raise_error(::Resque::NoQueueError)
     end
 
     it "recognizes a queue defined as a class instance variable" do
       expect do
         ResqueSpec.schedule_for(NameFromInstanceVariable)
-      end.should_not raise_error(::Resque::NoQueueError)
+      end.not_to raise_error()
     end
 
     it "recognizes a queue defined as a class method" do
       expect do
         ResqueSpec.schedule_for(NameFromClassMethod)
-      end.should_not raise_error(::Resque::NoQueueError)
+      end.not_to raise_error()
     end
 
     it "has an empty array if nothing queued for a class" do

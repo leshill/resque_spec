@@ -106,7 +106,7 @@ describe "Resque Extensions" do
             HookOrder.reset!
             expect {
               with_resque { Resque.enqueue(HookOrder, 1) }
-            }.should_not raise_error
+            }.not_to raise_error
           end
 
           it "calls the before_enqueue hook" do
@@ -187,7 +187,7 @@ describe "Resque Extensions" do
             ResqueSpec.queue_for(Person).count.should == 3
             expect do
               Resque.dequeue(Person)
-            end.should change(ResqueSpec.queue_for(Person), :count).by(-3)
+            end.to change(ResqueSpec.queue_for(Person), :count).by(-3)
             ResqueSpec.queue_for(Person).count.should == 0
           end
         end
@@ -197,7 +197,7 @@ describe "Resque Extensions" do
             ResqueSpec.queue_for(Person).count.should == 3
             expect do
               Resque.dequeue(Person, "xyz", "lmn")
-            end.should change(ResqueSpec.queue_for(Person), :size).by(-2)
+            end.to change(ResqueSpec.queue_for(Person), :size).by(-2)
             ResqueSpec.queue_for(Person).count.should == 1
           end
         end
@@ -207,7 +207,7 @@ describe "Resque Extensions" do
             ResqueSpec.queue_for(Person).count.should == 3
             expect do
               Resque.dequeue(Person).should == 3
-            end.should change(ResqueSpec.queue_for(Person), :count).by(-3)
+            end.to change(ResqueSpec.queue_for(Person), :count).by(-3)
             ResqueSpec.queue_for(Person).count.should == 0
           end
         end
@@ -217,7 +217,7 @@ describe "Resque Extensions" do
             ResqueSpec.queue_for(Person).count.should == 3
             expect do
               Resque.dequeue(Person, "xyz", "lmn").should == 2
-            end.should change(ResqueSpec.queue_for(Person), :size).by(-2)
+            end.to change(ResqueSpec.queue_for(Person), :size).by(-2)
             ResqueSpec.queue_for(Person).count.should == 1
           end
         end
@@ -304,7 +304,7 @@ describe "Resque Extensions" do
           ResqueSpec.queue_for(Person).count.should == 3
           expect do
             Resque::Job.destroy(:people, Person).should == 3
-          end.should change(ResqueSpec.queue_for(Person), :count).by(-3)
+          end.to change(ResqueSpec.queue_for(Person), :count).by(-3)
           ResqueSpec.queue_for(Person).count.should == 0
         end
       end
@@ -314,7 +314,7 @@ describe "Resque Extensions" do
           ResqueSpec.queue_for(Person).count.should == 3
           expect do
             Resque::Job.destroy(:people, Person, "xyz", "lmn").should == 2
-          end.should change(ResqueSpec.queue_for(Person), :size).by(-2)
+          end.to change(ResqueSpec.queue_for(Person), :size).by(-2)
           ResqueSpec.queue_for(Person).count.should == 1
         end
       end

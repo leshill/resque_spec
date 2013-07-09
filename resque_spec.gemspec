@@ -19,9 +19,10 @@ Gem::Specification.new do |s|
   s.files = Dir.glob("lib/**/*") + %w(LICENSE README.md Rakefile)
 
   s.add_runtime_dependency('resque', ['>= 1.19.0'])
-  s.add_runtime_dependency('rspec', ['>= 2.10.0'])
+  s.add_runtime_dependency('rspec', ['>= 2.5.0'])
   s.add_development_dependency('resque-scheduler')
   s.add_development_dependency('ruby-debug19')
   s.add_development_dependency('timecop')
   s.add_development_dependency('rake')
+  s.add_development_dependency('rspec', ['>= 2.10.0'])
 end

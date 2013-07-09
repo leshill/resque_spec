@@ -3,7 +3,7 @@ PATH
   specs:
     resque_spec (0.13.0)
       resque (>= 1.19.0)
-      rspec (>= 2.10.0)
+      rspec (>= 2.5.0)
 
 GEM
   remote: https://rubygems.org/
@@ -67,5 +67,6 @@ DEPENDENCIES
   rake
   resque-scheduler
   resque_spec!
+  rspec (>= 2.10.0)
   ruby-debug19
   timecop

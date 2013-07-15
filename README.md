@@ -149,6 +149,28 @@ environment. Your initializer will probably end up looking like:
     # config/initializers/resque_mailer.rb
     Resque::Mailer.excluded_environments = []
 
+If you have a mailer like this:
+
+    class ExampleMailer < ActionMailer::Base
+      include Resque::Mailer
+
+      def welcome_email(user_id)
+      end
+    end
+
+You can write a spec like this:
+
+    describe "#welcome_email" do
+      before do
+        ResqueSpec.reset!
+        Examplemailer.welcome_email(user.id).deliver
+      end
+
+      subject { described_class }
+      it { should have_queue_size_of(1) }
+      it { should have_queued(:welcome_email, user.id) }
+    end
+
 resque-scheduler with Specs
 ==========================
 

@@ -408,6 +408,7 @@ Contributors
 * Pablo Fernandez    (@heelhook)      : Add `have_queue_size_of_at_least` and `have_schedule_size_of_at_least` matchers
 *                    (@k1w1)          : Add support for enqueue_at_with_queue/enqueue_in_with_queue
 * Ozéias Sant'ana    (@ozeias)        : Update specs to RSpec 2.10
+* Yuya Kitajima      (@yuyak)         : Add ResqueMailer examples to README
 
 Copyright
 =========

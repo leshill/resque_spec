@@ -1,5 +1,6 @@
 ## On master
 
+* Add ResqueMailer examples to README (@yuyak)
 * #70 - RSpec 2.1x support (@ozeias)
 
 ## 0.13.0 (2013-01-07)

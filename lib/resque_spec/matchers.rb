@@ -1,4 +1,6 @@
-require 'rspec'
+require 'rspec/core'
+require 'rspec/expectations'
+require 'rspec/mocks'
 
 module InQueueHelper
   def self.extended(klass)

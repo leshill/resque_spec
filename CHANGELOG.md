@@ -1,5 +1,7 @@
 ## On master
 
+## 0.14.0 (2013-08-07)
+
 * Add ResqueMailer examples to README (@yuyak)
 * #70 - RSpec 2.1x support (@ozeias)
 * #73 - Replace `rspec` dependency with explicit dependencies (@andresbravog)

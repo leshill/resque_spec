@@ -13,6 +13,7 @@ Gem::Specification.new do |s|
   s.summary = 'RSpec matchers for Resque'
   s.homepage = 'http://github.com/leshill/resque_spec'
   s.email = 'leshill@gmail.com'
+  s.license = 'MIT'
 
   s.require_path = "lib"
 

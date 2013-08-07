@@ -1,5 +1,9 @@
 ## On master
 
+## 0.14.1 (2013-08-07)
+
+* #75 - Add license statement to gemspec
+
 ## 0.14.0 (2013-08-07)
 
 * Add ResqueMailer examples to README (@yuyak)

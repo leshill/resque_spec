@@ -1,5 +1,9 @@
 ## On master
 
+## 0.14.2 (2013-08-10)
+
+* #76 - Loosen rubygems version constraint (@Empact)
+
 ## 0.14.1 (2013-08-07)
 
 * #75 - Add license statement to gemspec

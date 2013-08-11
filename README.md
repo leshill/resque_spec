@@ -410,6 +410,7 @@ Contributors
 * Ozéias Sant'ana    (@ozeias)        : Update specs to RSpec 2.10
 * Yuya Kitajima      (@yuyak)         : Add ResqueMailer examples to README
 * Andrés Bravo       (@andresbravog)  : Replace `rspec` dependency with explicit dependencies
+* Ben Woosley        (@Empact)        : Loosen rubygems version constraint
 
 Copyright
 =========

@@ -4,7 +4,7 @@ $:.unshift lib unless $:.include?(lib)
 require "resque_spec/version"
 
 Gem::Specification.new do |s|
-  s.required_rubygems_version = '>= 2.0.0'
+  s.required_rubygems_version = '>= 1.3.6'
 
   s.name = 'resque_spec'
   s.version = ResqueSpec::VERSION

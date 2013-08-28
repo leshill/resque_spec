@@ -84,7 +84,7 @@ module ResqueSpec
   end
 
   def schedule_queue_name(klass)
-    "#{queue_name(klass)}_scheduled"
+    queue_name(klass)
   end
 end
 

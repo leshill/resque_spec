@@ -1,5 +1,7 @@
 ## On master
 
+* Use pry instead of debugger
+
 ## 0.14.2 (2013-08-10)
 
 * #76 - Loosen rubygems version constraint (@Empact)

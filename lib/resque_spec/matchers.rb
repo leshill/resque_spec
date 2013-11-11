@@ -195,11 +195,11 @@ RSpec::Matchers.define :have_scheduled do |*expected_args|
   end
 
   failure_message_for_should do |actual|
-    ["expected that #{actual} would have [#{expected_args.join(', ')}] scheduled but actually #{actuall} with [#{actual_args_str(actual)}]", @time_info].join(' ')
+    ["expected that #{actual} would have [#{expected_args.join(', ')}] scheduled but actually #{actual} with [#{actual_args_str(actual)}]", @time_info].join(' ')
   end
 
   failure_message_for_should_not do |actual|
-    ["expected that #{actual} would not have [#{expected_args.join(', ')}] scheduled but actually #{actuall} with [#{actual_args_str(actual)}]", @time_info].join(' ')
+    ["expected that #{actual} would not have [#{expected_args.join(', ')}] scheduled but actually #{actual} with [#{actual_args_str(actual)}]", @time_info].join(' ')
   end
 
   description do

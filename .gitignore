@@ -18,5 +18,6 @@ coverage
 rdoc
 .bundle
 *.gem
+Gemfile.lock
 
 ## PROJECT::SPECIFIC

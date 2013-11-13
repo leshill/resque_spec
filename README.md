@@ -1,6 +1,9 @@
 ResqueSpec
 ==========
 
+[![Build
+Status](https://travis-ci.org/leshill/resque_spec.png)](https://travis-ci.org/leshill/resque_spec])
+
 A test double of Resque for RSpec and Cucumber. The code was originally based
 on
 [http://github.com/justinweiss/resque_unit](http://github.com/justinweiss/resque_unit).

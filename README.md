@@ -414,6 +414,7 @@ Contributors
 * Yuya Kitajima      (@yuyak)         : Add ResqueMailer examples to README
 * Andrés Bravo       (@andresbravog)  : Replace `rspec` dependency with explicit dependencies
 * Ben Woosley        (@Empact)        : Loosen rubygems version constraint
+* Jeff Dickey        (@dickeyxxx)     : Remove 2.0 warnings, added Travis
 
 Copyright
 =========

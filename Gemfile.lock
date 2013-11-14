@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    resque_spec (0.14.2)
+    resque_spec (0.14.3)
       resque (>= 1.19.0)
       rspec-core (>= 2.5.0)
       rspec-expectations (>= 2.5.0)

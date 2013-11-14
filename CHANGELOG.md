@@ -1,5 +1,9 @@
 ## On master
 
+# 0.14.3 (2013-11-13)
+
+* #82 - Add Travis CI to repo (@dickeyxxx)
+* #81 - Fix Resque 2.0 warnings (@dickeyxxx)
 * Use pry instead of debugger
 
 ## 0.14.2 (2013-08-10)

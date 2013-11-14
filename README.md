@@ -418,4 +418,4 @@ Contributors
 Copyright
 =========
 
-Copyright (c) 2010-2012 Les Hill. See LICENSE for details.
+Copyright (c) 2010-2013 Les Hill. See LICENSE for details.

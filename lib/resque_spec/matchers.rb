@@ -26,6 +26,46 @@ module InQueueHelper
 
 end
 
+RSpec::Matchers.define :be_queued do |*expected_args|
+  extend InQueueHelper
+
+  chain :times do |num_times_queued|
+    @times = num_times_queued
+    @times_info = @times == 1 ? ' once' : " #{@times} times"
+  end
+
+  chain :once do |num_times_queued|
+    @times = 1
+    @times_info = ' once'
+  end
+
+  match do |actual|
+    matched = queue(actual).select do |entry|
+      klass = entry.fetch(:class)
+      args = entry.fetch(:args)
+      klass.to_s == actual.to_s && expected_args == args
+    end
+
+    if @times
+      matched.size == @times
+    else
+      matched.size > 0
+    end
+  end
+
+  failure_message_for_should do |actual|
+    "expected that #{actual} would be queued with [#{expected_args.join(', ')}]#{@times_info}"
+  end
+
+  failure_message_for_should_not do |actual|
+    "expected that #{actual} would not be queued with [#{expected_args.join(', ')}]#{@times_info}"
+  end
+
+  description do
+    "be queued with arguments of [#{expected_args.join(', ')}]#{@times_info}"
+  end
+end
+
 RSpec::Matchers.define :have_queued do |*expected_args|
   extend InQueueHelper
 

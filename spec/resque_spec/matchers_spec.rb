@@ -8,6 +8,113 @@ describe "ResqueSpec Matchers" do
   let(:first_name) { 'Les' }
   let(:last_name) { 'Hill' }
 
+  describe "#be_queued" do
+    context "queued with a class" do
+      before do
+        Resque.enqueue(Person, first_name, last_name)
+      end
+
+      subject { Person }
+
+      it { should be_queued(first_name, last_name) }
+      it { should_not be_queued(last_name, first_name) }
+    end
+
+    context "queued with a string" do
+      before do
+        Resque::Job.create(:people, "Person", first_name, last_name)
+      end
+
+      context "asserted with a class" do
+        subject { Person }
+
+        it { should be_queued(first_name, last_name) }
+        it { should_not be_queued(last_name, first_name) }
+      end
+
+      context "asserted with a string" do
+        subject { "Person" }
+
+        it { should be_queued(first_name, last_name) }
+        it { should_not be_queued(last_name, first_name) }
+      end
+
+      context "with anything matcher" do
+        subject { "Person" }
+
+        it { should be_queued(anything, anything) }
+        it { should be_queued(anything, last_name) }
+        it { should be_queued(first_name, anything) }
+        it { should_not be_queued(anything) }
+        it { should_not be_queued(anything, anything, anything) }
+      end
+    end
+
+    context "#in" do
+
+      before do
+        Resque::Job.create(:people, "User", first_name, last_name)
+      end
+
+      subject { "User" }
+
+      context "without #in(queue_name)" do
+        it "should raise a Resque::NoQueueError" do
+          lambda { "User".should be_queued(first_name, last_name) }.should raise_error(Resque::NoQueueError)
+        end
+      end
+
+      context "with #in(queue_name)" do
+        it { should be_queued(first_name, last_name).in(:people) }
+        it { should_not be_queued(last_name, first_name).in(:people) }
+      end
+
+      context "without #in(:places) after #in(:people)" do
+        before { should be_queued(first_name, last_name).in(:people) }
+        before { Resque.enqueue(Place) }
+
+        specify { Place.should be_queued }
+      end
+    end
+
+    context "#times" do
+
+      subject { Person }
+
+      context "job queued once" do
+        before do
+          Resque.enqueue(Person, first_name, last_name)
+        end
+
+        it { should_not be_queued(first_name, last_name).times(0) }
+        it { should be_queued(first_name, last_name).times(1) }
+        it { should_not be_queued(first_name, last_name).times(2) }
+      end
+
+      context "no job queued" do
+        it { should be_queued(first_name, last_name).times(0) }
+        it { should_not be_queued(first_name, last_name).times(1) }
+      end
+    end
+
+    context "#once" do
+
+      subject { Person }
+
+      context "job queued once" do
+        before do
+          Resque.enqueue(Person, first_name, last_name)
+        end
+
+        it { should be_queued(first_name, last_name).once }
+      end
+
+      context "no job queued" do
+        it { should_not be_queued(first_name, last_name).once }
+      end
+    end
+  end
+
   describe "#have_queued" do
     context "queued with a class" do
       before do

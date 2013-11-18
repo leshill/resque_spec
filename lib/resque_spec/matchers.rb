@@ -66,6 +66,10 @@ RSpec::Matchers.define :have_queued do |*expected_args|
   end
 end
 
+module RSpec::Matchers
+  alias :be_queued :have_queued
+end
+
 RSpec::Matchers.define :have_queue_size_of do |size|
   extend InQueueHelper
 

@@ -415,6 +415,7 @@ Contributors
 * Andrés Bravo       (@andresbravog)  : Replace `rspec` dependency with explicit dependencies
 * Ben Woosley        (@Empact)        : Loosen rubygems version constraint
 * Jeff Dickey        (@dickeyxxx)     : Remove 2.0 warnings, added Travis
+* Earle Clubb        (@eclubb)        : `be\_queued` matcher
 
 Copyright
 =========

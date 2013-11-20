@@ -406,7 +406,7 @@ Contributors
 *                    (@dtsiknis)      : Updated removed\_delayed
 * Li Ellis Gallardo  (@lellisga)      : fix inline/disable\_ext bug
 * Jeff Deville       (@jeffdeville)   : Resque.size
-* Frank Wambutt      (@opinel)        : Fix DST problem in `have\_scheduled`
+* Frank Wambutt      (@opinel)        : Fix DST problem in `have_scheduled`
 * Luke Melia         (@lukemelia)     : Add `times` chained matcher
 * Pablo Fernandez    (@heelhook)      : Add `have_queue_size_of_at_least` and `have_schedule_size_of_at_least` matchers
 *                    (@k1w1)          : Add support for enqueue\_at\_with\_queue/enqueue\_in\_with\_queue
@@ -415,7 +415,7 @@ Contributors
 * Andrés Bravo       (@andresbravog)  : Replace `rspec` dependency with explicit dependencies
 * Ben Woosley        (@Empact)        : Loosen rubygems version constraint
 * Jeff Dickey        (@dickeyxxx)     : Remove 2.0 warnings, added Travis
-* Earle Clubb        (@eclubb)        : `be\_queued` matcher
+* Earle Clubb        (@eclubb)        : `be_queued` matcher
 
 Copyright
 =========

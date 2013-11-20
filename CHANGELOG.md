@@ -1,5 +1,9 @@
 ## On master
 
+# 0.14.4 (2013-11-20)
+
+* #87 - Add 'be\_queued' matcher that behaves like 'have\_queued' (@eclubb)
+
 # 0.14.3 (2013-11-13)
 
 * #82 - Add Travis CI to repo (@dickeyxxx)

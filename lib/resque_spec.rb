@@ -80,7 +80,12 @@ module ResqueSpec
   end
 
   def perform(queue_name, payload)
-    new_job(queue_name, payload).perform
+    job = new_job(queue_name, payload)
+    begin
+      job.perform
+    rescue Object => e
+      job.fail(e)
+    end
   end
 
   def perform_or_store(queue_name, payload)

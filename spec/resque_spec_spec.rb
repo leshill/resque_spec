@@ -97,11 +97,10 @@ describe ResqueSpec do
         ResqueSpec.queue_by_name(:queue_name).should be_empty
       end
 
-      it "reports failures" do
-        ResqueSpec.enqueue(:queue_name, FailingJob, 1)
-        payload = {"class"=>"FailingJob", "args"=>[1], "stored_at"=>nil}
-        expect(Resque::Failure.all["payload"]).to eq payload
-        expect(Resque::Failure.all["error"]).to eq "failure!"
+      it "fails jobs" do
+        expect do
+          ResqueSpec.enqueue(:queue_name, FailingJob, 1)
+        end.to change(Resque::Failure, :count).by(1)
       end
     end
   end

@@ -36,6 +36,21 @@ class NameFromClassMethod
   self.invocations = 0
 end
 
+class FailingJob
+  class << self
+    attr_accessor :failures
+
+    def perform(*args)
+      raise "failure!"
+    end
+
+    def queue
+      :failing_job
+    end
+  end
+  self.failures = 0
+end
+
 class NoQueueClass
   class << self
     attr_accessor :invocations

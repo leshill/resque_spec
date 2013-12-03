@@ -96,6 +96,13 @@ describe ResqueSpec do
         ResqueSpec.enqueue(:queue_name, NameFromClassMethod, 1)
         ResqueSpec.queue_by_name(:queue_name).should be_empty
       end
+
+      it "fails jobs" do
+        Resque::Job.any_instance.stub(:fail) { FailingJob.failures += 1  }
+        expect do
+          ResqueSpec.enqueue(:queue_name, FailingJob, 1)
+        end.to change(FailingJob, :failures).by(1)
+      end
     end
   end
 

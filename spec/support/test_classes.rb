@@ -38,6 +38,8 @@ end
 
 class FailingJob
   class << self
+    attr_accessor :failures
+
     def perform(*args)
       raise "failure!"
     end
@@ -46,6 +48,7 @@ class FailingJob
       :failing_job
     end
   end
+  self.failures = 0
 end
 
 class NoQueueClass

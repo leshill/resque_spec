@@ -98,9 +98,10 @@ describe ResqueSpec do
       end
 
       it "fails jobs" do
+        Resque::Job.any_instance.stub(:fail) { FailingJob.failures += 1  }
         expect do
           ResqueSpec.enqueue(:queue_name, FailingJob, 1)
-        end.to change(Resque::Failure, :count).by(1)
+        end.to change(FailingJob, :failures).by(1)
       end
     end
   end

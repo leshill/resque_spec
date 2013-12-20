@@ -29,7 +29,6 @@ module Resque
       old_count - ResqueSpec.queue_by_name(queue).size
     end
 
-
     def self.reserve(queue_name)
       return reserve_without_resque_spec(queue_name) if ResqueSpec.disable_ext
 

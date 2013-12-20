@@ -5,6 +5,7 @@ module Resque
     class << self
       alias :create_without_resque_spec :create
       alias :destroy_without_resque_spec :destroy
+      alias :reserve_without_resque_spec :reserve
     end
 
     def self.create(queue, klass, *args)
@@ -27,11 +28,17 @@ module Resque
 
       old_count - ResqueSpec.queue_by_name(queue).size
     end
+    
+
+    def self.reserve(queue_name)
+      return reserve_without_resque_spec(queue_name) if ResqueSpec.disable_ext
+  
+      ResqueSpec.pop(queue_name)
+    end    
   end
 
   alias :enqueue_without_resque_spec :enqueue
   alias :enqueue_to_without_resque_spec :enqueue_to if Resque.respond_to? :enqueue_to
-  alias :reserve_without_resque_spec :reserve
   alias :peek_without_resque_spec :peek
   alias :size_without_resque_spec :size
 
@@ -61,12 +68,6 @@ module Resque
     ResqueSpec.peek(queue, start, count).map do |job|
       job.inject({}) { |a, (k, v)| a[k.to_s] = v; a }
     end
-  end
-
-  def reserve(queue_name)
-    return reserve_without_resque_spec(queue_name) if ResqueSpec.disable_ext
-
-    ResqueSpec.pop(queue_name)
   end
 
   def size(queue_name)

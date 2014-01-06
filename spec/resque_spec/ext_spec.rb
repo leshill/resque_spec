@@ -224,9 +224,16 @@ describe "Resque Extensions" do
       end
     end
 
+    # Moved to Resque::Job in 2.0
     describe "#reserve" do
 
-      subject { Resque.reserve(queue_name) }
+      subject do
+        if Resque.respond_to? :reserve
+          Resque.reserve(queue_name)
+        else
+          Resque::Job.reserve(queue_name)
+        end
+      end
 
       context "given an invalid queue" do
         let(:queue_name) { :not_a_queue }

@@ -324,146 +324,148 @@ describe "ResqueSpec Matchers" do
     end
   end
 
-  describe "#have_scheduled_at" do
-    let(:scheduled_at) { Time.now + 5 * 60 }
+  # Schedule does not yet work with 2.0
+  if Resque.respond_to? :reserve
+    describe "#have_scheduled_at" do
+      let(:scheduled_at) { Time.now + 5 * 60 }
 
-    before do
-      Resque.enqueue_at(scheduled_at, Person, first_name, last_name)
-    end
-
-    it "returns true if the arguments are found in the queue" do
-      Person.should have_scheduled_at(scheduled_at, first_name, last_name)
-    end
-
-    it "returns true if the arguments are found in the queue with anything matcher" do
-      Person.should have_scheduled_at(scheduled_at, anything, anything)
-      Person.should have_scheduled_at(scheduled_at, anything, last_name)
-      Person.should have_scheduled_at(scheduled_at, first_name, anything)
-    end
-
-    it "returns false if the arguments are not found in the queue" do
-      Person.should_not have_scheduled_at(scheduled_at, last_name, first_name)
-    end
-  end
-
-  describe "#have_scheduled" do
-    let(:scheduled_at) { Time.now + 5 * 60 }
-
-    before do
-      Resque.enqueue_at(scheduled_at, Person, first_name, last_name)
-    end
-
-    it "returns true if the arguments are found in the queue" do
-      Person.should have_scheduled(first_name, last_name)
-    end
-
-    it "returns true if arguments are found in the queue with anything matcher" do
-      Person.should have_scheduled(anything, anything).at(scheduled_at)
-      Person.should have_scheduled(anything, last_name).at(scheduled_at)
-      Person.should have_scheduled(first_name, anything).at(scheduled_at)
-    end
-
-    it "returns false if the arguments are not found in the queue" do
-      Person.should_not have_scheduled(last_name, first_name)
-    end
-
-    context "with #at(timestamp)" do
-      it "returns true if arguments and timestamp matches positive expectation" do
-        Person.should have_scheduled(first_name, last_name).at(scheduled_at)
+      before do
+        Resque.enqueue_at(scheduled_at, Person, first_name, last_name)
       end
 
-      it "returns true if arguments and timestamp matches negative expectation" do
-        Person.should_not have_scheduled(first_name, last_name).at(scheduled_at + 5 * 60)
+      it "returns true if the arguments are found in the queue" do
+        Person.should have_scheduled_at(scheduled_at, first_name, last_name)
+      end
+
+      it "returns true if the arguments are found in the queue with anything matcher" do
+        Person.should have_scheduled_at(scheduled_at, anything, anything)
+        Person.should have_scheduled_at(scheduled_at, anything, last_name)
+        Person.should have_scheduled_at(scheduled_at, first_name, anything)
+      end
+
+      it "returns false if the arguments are not found in the queue" do
+        Person.should_not have_scheduled_at(scheduled_at, last_name, first_name)
       end
     end
 
-    context "with #in(interval)" do
-      let(:interval) { 10 * 60 }
+    describe "#have_scheduled" do
+      let(:scheduled_at) { Time.now + 5 * 60 }
 
-      before(:each) do
-        Resque.enqueue_in(interval, Person, first_name, last_name)
+      before do
+        Resque.enqueue_at(scheduled_at, Person, first_name, last_name)
       end
 
-      it "returns true if arguments and interval matches positive expectation" do
-        Person.should have_scheduled(first_name, last_name).in(interval)
+      it "returns true if the arguments are found in the queue" do
+        Person.should have_scheduled(first_name, last_name)
       end
 
-      it "returns true if arguments and interval matches negative expectation" do
-        Person.should_not have_scheduled(first_name, last_name).in(interval + 5 * 60)
+      it "returns true if arguments are found in the queue with anything matcher" do
+        Person.should have_scheduled(anything, anything).at(scheduled_at)
+        Person.should have_scheduled(anything, last_name).at(scheduled_at)
+        Person.should have_scheduled(first_name, anything).at(scheduled_at)
+      end
+
+      it "returns false if the arguments are not found in the queue" do
+        Person.should_not have_scheduled(last_name, first_name)
+      end
+
+      context "with #at(timestamp)" do
+        it "returns true if arguments and timestamp matches positive expectation" do
+          Person.should have_scheduled(first_name, last_name).at(scheduled_at)
+        end
+
+        it "returns true if arguments and timestamp matches negative expectation" do
+          Person.should_not have_scheduled(first_name, last_name).at(scheduled_at + 5 * 60)
+        end
+      end
+
+      context "with #in(interval)" do
+        let(:interval) { 10 * 60 }
+
+        before(:each) do
+          Resque.enqueue_in(interval, Person, first_name, last_name)
+        end
+
+        it "returns true if arguments and interval matches positive expectation" do
+          Person.should have_scheduled(first_name, last_name).in(interval)
+        end
+
+        it "returns true if arguments and interval matches negative expectation" do
+          Person.should_not have_scheduled(first_name, last_name).in(interval + 5 * 60)
+        end
+      end
+
+      context "with #queue(queue_name)" do
+        let(:interval) { 10 * 60 }
+
+        before(:each) do
+          Resque.enqueue_in_with_queue(:test_queue, interval, NoQueueClass, 1)
+        end
+
+        it "uses queue from chained method" do
+          NoQueueClass.should have_scheduled(1).in(interval).queue(:test_queue)
+        end
       end
     end
 
-    context "with #queue(queue_name)" do
-      let(:interval) { 10 * 60 }
-
-      before(:each) do
-        Resque.enqueue_in_with_queue(:test_queue, interval, NoQueueClass, 1)
+    describe "#have_schedule_size_of" do
+      before do
+        Resque.enqueue_at(Time.now + 5 * 60, Person, first_name, last_name)
       end
 
-      it "uses queue from chained method" do
-        NoQueueClass.should have_scheduled(1).in(interval).queue(:test_queue)
-      end
-    end
-  end
-
-  describe "#have_schedule_size_of" do
-    before do
-      Resque.enqueue_at(Time.now + 5 * 60, Person, first_name, last_name)
-    end
-
-    it "raises the approrpiate exception" do
-      lambda {
-        Person.should have_schedule_size_of(2)
-      }.should raise_error(RSpec::Expectations::ExpectationNotMetError)
-    end
-
-    it "returns true if actual schedule size matches positive expectation" do
-      Person.should have_schedule_size_of(1)
-    end
-
-    it "returns true if actual schedule size matches negative expectation" do
-      Person.should_not have_schedule_size_of(2)
-    end
-
-    context "with #queue(queue_name)" do
-      before(:each) do
-        Resque.enqueue_in_with_queue(:test_queue, 10 * 60, NoQueueClass, 1)
+      it "raises the approrpiate exception" do
+        lambda {
+          Person.should have_schedule_size_of(2)
+        }.should raise_error(RSpec::Expectations::ExpectationNotMetError)
       end
 
       it "returns true if actual schedule size matches positive expectation" do
-        NoQueueClass.should have_schedule_size_of(1).queue(:test_queue)
+        Person.should have_schedule_size_of(1)
+      end
+
+      it "returns true if actual schedule size matches negative expectation" do
+        Person.should_not have_schedule_size_of(2)
+      end
+
+      context "with #queue(queue_name)" do
+        before(:each) do
+          Resque.enqueue_in_with_queue(:test_queue, 10 * 60, NoQueueClass, 1)
+        end
+
+        it "returns true if actual schedule size matches positive expectation" do
+          NoQueueClass.should have_schedule_size_of(1).queue(:test_queue)
+        end
       end
     end
-  end
 
-  describe "#have_schedule_size_of_at_least" do
-    before do
-      Resque.enqueue_at(Time.now + 5 * 60, Person, first_name, last_name)
-    end
+    describe "#have_schedule_size_of_at_least" do
+      before do
+        Resque.enqueue_at(Time.now + 5 * 60, Person, first_name, last_name)
+      end
 
-    it "raises the approrpiate exception" do
-      lambda {
-        Person.should have_schedule_size_of_at_least(2)
-      }.should raise_error(RSpec::Expectations::ExpectationNotMetError)
-    end
-
-    it "returns true if actual schedule size matches positive expectation" do
-      Person.should have_schedule_size_of_at_least(1)
-    end
-
-    it "returns true if actual schedule size matches negative expectation" do
-      Person.should_not have_schedule_size_of_at_least(5)
-    end
-
-    context "with #queue(queue_name)" do
-      before(:each) do
-        Resque.enqueue_in_with_queue(:test_queue, 10 * 60, NoQueueClass, 1)
+      it "raises the approrpiate exception" do
+        lambda {
+          Person.should have_schedule_size_of_at_least(2)
+        }.should raise_error(RSpec::Expectations::ExpectationNotMetError)
       end
 
       it "returns true if actual schedule size matches positive expectation" do
-        NoQueueClass.should have_schedule_size_of_at_least(1).queue(:test_queue)
+        Person.should have_schedule_size_of_at_least(1)
+      end
+
+      it "returns true if actual schedule size matches negative expectation" do
+        Person.should_not have_schedule_size_of_at_least(5)
+      end
+
+      context "with #queue(queue_name)" do
+        before(:each) do
+          Resque.enqueue_in_with_queue(:test_queue, 10 * 60, NoQueueClass, 1)
+        end
+
+        it "returns true if actual schedule size matches positive expectation" do
+          NoQueueClass.should have_schedule_size_of_at_least(1).queue(:test_queue)
+        end
       end
     end
-
   end
 end

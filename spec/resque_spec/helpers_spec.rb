@@ -37,33 +37,36 @@ describe ResqueSpec::Helpers do
       end
     end
 
-    context "Resque#enqueue_at" do
-      subject do
-        with_resque do
-          Resque.enqueue_at(Time.now + 500, NameFromClassMethod, 1)
+    # Schedule does not yet work with 2.0
+    if Resque.respond_to? :reserve
+      context "Resque#enqueue_at" do
+        subject do
+          with_resque do
+            Resque.enqueue_at(Time.now + 500, NameFromClassMethod, 1)
+          end
         end
-      end
 
-      it "performs job" do
-        NameFromClassMethod.should_receive(:perform).with(1)
-        subject
-      end
+        it "performs job" do
+          NameFromClassMethod.should_receive(:perform).with(1)
+          subject
+        end
 
-      it "does not add to the queue" do
-        subject
-        ResqueSpec.schedule_for(NameFromClassMethod).should be_empty
-      end
+        it "does not add to the queue" do
+          subject
+          ResqueSpec.schedule_for(NameFromClassMethod).should be_empty
+        end
 
-      it "only performs jobs in block" do
-        NameFromClassMethod.should_receive(:perform).with(1).once
-        subject
-        Resque.enqueue_at(Time.now + 600, NameFromClassMethod, 1)
-      end
+        it "only performs jobs in block" do
+          NameFromClassMethod.should_receive(:perform).with(1).once
+          subject
+          Resque.enqueue_at(Time.now + 600, NameFromClassMethod, 1)
+        end
 
-      it "only adds to queue outside of block" do
-        subject
-        Resque.enqueue_at(Time.now + 600, NameFromClassMethod, 1)
-        ResqueSpec.schedule_for(NameFromClassMethod).should have(1).item
+        it "only adds to queue outside of block" do
+          subject
+          Resque.enqueue_at(Time.now + 600, NameFromClassMethod, 1)
+          ResqueSpec.schedule_for(NameFromClassMethod).should have(1).item
+        end
       end
     end
 

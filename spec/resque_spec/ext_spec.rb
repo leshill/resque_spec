@@ -340,9 +340,13 @@ describe "Resque Extensions" do
       end
 
       describe ".reserve" do
-        it "calls the original Resque.reserve method" do
-          Resque.should_receive(:reserve_without_resque_spec).with(Person.queue)
-          Resque.reserve(Person.queue)
+        it "calls the original Resque::Job.reserve method" do
+          if Resque.respond_to? :reserve
+            Resque::Job.should_receive(:reserve_without_resque_spec).with(Person.queue)
+            Resque.reserve(Person.queue)
+          else
+            pending "Only in Resque 1.x"
+          end
         end
       end
     end
@@ -360,6 +364,13 @@ describe "Resque Extensions" do
           Resque::Job.should_receive(:destroy_without_resque_spec).with(:people, Person, first_name, last_name)
           Resque::Job.destroy(:people, Person, first_name, last_name)
         end
+      end
+    end
+
+    describe ".reserve" do
+      it "calls the original Resque.reserve method" do
+        Resque::Job.should_receive(:reserve_without_resque_spec).with(Person.queue)
+        Resque::Job.reserve(Person.queue)
       end
     end
   end

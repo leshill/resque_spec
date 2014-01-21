@@ -3,9 +3,12 @@ require 'rspec/expectations'
 require 'rspec/mocks'
 
 module InQueueHelper
-  def self.extended(klass)
+  def self.included(klass)
+    klass.class_eval do
+      attr_accessor :queue_name
+    end
+
     klass.instance_eval do
-      self.queue_name = nil
       chain :in do |queue_name|
         self.queue_name = queue_name
       end
@@ -13,8 +16,6 @@ module InQueueHelper
   end
 
   private
-
-  attr_accessor :queue_name
 
   def queue(actual)
     if @queue_name
@@ -27,7 +28,7 @@ module InQueueHelper
 end
 
 RSpec::Matchers.define :be_queued do |*expected_args|
-  extend InQueueHelper
+  include InQueueHelper
 
   chain :times do |num_times_queued|
     @times = num_times_queued
@@ -67,7 +68,7 @@ RSpec::Matchers.define :be_queued do |*expected_args|
 end
 
 RSpec::Matchers.define :have_queued do |*expected_args|
-  extend InQueueHelper
+  include InQueueHelper
 
   chain :times do |num_times_queued|
     @times = num_times_queued
@@ -107,7 +108,7 @@ RSpec::Matchers.define :have_queued do |*expected_args|
 end
 
 RSpec::Matchers.define :have_queue_size_of do |size|
-  extend InQueueHelper
+  include InQueueHelper
 
   match do |actual|
     queue(actual).size == size
@@ -127,7 +128,7 @@ RSpec::Matchers.define :have_queue_size_of do |size|
 end
 
 RSpec::Matchers.define :have_queue_size_of_at_least do |size|
-  extend InQueueHelper
+  include InQueueHelper
 
   match do |actual|
     queue(actual).size >= size
@@ -147,9 +148,12 @@ RSpec::Matchers.define :have_queue_size_of_at_least do |size|
 end
 
 module ScheduleQueueHelper
-  def self.extended(klass)
+  def self.included(klass)
+    klass.class_eval do
+      attr_accessor :queue_name
+    end
+
     klass.instance_eval do
-      self.queue_name = nil
       chain :queue do |queue_name|
         self.queue_name = queue_name
       end
@@ -157,8 +161,6 @@ module ScheduleQueueHelper
   end
 
   private
-
-  attr_accessor :queue_name
 
   def schedule_queue_for(actual)
     if @queue_name
@@ -171,7 +173,7 @@ module ScheduleQueueHelper
 end
 
 RSpec::Matchers.define :have_scheduled do |*expected_args|
-  extend ScheduleQueueHelper
+  include ScheduleQueueHelper
 
   chain :at do |timestamp|
     @interval = nil
@@ -216,7 +218,7 @@ RSpec::Matchers.define :have_scheduled do |*expected_args|
 end
 
 RSpec::Matchers.define :have_scheduled_at do |*expected_args|
-  extend ScheduleQueueHelper
+  include ScheduleQueueHelper
   warn "DEPRECATION WARNING: have_scheduled_at(time, *args) is deprecated and will be removed in future. Please use have_scheduled(*args).at(time) instead."
 
   match do |actual|
@@ -239,7 +241,7 @@ RSpec::Matchers.define :have_scheduled_at do |*expected_args|
 end
 
 RSpec::Matchers.define :have_schedule_size_of do |size|
-  extend ScheduleQueueHelper
+  include ScheduleQueueHelper
 
   match do |actual|
     schedule_queue_for(actual).size == size
@@ -259,7 +261,7 @@ RSpec::Matchers.define :have_schedule_size_of do |size|
 end
 
 RSpec::Matchers.define :have_schedule_size_of_at_least do |size|
-  extend ScheduleQueueHelper
+  include ScheduleQueueHelper
 
   match do |actual|
     schedule_queue_for(actual).size >= size

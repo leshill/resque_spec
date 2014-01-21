@@ -278,7 +278,7 @@ describe ResqueSpec do
     it "resets the inline status" do
       ResqueSpec.inline = true
       ResqueSpec.reset!
-      ResqueSpec.inline.should be_false
+      ResqueSpec.inline.should == false
     end
   end
 end

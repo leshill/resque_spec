@@ -15,8 +15,6 @@ module InQueueHelper
     end
   end
 
-  private
-
   def queue(actual)
     if @queue_name
       ResqueSpec.queue_by_name(@queue_name)
@@ -159,8 +157,6 @@ module ScheduleQueueHelper
       end
     end
   end
-
-  private
 
   def schedule_queue_for(actual)
     if @queue_name

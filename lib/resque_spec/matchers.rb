@@ -35,7 +35,7 @@ RSpec::Matchers.define :be_queued do |*expected_args|
     @times_info = @times == 1 ? ' once' : " #{@times} times"
   end
 
-  chain :once do |num_times_queued|
+  chain :once do
     @times = 1
     @times_info = ' once'
   end
@@ -75,7 +75,7 @@ RSpec::Matchers.define :have_queued do |*expected_args|
     @times_info = @times == 1 ? ' once' : " #{@times} times"
   end
 
-  chain :once do |num_times_queued|
+  chain :once do
     @times = 1
     @times_info = ' once'
   end

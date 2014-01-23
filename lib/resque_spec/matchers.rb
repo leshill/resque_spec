@@ -7,12 +7,11 @@ module InQueueHelper
     klass.class_eval do
       attr_accessor :queue_name
     end
+  end
 
-    klass.instance_eval do
-      chain :in do |queue_name|
-        self.queue_name = queue_name
-      end
-    end
+  def in(queue_name)
+    self.queue_name = queue_name
+    self
   end
 
   def queue(actual)
@@ -150,12 +149,11 @@ module ScheduleQueueHelper
     klass.class_eval do
       attr_accessor :queue_name
     end
+  end
 
-    klass.instance_eval do
-      chain :queue do |queue_name|
-        self.queue_name = queue_name
-      end
-    end
+  def queue(queue_name)
+    self.queue_name = queue_name
+    self
   end
 
   def schedule_queue_for(actual)

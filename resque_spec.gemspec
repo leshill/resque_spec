@@ -20,14 +20,13 @@ Gem::Specification.new do |s|
   s.files = Dir.glob("lib/**/*") + %w(LICENSE README.md Rakefile)
 
   s.add_runtime_dependency('resque', ['>= 1.19.0'])
-  s.add_runtime_dependency('rspec-core', ['>= 3.0.0.beta'])
-  s.add_runtime_dependency('rspec-expectations', ['>= 3.0.0.beta'])
-  s.add_runtime_dependency('rspec-mocks', ['>= 3.0.0.beta'])
+  s.add_runtime_dependency('rspec-core', ['>= 2.5.0'])
+  s.add_runtime_dependency('rspec-expectations', ['>= 2.5.0'])
+  s.add_runtime_dependency('rspec-mocks', ['>= 2.5.0'])
   s.add_development_dependency('resque-scheduler')
   s.add_development_dependency('pry')
   s.add_development_dependency('pry-debugger')
   s.add_development_dependency('timecop')
   s.add_development_dependency('rake')
-  s.add_development_dependency('rspec', ['>= 3.0.0.beta'])
-  s.add_development_dependency('rspec-collection_matchers', ['>= 0.0.1'])
+  s.add_development_dependency('rspec', ['>= 2.10.0'])
 end

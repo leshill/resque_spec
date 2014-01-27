@@ -5,8 +5,13 @@ require 'resque_spec/matchers'
 module ResqueSpec
   extend self
 
-  attr_accessor :inline
+  attr_reader :inline
   attr_accessor :disable_ext
+
+  def inline=(value)
+    Resque.inline = value
+    @inline = value
+  end
 
   def dequeue(queue_name, klass, *args)
     queue_by_name(queue_name).delete_if do |job|

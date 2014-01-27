@@ -77,6 +77,10 @@ describe ResqueSpec do
         }.not_to change(NameFromClassMethod, :invocations)
       end
 
+      it "sets Resque.inline to false" do
+        expect(Resque.inline).to be_false
+      end
+
       it "does not change the behavior of enqueue" do
         ResqueSpec.enqueue(:queue_name, NameFromClassMethod, 1)
         ResqueSpec.queue_by_name(:queue_name).should include({ class: NameFromClassMethod.to_s, args: [1] })
@@ -90,6 +94,10 @@ describe ResqueSpec do
         expect {
           ResqueSpec.enqueue(:queue_name, NameFromClassMethod, 1)
         }.to change(NameFromClassMethod, :invocations).by(1)
+      end
+
+      it "sets Resque.inline to true" do
+        expect(Resque.inline).to be_true
       end
 
       it "does not enqueue" do
@@ -279,6 +287,7 @@ describe ResqueSpec do
       ResqueSpec.inline = true
       ResqueSpec.reset!
       ResqueSpec.inline.should be_false
+      Resque.inline.should be_false
     end
   end
 end

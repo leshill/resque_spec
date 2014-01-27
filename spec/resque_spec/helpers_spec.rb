@@ -89,6 +89,14 @@ describe ResqueSpec::Helpers do
             end
             ResqueSpec.inline.should eq status
           end
+
+          it "sets Resque.inline as #{status} when inside the block" do
+            ResqueSpec.inline = status
+            with_resque do
+              Resque.inline.should eq true
+            end
+            Resque.inline.should eq status
+          end
         end
       end
     end

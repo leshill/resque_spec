@@ -85,7 +85,10 @@ module ResqueSpec
   end
 
   def perform(queue_name, payload)
+    original = Resque.inline
+    Resque.inline = true
     new_job(queue_name, payload).perform
+    Resque.inline = original
   end
 
   def perform_or_store(queue_name, payload)

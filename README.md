@@ -10,7 +10,8 @@ on
 
 ResqueSpec will also fire Resque hooks if you are using them. See below.
 
-The current version works with `Resque v1.19.0` and up and `RSpec v2.5.0` and up.
+The current version works with `Resque >~ v1.19` and up and `RSpec >= v2.5.0`
+(including the RSpec 3 beta).
 
 Install
 -------
@@ -416,6 +417,7 @@ Contributors
 * Ben Woosley        (@Empact)        : Loosen rubygems version constraint
 * Jeff Dickey        (@dickeyxxx)     : Remove 2.0 warnings, added Travis
 * Earle Clubb        (@eclubb)        : `be_queued` matcher
+* Erkki Eilonen      (@erkki)         : RSpec 3 support
 
 Copyright
 =========

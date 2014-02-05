@@ -22,6 +22,22 @@ module InQueueHelper
     end
   end
 
+  def actual_args(actual)
+    if queue(actual).first
+      queue(actual).first[:args]
+    else
+      []
+    end
+  end
+
+  def actual_args_str(actual)
+    if actual_args(actual).empty?
+      'no args'
+    else
+      actual_args(actual).join(', ')
+    end
+  end
+
 end
 
 RSpec::Matchers.define :be_queued do |*expected_args|
@@ -92,11 +108,11 @@ RSpec::Matchers.define :have_queued do |*expected_args|
   end
 
   failure_message_for_should do |actual|
-    "expected that #{actual} would have [#{expected_args.join(', ')}] queued#{@times_info}"
+    "expected that #{actual} would have [#{expected_args.join(', ')}] queued#{@times_info} but actually #{actual} with [#{actual_args_str(actual)}]"
   end
 
   failure_message_for_should_not do |actual|
-    "expected that #{actual} would not have [#{expected_args.join(', ')}] queued#{@times_info}"
+    "expected that #{actual} would not have [#{expected_args.join(', ')}] queued#{@times_info} but actually #{actual} with [#{actual_args_str(actual)}]"
   end
 
   description do
@@ -164,6 +180,22 @@ module ScheduleQueueHelper
     end
   end
 
+  def actual_args(actual)
+    if schedule_queue_for(actual).first
+      schedule_queue_for(actual).first[:args]
+    else
+      []
+    end
+  end
+
+  def actual_args_str(actual)
+    if actual_args(actual).empty?
+      'no args'
+    else
+      actual_args(actual).join(', ')
+    end
+  end
+
 end
 
 RSpec::Matchers.define :have_scheduled do |*expected_args|
@@ -199,11 +231,11 @@ RSpec::Matchers.define :have_scheduled do |*expected_args|
   end
 
   failure_message_for_should do |actual|
-    ["expected that #{actual} would have [#{expected_args.join(', ')}] scheduled", @time_info].join(' ')
+    ["expected that #{actual} would have [#{expected_args.join(', ')}] scheduled but actually #{actual} with [#{actual_args_str(actual)}]", @time_info].join(' ')
   end
 
   failure_message_for_should_not do |actual|
-    ["expected that #{actual} would not have [#{expected_args.join(', ')}] scheduled", @time_info].join(' ')
+    ["expected that #{actual} would not have [#{expected_args.join(', ')}] scheduled but actually #{actual} with [#{actual_args_str(actual)}]", @time_info].join(' ')
   end
 
   description do
@@ -222,11 +254,11 @@ RSpec::Matchers.define :have_scheduled_at do |*expected_args|
   end
 
   failure_message_for_should do |actual|
-    "expected that #{actual} would have [#{expected_args.join(', ')}] scheduled"
+    "expected that #{actual} would have [#{expected_args.join(', ')}] scheduled but actually #{actual} with [#{actual_args_str(actual)}]"
   end
 
   failure_message_for_should_not do |actual|
-    "expected that #{actual} would not have [#{expected_args.join(', ')}] scheduled"
+    "expected that #{actual} would not have [#{expected_args.join(', ')}] scheduled but actually #{actual} with [#{actual_args_str(actual)}]"
   end
 
   description do

@@ -157,6 +157,49 @@ describe "ResqueSpec Matchers" do
       end
     end
 
+    describe 'failure messages' do
+      before  { Resque.enqueue(Person, first_name, last_name) }
+      subject { Person }
+
+      context "when `should have_queued` failed" do
+        it "fails with actual arguments in failure message" do
+          expect {
+            should have_queued(last_name, first_name)
+          }.to raise_error(RSpec::Expectations::ExpectationNotMetError, /queued but actually #{subject} with \[#{first_name}, #{last_name}\]/)
+        end
+
+        context "with no args" do
+          it "fails with [no args] in failure message" do
+            ResqueSpec.reset!
+            Resque.enqueue(Person)
+
+            expect {
+              should have_queued(last_name, first_name)
+            }.to raise_error(RSpec::Expectations::ExpectationNotMetError, /queued but actually #{subject} with \[no args\]/)
+          end
+        end
+      end
+
+      context "when `should_not have_queued` failed" do
+        it "fails with actual arguments in failure message" do
+          expect {
+            should_not have_queued(first_name, last_name)
+          }.to raise_error(RSpec::Expectations::ExpectationNotMetError, /queued but actually #{subject} with \[#{first_name}, #{last_name}\]/)
+        end
+
+        context "with no args" do
+          it "fails with [no args] in failure message" do
+            ResqueSpec.reset!
+            Resque.enqueue(Person)
+
+            expect {
+              should_not have_queued
+            }.to raise_error(RSpec::Expectations::ExpectationNotMetError, /queued but actually #{subject} with \[no args\]/)
+          end
+        end
+      end
+    end
+
     context "#in" do
 
       before do
@@ -344,6 +387,49 @@ describe "ResqueSpec Matchers" do
     it "returns false if the arguments are not found in the queue" do
       Person.should_not have_scheduled_at(scheduled_at, last_name, first_name)
     end
+
+    describe 'failure messages' do
+      before  { Resque.enqueue_at(scheduled_at, Person, first_name, last_name) }
+      subject { Person }
+
+      context "when `should have_scheduled_at` failed" do
+        it "fails with actual arguments in failure message" do
+          expect {
+            should have_scheduled_at(scheduled_at, last_name, first_name)
+          }.to raise_error(RSpec::Expectations::ExpectationNotMetError, /scheduled but actually #{subject} with \[#{first_name}, #{last_name}\]/)
+        end
+
+        context "with no args" do
+          it "fails with actual arguments in failure message" do
+            ResqueSpec.reset!
+            Resque.enqueue_at(scheduled_at, Person)
+
+            expect {
+              should have_scheduled_at(scheduled_at, last_name, first_name)
+            }.to raise_error(RSpec::Expectations::ExpectationNotMetError, /scheduled but actually #{subject} with \[no args\]/)
+          end
+        end
+      end
+
+      context "when `should_not have_scheduled_at` failed" do
+        it "fails with actual arguments in failure message" do
+          expect {
+            should_not have_scheduled_at(scheduled_at, first_name, last_name)
+          }.to raise_error(RSpec::Expectations::ExpectationNotMetError, /scheduled but actually #{subject} with \[#{first_name}, #{last_name}\]/)
+        end
+
+        context "with no args" do
+          it "fails with actual arguments in failure message" do
+            ResqueSpec.reset!
+            Resque.enqueue_at(scheduled_at, Person)
+
+            expect {
+              should_not have_scheduled_at(scheduled_at)
+            }.to raise_error(RSpec::Expectations::ExpectationNotMetError, /scheduled but actually #{subject} with \[no args\]/)
+          end
+        end
+      end
+    end
   end
 
   describe "#have_scheduled" do
@@ -402,6 +488,49 @@ describe "ResqueSpec Matchers" do
 
       it "uses queue from chained method" do
         NoQueueClass.should have_scheduled(1).in(interval).queue(:test_queue)
+      end
+    end
+
+    describe 'failure messages' do
+      before  { Resque.enqueue_at(scheduled_at, Person, first_name, last_name) }
+      subject { Person }
+
+      context "when `should have_scheduled` failed" do
+        it "fails with actual arguments in failure message" do
+          expect {
+            should have_scheduled(last_name, first_name)
+          }.to raise_error(RSpec::Expectations::ExpectationNotMetError, /scheduled but actually #{subject} with \[#{first_name}, #{last_name}\]/)
+        end
+
+        context "with no args" do
+          it "fails with actual arguments in failure message" do
+            ResqueSpec.reset!
+            Resque.enqueue_at(scheduled_at, Person)
+
+            expect {
+              should have_scheduled(last_name, first_name)
+            }.to raise_error(RSpec::Expectations::ExpectationNotMetError, /scheduled but actually #{subject} with \[no args\]/)
+          end
+        end
+      end
+
+      context "when `should_not have_scheduled` failed" do
+        it "fails with actual arguments in failure message" do
+          expect {
+            should_not have_scheduled(first_name, last_name)
+          }.to raise_error(RSpec::Expectations::ExpectationNotMetError, /scheduled but actually #{subject} with \[#{first_name}, #{last_name}\]/)
+        end
+
+        context "with no args" do
+          it "fails with actual arguments in failure message" do
+            ResqueSpec.reset!
+            Resque.enqueue_at(scheduled_at, Person)
+
+            expect {
+              should_not have_scheduled
+            }.to raise_error(RSpec::Expectations::ExpectationNotMetError, /scheduled but actually #{subject} with \[no args\]/)
+          end
+        end
       end
     end
   end

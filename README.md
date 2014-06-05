@@ -387,37 +387,38 @@ Follow me on [Github](https://github.com/leshill) and
 Contributors
 ============
 
-* Kenneth Kalmer     (@kennethkalmer) : rspec dependency fix
-* Brian Cardarella   (@bcardarella)   : fix mutation bug
-* Joshua Davey       (@joshdavey)     : with\_resque helper
-* Lar Van Der Jagt   (@supaspoida)    : with\_resque helper
-* Evan Sagge         (@evansagge)     : Hook in via Job.create, have\_queued.in
-* Jon Larkowski      (@l4rk)          : inline perform
-* James Conroy-Finn  (@jcf)           : spec fix
-* Dennis Walters     (@ess)           : enqueue\_in support
-*                    (@RipTheJacker)  : remove\_delayed support
-* Kurt Werle         (@kwerle)        : explicit require spec for v020
-*                    (@dwilkie)       : initial before\_enqueue support
-* Marcin Balinski    (@marcinb)       : have\_schedule\_size\_of matcher, schedule matcher at, in
-*                    (@alexeits)      : fix matcher in bug with RSpec 2.8.0
-*                    (@ToadJamb)      : encode/decode of Resque job arguments
-* Mateusz Konikowski (@mkonikowski)   : support for anything matcher
-* Mathieu Ravaux     (@mathieuravaux) : without\_resque\_spec support
-* Arjan van der Gaag (@avdgaag)       : peek support
-*                    (@dtsiknis)      : Updated removed\_delayed
-* Li Ellis Gallardo  (@lellisga)      : fix inline/disable\_ext bug
-* Jeff Deville       (@jeffdeville)   : Resque.size
-* Frank Wambutt      (@opinel)        : Fix DST problem in `have_scheduled`
-* Luke Melia         (@lukemelia)     : Add `times` chained matcher
-* Pablo Fernandez    (@heelhook)      : Add `have_queue_size_of_at_least` and `have_schedule_size_of_at_least` matchers
-*                    (@k1w1)          : Add support for enqueue\_at\_with\_queue/enqueue\_in\_with\_queue
-* Ozéias Sant'ana    (@ozeias)        : Update specs to RSpec 2.10
-* Yuya Kitajima      (@yuyak)         : Add ResqueMailer examples to README
-* Andrés Bravo       (@andresbravog)  : Replace `rspec` dependency with explicit dependencies
-* Ben Woosley        (@Empact)        : Loosen rubygems version constraint
-* Jeff Dickey        (@dickeyxxx)     : Remove 2.0 warnings, added Travis
-* Earle Clubb        (@eclubb)        : `be_queued` matcher
-* Erkki Eilonen      (@erkki)         : RSpec 3 support
+* Kenneth Kalmer     (@kennethkalmer)  : rspec dependency fix
+* Brian Cardarella   (@bcardarella)    : fix mutation bug
+* Joshua Davey       (@joshdavey)      : with\_resque helper
+* Lar Van Der Jagt   (@supaspoida)     : with\_resque helper
+* Evan Sagge         (@evansagge)      : Hook in via Job.create, have\_queued.in
+* Jon Larkowski      (@l4rk)           : inline perform
+* James Conroy-Finn  (@jcf)            : spec fix
+* Dennis Walters     (@ess)            : enqueue\_in support
+*                    (@RipTheJacker)   : remove\_delayed support
+* Kurt Werle         (@kwerle)         : explicit require spec for v020
+*                    (@dwilkie)        : initial before\_enqueue support
+* Marcin Balinski    (@marcinb)        : have\_schedule\_size\_of matcher, schedule matcher at, in
+*                    (@alexeits)       : fix matcher in bug with RSpec 2.8.0
+*                    (@ToadJamb)       : encode/decode of Resque job arguments
+* Mateusz Konikowski (@mkonikowski)    : support for anything matcher
+* Mathieu Ravaux     (@mathieuravaux)  : without\_resque\_spec support
+* Arjan van der Gaag (@avdgaag)        : peek support
+*                    (@dtsiknis)       : Updated removed\_delayed
+* Li Ellis Gallardo  (@lellisga)       : fix inline/disable\_ext bug
+* Jeff Deville       (@jeffdeville)    : Resque.size
+* Frank Wambutt      (@opinel)         : Fix DST problem in `have_scheduled`
+* Luke Melia         (@lukemelia)      : Add `times` chained matcher
+* Pablo Fernandez    (@heelhook)       : Add `have_queue_size_of_at_least` and `have_schedule_size_of_at_least` matchers
+*                    (@k1w1)           : Add support for enqueue\_at\_with\_queue/enqueue\_in\_with\_queue
+* Ozéias Sant'ana    (@ozeias)         : Update specs to RSpec 2.10
+* Yuya Kitajima      (@yuyak)          : Add ResqueMailer examples to README
+* Andrés Bravo       (@andresbravog)   : Replace `rspec` dependency with explicit dependencies
+* Ben Woosley        (@Empact)         : Loosen rubygems version constraint
+* Jeff Dickey        (@dickeyxxx)      : Remove 2.0 warnings, added Travis
+* Earle Clubb        (@eclubb)         : `be_queued` matcher
+* Erkki Eilonen      (@erkki)          : RSpec 3 support
+* Gavin Heavyside    (@gavinheavyside) : RSpec three warnings
 
 Copyright
 =========

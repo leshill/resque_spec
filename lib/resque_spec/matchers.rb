@@ -51,11 +51,11 @@ RSpec::Matchers.define :be_queued do |*expected_args|
     end
   end
 
-  failure_message_for_should do |actual|
+  failure_message do |actual|
     "expected that #{actual} would be queued with [#{expected_args.join(', ')}]#{@times_info}"
   end
 
-  failure_message_for_should_not do |actual|
+  failure_message_when_negated do |actual|
     "expected that #{actual} would not be queued with [#{expected_args.join(', ')}]#{@times_info}"
   end
 
@@ -91,11 +91,11 @@ RSpec::Matchers.define :have_queued do |*expected_args|
     end
   end
 
-  failure_message_for_should do |actual|
+  failure_message do |actual|
     "expected that #{actual} would have [#{expected_args.join(', ')}] queued#{@times_info}"
   end
 
-  failure_message_for_should_not do |actual|
+  failure_message_when_negated do |actual|
     "expected that #{actual} would not have [#{expected_args.join(', ')}] queued#{@times_info}"
   end
 
@@ -111,11 +111,11 @@ RSpec::Matchers.define :have_queue_size_of do |size|
     queue(actual).size == size
   end
 
-  failure_message_for_should do |actual|
+  failure_message do |actual|
     "expected that #{actual} would have #{size} entries queued, but got #{queue(actual).size} instead"
   end
 
-  failure_message_for_should_not do |actual|
+  failure_message_when_negated do |actual|
     "expected that #{actual} would not have #{size} entries queued, but got #{queue(actual).size} instead"
   end
 
@@ -131,11 +131,11 @@ RSpec::Matchers.define :have_queue_size_of_at_least do |size|
     queue(actual).size >= size
   end
 
-  failure_message_for_should do |actual|
+  failure_message do |actual|
     "expected that #{actual} would have at least #{size} entries queued, but got #{queue(actual).size} instead"
   end
 
-  failure_message_for_should_not do |actual|
+  failure_message_when_negated do |actual|
     "expected that #{actual} would not have at least #{size} entries queued, but got #{queue(actual).size} instead"
   end
 
@@ -198,11 +198,11 @@ RSpec::Matchers.define :have_scheduled do |*expected_args|
     end
   end
 
-  failure_message_for_should do |actual|
+  failure_message do |actual|
     ["expected that #{actual} would have [#{expected_args.join(', ')}] scheduled", @time_info].join(' ')
   end
 
-  failure_message_for_should_not do |actual|
+  failure_message_when_negated do |actual|
     ["expected that #{actual} would not have [#{expected_args.join(', ')}] scheduled", @time_info].join(' ')
   end
 
@@ -221,11 +221,11 @@ RSpec::Matchers.define :have_scheduled_at do |*expected_args|
     schedule_queue_for(actual).any? { |entry| entry[:class].to_s == actual.to_s && entry[:time] == time && other_args == entry[:args] }
   end
 
-  failure_message_for_should do |actual|
+  failure_message do |actual|
     "expected that #{actual} would have [#{expected_args.join(', ')}] scheduled"
   end
 
-  failure_message_for_should_not do |actual|
+  failure_message_when_negated do |actual|
     "expected that #{actual} would not have [#{expected_args.join(', ')}] scheduled"
   end
 
@@ -241,11 +241,11 @@ RSpec::Matchers.define :have_schedule_size_of do |size|
     schedule_queue_for(actual).size == size
   end
 
-  failure_message_for_should do |actual|
+  failure_message do |actual|
     "expected that #{actual} would have #{size} scheduled entries, but got #{schedule_queue_for(actual).size} instead"
   end
 
-  failure_message_for_should_not do |actual|
+  failure_message_when_negated do |actual|
     "expected that #{actual} would have #{size} scheduled entries."
   end
 
@@ -261,11 +261,11 @@ RSpec::Matchers.define :have_schedule_size_of_at_least do |size|
     schedule_queue_for(actual).size >= size
   end
 
-  failure_message_for_should do |actual|
+  failure_message do |actual|
     "expected that #{actual} would have at least #{size} scheduled entries, but got #{schedule_queue_for(actual).size} instead"
   end
 
-  failure_message_for_should_not do |actual|
+  failure_message_when_negated do |actual|
     "expected that #{actual} would have at least #{size} scheduled entries."
   end
 

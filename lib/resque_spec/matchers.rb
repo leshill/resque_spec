@@ -2,7 +2,18 @@ require 'rspec/core'
 require 'rspec/expectations'
 require 'rspec/mocks'
 
+module ArgsHelper
+  private
+
+  def match_args(expected_args, args)
+    arg_list_matcher = RSpec::Mocks::ArgumentListMatcher.new(expected_args)
+    arg_list_matcher.args_match?(args)
+  end
+end
+
 module InQueueHelper
+  include ArgsHelper
+
   def self.included(klass)
     klass.class_eval do
       attr_accessor :queue_name
@@ -21,7 +32,6 @@ module InQueueHelper
       ResqueSpec.queue_for(actual)
     end
   end
-
 end
 
 RSpec::Matchers.define :be_queued do |*expected_args|
@@ -41,7 +51,7 @@ RSpec::Matchers.define :be_queued do |*expected_args|
     matched = queue(actual).select do |entry|
       klass = entry.fetch(:class)
       args = entry.fetch(:args)
-      klass.to_s == actual.to_s && expected_args == args
+      klass.to_s == actual.to_s && match_args(expected_args, args)
     end
 
     if @times
@@ -62,6 +72,7 @@ RSpec::Matchers.define :be_queued do |*expected_args|
   description do
     "be queued with arguments of [#{expected_args.join(', ')}]#{@times_info}"
   end
+
 end
 
 RSpec::Matchers.define :have_queued do |*expected_args|
@@ -81,7 +92,7 @@ RSpec::Matchers.define :have_queued do |*expected_args|
     matched = queue(actual).select do |entry|
       klass = entry.fetch(:class)
       args = entry.fetch(:args)
-      klass.to_s == actual.to_s && expected_args == args
+      klass.to_s == actual.to_s && match_args(expected_args, args)
     end
 
     if @times
@@ -145,6 +156,8 @@ RSpec::Matchers.define :have_queue_size_of_at_least do |size|
 end
 
 module ScheduleQueueHelper
+  include ArgsHelper
+
   def self.included(klass)
     klass.class_eval do
       attr_accessor :queue_name
@@ -184,7 +197,7 @@ RSpec::Matchers.define :have_scheduled do |*expected_args|
   match do |actual|
     schedule_queue_for(actual).any? do |entry|
       class_matches = entry[:class].to_s == actual.to_s
-      args_match = expected_args == entry[:args]
+      args_match = match_args(expected_args, entry[:args])
 
       time_matches = if @time
         entry[:time] == @time
@@ -218,7 +231,7 @@ RSpec::Matchers.define :have_scheduled_at do |*expected_args|
   match do |actual|
     time = expected_args.first
     other_args = expected_args[1..-1]
-    schedule_queue_for(actual).any? { |entry| entry[:class].to_s == actual.to_s && entry[:time] == time && other_args == entry[:args] }
+    schedule_queue_for(actual).any? { |entry| entry[:class].to_s == actual.to_s && entry[:time] == time && match_args(other_args, entry[:args]) }
   end
 
   failure_message do |actual|

@@ -10,8 +10,8 @@ on
 
 ResqueSpec will also fire Resque hooks if you are using them. See below.
 
-The current version works with `Resque >~ v1.19` and up and `RSpec >= v2.5.0`
-(including the RSpec 3 beta).
+Version 0.16.0 works with `Resque >~ v1.19` and up and `rspec >= 3.0.0`.
+Version 0.15.0 works with `Resque >~ v1.19` and up and `rspec >= v2.5.0`
 
 Install
 -------

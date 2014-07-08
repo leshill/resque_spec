@@ -125,9 +125,9 @@ describe ResqueSpec do
         ResqueSpec.enqueue(:queue_name, NameFromClassMethod, 1)
         ResqueSpec.enqueue(:queue_name, NameFromClassMethod, 2)
         ResqueSpec.enqueue(:queue_name, NameFromClassMethod, 3)
-        ResqueSpec.peek(:queue_name, 2, 1).should have(1).jobs
+        ResqueSpec.peek(:queue_name, 2, 1).size.should eq(1)
         ResqueSpec.peek(:queue_name, 2, 1).should include({ class: NameFromClassMethod.to_s, args: [3] })
-        ResqueSpec.peek(:queue_name, 0, 2).should have(2).jobs
+        ResqueSpec.peek(:queue_name, 0, 2).size.should eq(2)
         ResqueSpec.peek(:queue_name, 0, 2).should include({ class: NameFromClassMethod.to_s, args: [1] })
         ResqueSpec.peek(:queue_name, 0, 2).should include({ class: NameFromClassMethod.to_s, args: [2] })
       end
@@ -135,7 +135,7 @@ describe ResqueSpec do
       it 'should default to the first job' do
         ResqueSpec.enqueue(:queue_name, NameFromClassMethod, 1)
         ResqueSpec.enqueue(:queue_name, NameFromClassMethod, 2)
-        ResqueSpec.peek(:queue_name).should have(1).jobs
+        ResqueSpec.peek(:queue_name).size.should eq(1)
         ResqueSpec.peek(:queue_name).should include({ class: NameFromClassMethod.to_s, args: [1] })
       end
     end
@@ -278,7 +278,7 @@ describe ResqueSpec do
     it "resets the inline status" do
       ResqueSpec.inline = true
       ResqueSpec.reset!
-      ResqueSpec.inline.should be_false
+      ResqueSpec.inline.should == false
     end
   end
 end

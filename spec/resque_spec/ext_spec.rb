@@ -31,7 +31,7 @@ describe "Resque Extensions" do
       end
 
       it 'should return the queued task' do
-        Resque.peek(:people).should have(1).elements
+        Resque.peek(:people).size.should eq(1)
       end
 
       it 'should return a job with string keys' do

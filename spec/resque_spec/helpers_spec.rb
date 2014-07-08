@@ -33,7 +33,7 @@ describe ResqueSpec::Helpers do
       it "only adds to queue outside of block" do
         subject
         Resque.enqueue(NameFromClassMethod, 1)
-        ResqueSpec.queue_for(NameFromClassMethod).should have(1).item
+        ResqueSpec.queue_for(NameFromClassMethod).size.should eq(1)
       end
     end
 

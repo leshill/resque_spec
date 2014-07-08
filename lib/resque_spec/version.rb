@@ -1,3 +1,3 @@
 module ResqueSpec
-  VERSION = "0.14.4"
+  VERSION = "0.16.0"
 end

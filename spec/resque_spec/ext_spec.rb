@@ -353,6 +353,7 @@ describe "Resque Extensions" do
             Resque.reserve(Person.queue)
           else
             pending "Only in Resque 1.x"
+            fail
           end
         end
       end

@@ -50,7 +50,7 @@ And I write this spec using the `resque_spec` matcher
 
       it "adds person.calculate to the Person queue" do
         person.recalculate
-        Person.should have_queued(person.id, :calculate)
+        expect(Person).to have_queued(person.id, :calculate)
       end
     end
 
@@ -65,7 +65,7 @@ And I might use the `in` statement to specify the queue:
 
       it "adds person.calculate to the Person queue" do
         person.recalculate
-        Person.should have_queued(person.id, :calculate).in(:people)
+        expect(Person).to have_queued(person.id, :calculate).in(:people)
       end
     end
 
@@ -73,7 +73,7 @@ And I might write this as a Cucumber step
 
     Then /the (\w?) has (\w?) queued/ do |thing, method|
       thing_obj = instance_variable_get("@#{thing}")
-      thing_obj.class.should have_queued(thing_obj.id, method.to_sym)
+      expect(thing_obj.class).to have_queued(thing_obj.id, method.to_sym)
     end
 
 Then I write some code to make it pass:
@@ -95,7 +95,7 @@ You can check the size of the queue in your specs too.
 
       it "adds an entry to the Person queue" do
         person.recalculate
-        Person.should have_queue_size_of(1)
+        expect(Person).to have_queue_size_of(1)
       end
     end
 
@@ -129,7 +129,7 @@ And I write this spec using the `resque_spec` matcher
 
       it "adds person.calculate to the Person queue" do
         person.recalculate
-        Person.should have_scheduled(person.id, :calculate)
+        expect(Person).to have_scheduled(person.id, :calculate)
       end
     end
 
@@ -144,7 +144,7 @@ And I might use the `at` statement to specify the time:
         person.recalculate
 
         # Is it scheduled to be executed at 2010-02-14 06:00:00 ?
-        Person.should have_scheduled(person.id, :calculate).at(Time.mktime(2010,2,14,6,0,0))
+        expect(Person).to have_scheduled(person.id, :calculate).at(Time.mktime(2010,2,14,6,0,0))
       end
     end
 
@@ -159,7 +159,7 @@ And I might use the `in` statement to specify time interval (in seconds):
         person.recalculate
 
         # Is it scheduled to be executed in 5 minutes?
-        Person.should have_scheduled(person.id, :calculate).in(5 * 60)
+        expect(Person).to have_scheduled(person.id, :calculate).in(5 * 60)
       end
     end
 
@@ -173,7 +173,7 @@ You can also check the size of the schedule:
       it "adds person.calculate to the Person queue" do
         person.recalculate
 
-        Person.should have_schedule_size_of(1)
+        expect(Person).to have_schedule_size_of(1)
       end
     end
 
@@ -183,7 +183,7 @@ And I might write this as a Cucumber step
 
     Then /the (\w?) has (\w?) scheduled/ do |thing, method|
       thing_obj = instance_variable_get("@#{thing}")
-      thing_obj.class.should have_scheduled(thing_obj.id, method.to_sym)
+      expect(thing_obj.class).to have_scheduled(thing_obj.id, method.to_sym)
     end
 
 Then I write some code to make it pass:
@@ -234,7 +234,7 @@ Or I write this spec using the `with_resque` helper
         with_resque do
           game.score!
         end
-        game.score.should == 10
+        expect(game.score).to == 10
       end
     end
 

@@ -428,6 +428,7 @@ Contributors
 * Erkki Eilonen      (@erkki)          : RSpec 3 support
 * Gavin Heavyside    (@gavinheavyside) : RSpec three warnings
 * Pavel Khrulev      (@PaulSchuher)    : Resque 2 and RSpec 3 support
+* Ilya Katz          (@ilyakatz)       : Cleanup README.md for RSpec 3
 
 Copyright
 =========

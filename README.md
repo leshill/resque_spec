@@ -429,6 +429,7 @@ Contributors
 * Gavin Heavyside    (@gavinheavyside) : RSpec three warnings
 * Pavel Khrulev      (@PaulSchuher)    : Resque 2 and RSpec 3 support
 * Ilya Katz          (@ilyakatz)       : Cleanup README.md for RSpec 3
+*                    (@addbrick)       : Compare times as integers in `have_scheduled` matcher
 
 Copyright
 =========

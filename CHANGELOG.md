@@ -1,5 +1,9 @@
 ## On master
 
+* #106 - Compare times as integers in `have_scheduled` matcher
+
+# Missing bits :)
+
 # 0.14.4 (2013-11-20)
 
 * #87 - Add 'be\_queued' matcher that behaves like 'have\_queued' (@eclubb)

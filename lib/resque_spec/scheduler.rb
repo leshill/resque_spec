@@ -44,6 +44,12 @@ module ResqueSpec
 
       ResqueSpec.remove_delayed(klass, *args)
     end
+
+    def scheduled_at(klass, *args)
+      return scheduled_at_without_resque_spec(klass, *args) if ResqueSpec.disable_ext && respond_to?(:scheduled_at_without_resque_spec)
+
+      ResqueSpec.scheduled_at(klass, *args)
+    end
   end
 
   def enqueue_at(time, klass, *args)
@@ -75,6 +81,12 @@ module ResqueSpec
 
   def schedule_for(klass)
     queue_by_name(schedule_queue_name(klass))
+  end
+
+  def scheduled_at(klass, *args)
+    schedule_for(klass).collect do |job|
+      job[:args] == args ? job[:time].to_i : nil
+    end.compact
   end
 
   private

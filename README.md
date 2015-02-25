@@ -19,7 +19,9 @@ Resque 2
 Use the `resque_2` branch via your `Gemfile` to use with v2.0.0.pre.1+ of
 `resque`.
 
-    gem 'resque', github: 'leshill/resque_spec', ref: 'resque_2'
+```ruby
+gem 'resque', github: 'leshill/resque_spec', ref: 'resque_2'
+```
 
 Install
 -------
@@ -29,9 +31,11 @@ using `bundler`? Do the necessary thing for your app's gem management and use
 `bundler`. `resque_spec` monkey patches `resque` it should only be used with
 your tests!)
 
-    group :test do
-      gem 'resque_spec'
-    end
+```ruby
+group :test do
+  gem 'resque_spec'
+end
+```
 
 Cucumber
 --------
@@ -40,8 +44,9 @@ By default, the above will add the `ResqueSpec` module and make it available in
 Cucumber. If you want the `with_resque` and `without_resque` helpers, manually
 require the `resque_spec/cucumber` module:
 
-    require 'resque_spec/cucumber'
-
+```ruby
+require 'resque_spec/cucumber'
+```
 This can be done in `features/support/env.rb` or in a specific support file
 such as `features/support/resque.rb`.
 
@@ -67,64 +72,72 @@ Given this scenario
 
 And I write this spec using the `resque_spec` matcher
 
-    describe "#recalculate" do
-      before do
-        ResqueSpec.reset!
-      end
+```ruby
+describe "#recalculate" do
+  before do
+    ResqueSpec.reset!
+  end
 
-      it "adds person.calculate to the Person queue" do
-        person.recalculate
-        expect(Person).to have_queued(person.id, :calculate)
-      end
-    end
-
+  it "adds person.calculate to the Person queue" do
+    person.recalculate
+    expect(Person).to have_queued(person.id, :calculate)
+  end
+end
+```
 
 And I see that the `have_queued` assertion is asserting that the `Person` queue has a job with arguments `person.id` and `:calculate`
 
 And I take note of the `before` block that is calling `reset!` for every spec
 
 And I might use the `in` statement to specify the queue:
+```ruby
+describe "#recalculate" do
+  before do
+    ResqueSpec.reset!
+  end
 
-    describe "#recalculate" do
-      before do
-        ResqueSpec.reset!
-      end
-
-      it "adds person.calculate to the Person queue" do
-        person.recalculate
-        expect(Person).to have_queued(person.id, :calculate).in(:people)
-      end
-    end
+  it "adds person.calculate to the Person queue" do
+    person.recalculate
+    expect(Person).to have_queued(person.id, :calculate).in(:people)
+  end
+end
+```
 
 And I might write this as a Cucumber step
 
-    Then /the (\w?) has (\w?) queued/ do |thing, method|
-      thing_obj = instance_variable_get("@#{thing}")
-      expect(thing_obj.class).to have_queued(thing_obj.id, method.to_sym)
-    end
+```ruby
+Then /the (\w?) has (\w?) queued/ do |thing, method|
+  thing_obj = instance_variable_get("@#{thing}")
+  expect(thing_obj.class).to have_queued(thing_obj.id, method.to_sym)
+end
+```
 
 Then I write some code to make it pass:
 
-    class Person
-      @queue = :people
+```ruby
+class Person
+  @queue = :people
 
-      def recalculate
-        Resque.enqueue(Person, id, :calculate)
-      end
-    end
+  def recalculate
+    Resque.enqueue(Person, id, :calculate)
+  end
+end
+```
 
 You can check the size of the queue in your specs too.
 
-    describe "#recalculate" do
-      before do
-        ResqueSpec.reset!
-      end
+```ruby
+describe "#recalculate" do
+  before do
+    ResqueSpec.reset!
+  end
 
-      it "adds an entry to the Person queue" do
-        person.recalculate
-        expect(Person).to have_queue_size_of(1)
-      end
-    end
+  it "adds an entry to the Person queue" do
+    person.recalculate
+    expect(Person).to have_queue_size_of(1)
+  end
+end
+```
 
 Turning off ResqueSpec and calling directly to Resque
 -----------------------------------------------------
@@ -133,20 +146,24 @@ Occasionally, you want to run your specs directly against Resque instead of
 ResqueSpec. For one at a time use, pass a block to the `without_resque_spec`
 helper:
 
-    describe "#recalculate" do
-      it "recalculates the persons score" do
-        without_resque_spec do
-          person.recalculate
-        end
-        ... assert recalculation after job done
-      end
+```ruby
+describe "#recalculate" do
+  it "recalculates the persons score" do
+    without_resque_spec do
+      person.recalculate
     end
+    ... assert recalculation after job done
+  end
+end
+```
 
 Or you can manage when ResqueSpec is disabled by flipping the
 `ResqueSpec.disable_ext` flag:
 
-    # disable ResqueSpec
-    ResqueSpec.disable_ext = true
+```ruby
+# disable ResqueSpec
+ResqueSpec.disable_ext = true
+```
 
 You will most likely (but not always, see the Resque docs) need to ensure that
 you have `redis` running.
@@ -158,30 +175,36 @@ To use with [ResqueMailer](https://github.com/zapnap/resque_mailer) you should
 have an initializer that does *not* exclude the `test` (or `cucumber`)
 environment. Your initializer will probably end up looking like:
 
-    # config/initializers/resque_mailer.rb
-    Resque::Mailer.excluded_environments = []
+```ruby
+# config/initializers/resque_mailer.rb
+Resque::Mailer.excluded_environments = []
+```
 
 If you have a mailer like this:
 
-    class ExampleMailer < ActionMailer::Base
-      include Resque::Mailer
+```ruby
+class ExampleMailer < ActionMailer::Base
+  include Resque::Mailer
 
-      def welcome_email(user_id)
-      end
-    end
+  def welcome_email(user_id)
+  end
+end
+```
 
 You can write a spec like this:
 
-    describe "#welcome_email" do
-      before do
-        ResqueSpec.reset!
-        Examplemailer.welcome_email(user.id).deliver
-      end
+```ruby
+describe "#welcome_email" do
+  before do
+    ResqueSpec.reset!
+    Examplemailer.welcome_email(user.id).deliver
+  end
 
-      subject { described_class }
-      it { should have_queue_size_of(1) }
-      it { should have_queued(:welcome_email, user.id) }
-    end
+  subject { described_class }
+  it { should have_queue_size_of(1) }
+  it { should have_queued(:welcome_email, user.id) }
+end
+```
 
 resque-scheduler with Specs
 ==========================
@@ -190,7 +213,9 @@ To use with resque-scheduler, add this require `require 'resque_spec/scheduler'`
 
 *n.b.* Yes, you also need to require resque-scheduler, this works (check the docs for other ways):
 
-    gem "resque-scheduler", :require => "resque_scheduler"
+```ruby
+gem "resque-scheduler", :require => "resque_scheduler"
+```
 
 Given this scenario
 
@@ -200,98 +225,112 @@ Given this scenario
 
 And I write this spec using the `resque_spec` matcher
 
-    describe "#recalculate" do
-      before do
-        ResqueSpec.reset!
-      end
+```ruby
+describe "#recalculate" do
+  before do
+    ResqueSpec.reset!
+  end
 
-      it "adds person.calculate to the Person queue" do
-        person.recalculate
-        expect(Person).to have_scheduled(person.id, :calculate)
-      end
-    end
+  it "adds person.calculate to the Person queue" do
+    person.recalculate
+    expect(Person).to have_scheduled(person.id, :calculate)
+  end
+end
+```
 
 And I might use the `at` statement to specify the time:
 
-    describe "#recalculate" do
-      before do
-        ResqueSpec.reset!
-      end
+```ruby
+describe "#recalculate" do
+  before do
+    ResqueSpec.reset!
+  end
 
-      it "adds person.calculate to the Person queue" do
-        person.recalculate
+  it "adds person.calculate to the Person queue" do
+    person.recalculate
 
-        # Is it scheduled to be executed at 2010-02-14 06:00:00 ?
-        expect(Person).to have_scheduled(person.id, :calculate).at(Time.mktime(2010,2,14,6,0,0))
-      end
-    end
+    # Is it scheduled to be executed at 2010-02-14 06:00:00 ?
+    expect(Person).to have_scheduled(person.id, :calculate).at(Time.mktime(2010,2,14,6,0,0))
+  end
+end
+```
 
 And I might use the `in` statement to specify time interval (in seconds):
 
-    describe "#recalculate" do
-      before do
-        ResqueSpec.reset!
-      end
+```ruby
+describe "#recalculate" do
+  before do
+    ResqueSpec.reset!
+  end
 
-      it "adds person.calculate to the Person queue" do
-        person.recalculate
+  it "adds person.calculate to the Person queue" do
+    person.recalculate
 
-        # Is it scheduled to be executed in 5 minutes?
-        expect(Person).to have_scheduled(person.id, :calculate).in(5 * 60)
-      end
-    end
+    # Is it scheduled to be executed in 5 minutes?
+    expect(Person).to have_scheduled(person.id, :calculate).in(5 * 60)
+  end
+end
+```
 
 You can also check the size of the schedule:
 
-    describe "#recalculate" do
-      before do
-        ResqueSpec.reset!
-      end
+```ruby
+describe "#recalculate" do
+  before do
+    ResqueSpec.reset!
+  end
 
-      it "adds person.calculate to the Person queue" do
-        person.recalculate
+  it "adds person.calculate to the Person queue" do
+    person.recalculate
 
-        expect(Person).to have_schedule_size_of(1)
-      end
-    end
+    expect(Person).to have_schedule_size_of(1)
+  end
+end
+```
 
 (And I take note of the `before` block that is calling `reset!` for every spec)
 
 You can explicitly specify the queue when using enqueue_at_with_queue and
 enqueue_in_with_queue:
 
-    describe "#recalculate_in_future" do
-      before do
-        ResqueSpec.reset!
-      end
+```ruby
+describe "#recalculate_in_future" do
+  before do
+    ResqueSpec.reset!
+  end
 
-      it "adds person.calculate to the :future queue" do
-        person.recalculate_in_future
+  it "adds person.calculate to the :future queue" do
+    person.recalculate_in_future
 
-        Person.should have_schedule_size_of(1).queue(:future)
-      end
-    end
+    Person.should have_schedule_size_of(1).queue(:future)
+  end
+end
+```
 
 And I might write this as a Cucumber step
 
-    Then /the (\w?) has (\w?) scheduled/ do |thing, method|
-      thing_obj = instance_variable_get("@#{thing}")
-      expect(thing_obj.class).to have_scheduled(thing_obj.id, method.to_sym)
-    end
+```ruby
+Then /the (\w?) has (\w?) scheduled/ do |thing, method|
+  thing_obj = instance_variable_get("@#{thing}")
+  expect(thing_obj.class).to have_scheduled(thing_obj.id, method.to_sym)
+end
+```
 
 Then I write some code to make it pass:
 
-    class Person
-      @queue = :people
+```ruby
+class Person
+  @queue = :people
 
-      def recalculate
-        Resque.enqueue_at(Time.now + 3600, Person, id, :calculate)
-      end
+  def recalculate
+    Resque.enqueue_at(Time.now + 3600, Person, id, :calculate)
+  end
 
-      def recalculate_in_future
-        Resque.enqueue_at_with_queue(:future, Time.now + 3600, Person, id, :calculate)
-      end
-    end
+  def recalculate_in_future
+    Resque.enqueue_at_with_queue(:future, Time.now + 3600, Person, id, :calculate)
+  end
+end
+```
 
 Performing Jobs in Specs
 ========================
@@ -313,27 +352,31 @@ Given this scenario
 
 I might write this as a Cucumber step
 
-    When /I score/ do
-      with_resque do
-        visit game_path
-        click_link 'Score!'
-      end
-    end
+```ruby
+When /I score/ do
+  with_resque do
+    visit game_path
+    click_link 'Score!'
+  end
+end
+```
 
 Or I write this spec using the `with_resque` helper
 
-    describe "#score!" do
-      before do
-        ResqueSpec.reset!
-      end
+```ruby
+describe "#score!" do
+  before do
+    ResqueSpec.reset!
+  end
 
-      it "increases the score" do
-        with_resque do
-          game.score!
-        end
-        expect(game.score).to == 10
-      end
+  it "increases the score" do
+    with_resque do
+      game.score!
     end
+    expect(game.score).to == 10
+  end
+end
+```
 
 You can turn this behavior on by setting `ResqueSpec.inline = true`.
 
@@ -353,9 +396,11 @@ Given this scenario:
 
 I might write this as a Cucumber step
 
-    When /the (\w+) queue runs/ do |queue_name|
-      ResqueSpec.perform_all(queue_name)
-    end
+```ruby
+When /the (\w+) queue runs/ do |queue_name|
+  ResqueSpec.perform_all(queue_name)
+end
+```
 
 Hooks
 =====

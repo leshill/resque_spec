@@ -61,8 +61,16 @@ RSpec::Matchers.define :be_queued do |*expected_args|
     end
   end
 
+  def actual_queue_message
+    if (!@times || @times == 1)  && !(actual_queue = queue(actual)).empty?
+      actual_queue_args_str = actual_queue.last[:args].join(', ')
+
+      ", but got #{actual} with [#{actual_queue_args_str}]#{@times_info} instead"
+    end
+  end
+
   failure_message do |actual|
-    "expected that #{actual} would be queued with [#{expected_args.join(', ')}]#{@times_info}"
+    "expected that #{actual} would be queued with [#{expected_args.join(', ')}]#{@times_info}#{actual_queue_message}"
   end
 
   failure_message_when_negated do |actual|
@@ -102,8 +110,16 @@ RSpec::Matchers.define :have_queued do |*expected_args|
     end
   end
 
+  def actual_queue_message
+    if (!@times || @times == 1)  && !(actual_queue = queue(actual)).empty?
+      actual_queue_args_str = actual_queue.last[:args].join(', ')
+
+      ", but got #{actual} with [#{actual_queue_args_str}]#{@times_info} instead"
+    end
+  end
+
   failure_message do |actual|
-    "expected that #{actual} would have [#{expected_args.join(', ')}] queued#{@times_info}"
+    "expected that #{actual} would have [#{expected_args.join(', ')}] queued#{@times_info}#{actual_queue_message}"
   end
 
   failure_message_when_negated do |actual|
@@ -185,13 +201,13 @@ RSpec::Matchers.define :have_scheduled do |*expected_args|
   chain :at do |timestamp|
     @interval = nil
     @time = timestamp
-    @time_info = "at #{@time}"
+    @time_info = " at #{@time}"
   end
 
   chain :in do |interval|
     @time = nil
     @interval = interval
-    @time_info = "in #{@interval} seconds"
+    @time_info = " in #{@interval} seconds"
   end
 
   match do |actual|
@@ -211,12 +227,29 @@ RSpec::Matchers.define :have_scheduled do |*expected_args|
     end
   end
 
+  def actual_queue_time_info(actual_queue)
+    if @time
+      " at #{actual_queue[:time]}"
+    elsif @interval
+      seconds = (actual_queue[:time] - actual_queue[:stored_at]).round
+      " in #{seconds} seconds"
+    end
+  end
+
+  def actual_queue_message
+    if !(actual_queue = schedule_queue_for(actual)).empty?
+      actual_queue_args_str = actual_queue.last[:args].join(', ')
+
+      ", but got #{actual} with [#{actual_queue_args_str}] scheduled#{actual_queue_time_info(actual_queue.last)} instead"
+    end
+  end
+
   failure_message do |actual|
-    ["expected that #{actual} would have [#{expected_args.join(', ')}] scheduled", @time_info].join(' ')
+    "expected that #{actual} would have [#{expected_args.join(', ')}] scheduled#{@time_info}#{actual_queue_message}"
   end
 
   failure_message_when_negated do |actual|
-    ["expected that #{actual} would not have [#{expected_args.join(', ')}] scheduled", @time_info].join(' ')
+    "expected that #{actual} would not have [#{expected_args.join(', ')}] scheduled#{@time_info}"
   end
 
   description do

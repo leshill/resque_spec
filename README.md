@@ -139,6 +139,20 @@ describe "#recalculate" do
 end
 ```
 
+You can validate the number of times that a job was scheduled
+
+```ruby
+describe "#recalculate" do
+  it "adds person.calculate to the Person queue" do
+    person.recalculate
+    expect(Person).to have_queued(person.id, :calculate).once
+    # or
+    expect(Person).to have_queued(person.id, :calculate).times(1)
+  end
+end
+```
+
+
 Turning off ResqueSpec and calling directly to Resque
 -----------------------------------------------------
 
@@ -205,6 +219,8 @@ describe "#welcome_email" do
   it { should have_queued(:welcome_email, user.id) }
 end
 ```
+
+
 
 resque-scheduler with Specs
 ==========================

@@ -6,8 +6,8 @@ module ArgsHelper
   private
 
   def match_args(expected_args, args)
-    arg_list_matcher = RSpec::Mocks::ArgumentListMatcher.new(expected_args)
-    arg_list_matcher.args_match?(args)
+    arg_list_matcher = RSpec::Mocks::ArgumentListMatcher.new(*expected_args)
+    arg_list_matcher.args_match?(*args)
   end
 end
 

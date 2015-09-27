@@ -20,6 +20,52 @@ describe "ResqueSpec Matchers" do
       it { should_not be_queued(last_name, first_name) }
     end
 
+
+    context "queued with any_args or *anything" do
+      context "for nil" do
+        before do
+          Resque.enqueue(Person)
+        end
+
+        subject { Person }
+
+        it { should be_queued(any_args) }
+      end
+
+      context "for a single parameter" do
+        before do
+          Resque.enqueue(Person, first_name)
+        end
+
+        subject { Person }
+
+        it { should be_queued(any_args) }
+      end
+
+      context "for multiple parameters" do
+        before do
+          Resque.enqueue(Person, first_name, last_name, [:foo])
+        end
+
+        subject { Person }
+
+        it { should be_queued(any_args) }
+      end
+
+      context "multiple times for any parameters" do
+        before do
+          Resque.enqueue(Person)
+          Resque.enqueue(Person, first_name)
+          Resque.enqueue(Person, first_name, [:foo])
+        end
+
+        subject { Person }
+
+        it { should be_queued(any_args) }
+        it { should be_queued(any_args).times(3) }
+      end
+    end
+
     context "queued with a string" do
       before do
         Resque::Job.create(:people, "Person", first_name, last_name)

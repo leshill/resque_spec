@@ -22,17 +22,31 @@ describe "ResqueSpec Matchers" do
 
 
     context "queued with any_args or *anything" do
-      context "for nil" do
+      context "for no args" do
         before do
           Resque.enqueue(Person)
         end
 
         subject { Person }
 
+        # anything does not match nothing
+        it { should_not be_queued(anything) }
+        # any_args matches no args
         it { should be_queued(any_args) }
       end
 
-      context "for a single parameter" do
+      context "for nil" do
+        before do
+          Resque.enqueue(Person, nil)
+        end
+
+        subject { Person }
+
+        it { should be_queued(anything) }
+        it { should be_queued(any_args) }
+      end
+
+      context "for a single non-nil parameter" do
         before do
           Resque.enqueue(Person, first_name)
         end
@@ -40,15 +54,17 @@ describe "ResqueSpec Matchers" do
         subject { Person }
 
         it { should be_queued(any_args) }
+        it { should be_queued(anything) }
       end
 
       context "for multiple parameters" do
         before do
-          Resque.enqueue(Person, first_name, last_name, [:foo])
+          Resque.enqueue(Person, first_name, nil, [:foo])
         end
 
         subject { Person }
 
+        it { should be_queued(anything, anything, anything).once }
         it { should be_queued(any_args) }
       end
 
@@ -56,7 +72,7 @@ describe "ResqueSpec Matchers" do
         before do
           Resque.enqueue(Person)
           Resque.enqueue(Person, first_name)
-          Resque.enqueue(Person, first_name, [:foo])
+          Resque.enqueue(Person, first_name, nil, [:foo])
         end
 
         subject { Person }

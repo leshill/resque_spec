@@ -220,7 +220,7 @@ describe ResqueSpec do
     it "raises if there is no queue defined for a class" do
       expect do
         ResqueSpec.queue_name(String)
-      end.to raise_error()
+      end.to raise_error(Resque::NoQueueError)
     end
 
     it "returns the queue name if there is a queue defined as an instance var" do

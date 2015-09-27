@@ -25,7 +25,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency('rspec-mocks', ['>= 3.0.0'])
   s.add_development_dependency('resque-scheduler')
   s.add_development_dependency('pry')
-  s.add_development_dependency('pry-debugger')
+  s.add_development_dependency('pry-byebug')
   s.add_development_dependency('timecop')
   s.add_development_dependency('rake')
   s.add_development_dependency('rspec', ['>= 3.0.0'])

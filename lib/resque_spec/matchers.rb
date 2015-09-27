@@ -75,45 +75,7 @@ RSpec::Matchers.define :be_queued do |*expected_args|
 
 end
 
-RSpec::Matchers.define :have_queued do |*expected_args|
-  include InQueueHelper
-
-  chain :times do |num_times_queued|
-    @times = num_times_queued
-    @times_info = @times == 1 ? ' once' : " #{@times} times"
-  end
-
-  chain :once do
-    @times = 1
-    @times_info = ' once'
-  end
-
-  match do |actual|
-    matched = queue(actual).select do |entry|
-      klass = entry.fetch(:class)
-      args = entry.fetch(:args)
-      klass.to_s == actual.to_s && match_args(expected_args, args)
-    end
-
-    if @times
-      matched.size == @times
-    else
-      matched.size > 0
-    end
-  end
-
-  failure_message do |actual|
-    "expected that #{actual} would have [#{expected_args.join(', ')}] queued#{@times_info}"
-  end
-
-  failure_message_when_negated do |actual|
-    "expected that #{actual} would not have [#{expected_args.join(', ')}] queued#{@times_info}"
-  end
-
-  description do
-    "have queued arguments of [#{expected_args.join(', ')}]#{@times_info}"
-  end
-end
+RSpec::Matchers.alias_matcher :have_queued, :be_queued
 
 RSpec::Matchers.define :have_queue_size_of do |size|
   include InQueueHelper

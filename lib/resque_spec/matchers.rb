@@ -32,7 +32,13 @@ module InQueueHelper
     else
       # Only the Jobs for the given class (actual) in a queue.
       # Why?  A single queue can be used by multiple workers.
-      ResqueSpec.queue_for(actual).select {|queued| queued[:class] == actual.name}
+      ResqueSpec.queue_for(actual).select do |queued|
+        if actual.respond_to?(:name)
+          queued[:class] == actual.name
+        else
+          queued[:class].to_s == actual.to_s
+        end
+      end
     end
   end
 end

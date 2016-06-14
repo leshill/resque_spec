@@ -205,8 +205,8 @@ describe ResqueSpec do
       describe ".enqueue_at" do
         it "calls the original Resque.enqueue_at method" do
           timestamp = Time.now
-          Resque.should_receive(:enqueue_at_without_resque_spec).with(NameFromClassMethod, 1)
-          Resque.enqueue_at(NameFromClassMethod, 1)
+          Resque.should_receive(:enqueue_at_without_resque_spec).with(timestamp, NameFromClassMethod, 1)
+          Resque.enqueue_at(timestamp, NameFromClassMethod, 1)
         end
       end
 
@@ -224,6 +224,42 @@ describe ResqueSpec do
           Resque.remove_delayed(NameFromClassMethod, 1)
         end
       end
+
+      describe ".enqueue with_queue methods" do
+        let(:queue) { 'some_queue' }
+
+        describe ".enqueue_at_with_queue" do
+          it "calls the original Resque.enqueue_at_with_queue method" do
+            timestamp = Time.now + 10000
+            Resque.should_receive(:enqueue_at_with_queue_without_resque_spec).with(queue, timestamp, NameFromClassMethod, 1).and_call_original
+            # Also check that we do not continue on and call the ResqueSpec method
+            ResqueSpec.should_not_receive(:enqueue_at_with_queue)
+            # Here we must check that the onward call to the real Resque.delayed_push occurs. This checks that
+            # the correct aliases are set. It is not sufficient to just check that Resque
+            # receives enqueue_at_with_queue_without_resque_spec call, as if the aliases are missing then
+            # the test will pass.
+            Resque.should_receive(:delayed_push).with(timestamp, class: NameFromClassMethod.to_s, args: [1], queue: queue)
+            Resque.enqueue_at_with_queue(queue, timestamp, NameFromClassMethod, 1)
+          end
+        end
+
+        describe ".enqueue_in_with_queue" do
+          it "calls the original Resque.enqueue_in_with_queue method" do
+            wait_time = 500
+            due_at = Time.now + wait_time
+            Resque.should_receive(:enqueue_in_with_queue_without_resque_spec).with(queue, wait_time, NameFromClassMethod, 1).and_call_original
+            ResqueSpec.should_not_receive(:enqueue_in_with_queue)
+            Resque.should_receive(:delayed_push).with(timestamp_matcher(due_at), class: NameFromClassMethod.to_s, args: [1], queue: queue)
+            Resque.enqueue_in_with_queue(queue, wait_time, NameFromClassMethod, 1)
+          end
+        end
+      end
     end
+  end
+end
+
+RSpec::Matchers.define :timestamp_matcher do |expected|
+  match do |actual|
+    expected.to_s == actual.to_s
   end
 end

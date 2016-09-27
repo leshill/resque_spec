@@ -455,6 +455,27 @@ describe "ResqueSpec Matchers" do
       end
     end
 
+    context "with #at_or_in(timestamp, interval)" do
+      let(:interval) { 10 * 60 }
+      let(:scheduled_at) { Time.now + 30 * 60 }
+
+      before(:each) do
+        if [true, false].sample
+          Resque.enqueue_in(interval, Person, first_name, last_name)
+        else
+          Resque.enqueue_at(scheduled_at, Person, first_name, last_name)
+        end
+      end
+
+      it "returns true if arguments, timestamp or interval matches positive expectation" do
+        Person.should have_scheduled(first_name, last_name).at_or_in(scheduled_at, interval)
+      end
+
+      it "returns true if arguments, timestamp, and interval matches negative expectation" do
+        Person.should_not have_scheduled(first_name, last_name).at_or_in(Time.now + 60 * 60, 100 * 60)
+      end
+    end
+
     context "with #queue(queue_name)" do
       let(:interval) { 10 * 60 }
 

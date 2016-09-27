@@ -156,12 +156,20 @@ RSpec::Matchers.define :have_scheduled do |*expected_args|
     @time_info = "in #{@interval} seconds"
   end
 
+  chain :at_or_in do |timestamp, interval|
+    @time = timestamp
+    @interval = interval
+    @time_info = "at #{@time} or in #{@interval} seconds"
+  end
+
   match do |actual|
     schedule_queue_for(actual).any? do |entry|
       class_matches = entry[:class].to_s == actual.to_s
       args_match = match_args(expected_args, entry[:args])
 
-      time_matches = if @time
+      time_matches = if @time and @interval
+        (entry[:time].to_i == @time.to_i) or (entry[:time].to_i == (entry[:stored_at] + @interval).to_i)
+      elsif @time
         entry[:time].to_i == @time.to_i
       elsif @interval
         entry[:time].to_i == (entry[:stored_at] + @interval).to_i

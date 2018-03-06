@@ -202,7 +202,7 @@ describe "#welcome_email" do
 
   subject { described_class }
   it { should have_queue_size_of(1) }
-  it { should have_queued(:welcome_email, user.id) }
+  it { should have_queued(:welcome_email, [user.id]) }
 end
 ```
 

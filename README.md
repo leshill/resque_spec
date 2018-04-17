@@ -476,6 +476,7 @@ Contributors
 * Ilya Katz                     (@ilyakatz)       : Cleanup README.md for RSpec 3
 *                               (@addbrick)       : Compare times as integers in `have_scheduled` matcher
 * Serious Haircut               (@serioushaircut) : Fix ArgumentListMatcher to make it work with any\_args
+* Peter Boling                  (@pboling)        : Fix `queue` to return jobs of Worker class specified to correct `size`
 
 Copyright
 =========

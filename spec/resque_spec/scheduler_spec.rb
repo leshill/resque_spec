@@ -210,6 +210,14 @@ describe ResqueSpec do
         end
       end
 
+      describe ".enqueue_at_with_queue" do
+        it "calls the original Resque.enqueue_at_with_queue method" do
+          timestamp = Time.now
+          Resque.should_receive(:enqueue_at_with_queue_without_resque_spec).with("test", NameFromClassMethod, 1)
+          Resque.enqueue_at_with_queue("test", NameFromClassMethod, 1)
+        end
+      end
+
       describe ".enqueue_in" do
         it "calls the original Resque.enqueue_in method" do
           wait_time = 500

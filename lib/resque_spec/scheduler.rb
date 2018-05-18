@@ -6,6 +6,7 @@ module ResqueSpec
       if klass.respond_to? :enqueue_at
         klass.instance_eval do
           alias :enqueue_at_without_resque_spec :enqueue_at
+          alias :enqueue_at_with_queue_without_resque_spec :enqueue_at_with_queue
           alias :enqueue_in_without_resque_spec :enqueue_in
           alias :remove_delayed_without_resque_spec :remove_delayed
         end
@@ -22,7 +23,7 @@ module ResqueSpec
     end
 
     def enqueue_at_with_queue(queue, time, klass, *args)
-      return enqueue_at_with_queue_without_resque_spec(time, klass, *args) if ResqueSpec.disable_ext && respond_to?(:enqueue_at_with_queue_without_resque_spec)
+      return enqueue_at_with_queue_without_resque_spec(queue, time, klass, *args) if ResqueSpec.disable_ext && respond_to?(:enqueue_at_with_queue_without_resque_spec)
 
       ResqueSpec.enqueue_at_with_queue(queue, time, klass, *args)
     end

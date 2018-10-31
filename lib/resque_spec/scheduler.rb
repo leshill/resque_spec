@@ -6,8 +6,11 @@ module ResqueSpec
       if klass.respond_to? :enqueue_at
         klass.instance_eval do
           alias :enqueue_at_without_resque_spec :enqueue_at
+          alias :enqueue_at_with_queue_without_resque_spec :enqueue_at_with_queue
           alias :enqueue_in_without_resque_spec :enqueue_in
+          alias :enqueue_in_with_queue_without_resque_spec :enqueue_in_with_queue
           alias :remove_delayed_without_resque_spec :remove_delayed
+          alias :scheduled_at_without_resque_spec :scheduled_at
         end
       end
       klass.extend(ResqueSpec::SchedulerExtMethods)

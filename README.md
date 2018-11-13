@@ -209,14 +209,6 @@ end
 resque-scheduler with Specs
 ==========================
 
-To use with resque-scheduler, add this require `require 'resque_spec/scheduler'`
-
-*n.b.* Yes, you also need to require resque-scheduler, this works (check the docs for other ways):
-
-```ruby
-gem "resque-scheduler", :require => "resque_scheduler"
-```
-
 Given this scenario
 
     Given a person

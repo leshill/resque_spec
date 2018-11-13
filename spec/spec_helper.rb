@@ -3,7 +3,6 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 require 'rspec/core'
 require 'rspec/expectations'
 require 'rspec/mocks'
-require 'resque_scheduler'
 require 'resque_spec/scheduler'
 require 'timecop'
 require 'pry'

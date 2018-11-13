@@ -1,4 +1,5 @@
 require 'resque_spec'
+require 'resque-scheduler'
 
 module ResqueSpec
   module SchedulerExt

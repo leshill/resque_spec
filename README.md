@@ -476,6 +476,7 @@ Contributors
 * Ilya Katz                     (@ilyakatz)       : Cleanup README.md for RSpec 3
 *                               (@addbrick)       : Compare times as integers in `have_scheduled` matcher
 * Serious Haircut               (@serioushaircut) : Fix ArgumentListMatcher to make it work with any\_args
+* Harry Lascelles               (@hlascelles)     : Fix error when resque-spec is disabled
 
 Copyright
 =========

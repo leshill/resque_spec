@@ -194,7 +194,18 @@ describe ResqueSpec do
           Resque.remove_delayed(NameFromClassMethod, 1).should == 1
         end
       end
+    end
 
+    describe "#scheduled_at" do
+      before do
+        Timecop.travel(Time.at(0)) do
+          Resque.enqueue_at(scheduled_at, NameFromClassMethod, 1)
+        end
+      end
+
+      it "returns the scheduled job" do
+        Resque.scheduled_at(NameFromClassMethod, 1).should eq [scheduled_at.to_i]
+      end
     end
   end
 

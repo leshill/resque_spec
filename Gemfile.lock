@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     resque_spec (0.18.0)
-      resque (>= 1.19.0)
+      resque (>= 1.26.0)
       rspec-core (>= 3.0.0)
       rspec-expectations (>= 3.0.0)
       rspec-mocks (>= 3.0.0)
@@ -82,7 +82,7 @@ DEPENDENCIES
   pry
   pry-byebug
   rake
-  resque-scheduler
+  resque-scheduler (>= 4.3.1)
   resque_spec!
   rspec (>= 3.0.0)
   timecop

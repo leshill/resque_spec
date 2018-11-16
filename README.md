@@ -10,19 +10,6 @@ on
 
 ResqueSpec will also fire Resque hooks if you are using them. See below.
 
-Version 0.16.0 works with `Resque >~ v1.19` and up and `rspec >= 3.0.0`.
-Version 0.15.0 works with `Resque >~ v1.19` and up and `rspec >= v2.5.0`
-
-Resque 2
-========
-
-Use the `resque_2` branch via your `Gemfile` to use with v2.0.0.pre.1+ of
-`resque`.
-
-```ruby
-gem 'resque', github: 'leshill/resque_spec', ref: 'resque_2'
-```
-
 Install
 -------
 
@@ -208,6 +195,14 @@ end
 
 resque-scheduler with Specs
 ==========================
+
+Update the Gemfile to enable the `resque-schedular` matchers:
+
+```ruby
+group :test do
+  gem 'resque_spec', require: 'resque_spec/scheduler'
+end
+```
 
 Given this scenario
 

@@ -259,6 +259,23 @@ describe "#recalculate" do
 end
 ```
 
+And I might use the `in` or `at` statement to specify time:
+
+```ruby
+describe "#recalculate" do
+  before do
+    ResqueSpec.reset!
+  end
+
+  it "adds person.calculate to the Person queue" do
+    person.recalculate
+
+    # Is it scheduled to be executed in 5 minutes or at 2010-02-14 06:00:00 ??
+    expect(Person).to have_scheduled(person.id, :calculate).at_or_in(Time.mktime(2010,2,14,6,0,0), 5 * 60)
+  end
+end
+```
+
 You can also check the size of the schedule:
 
 ```ruby

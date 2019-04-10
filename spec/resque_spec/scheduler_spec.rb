@@ -157,6 +157,11 @@ describe ResqueSpec do
       it "uses the correct queue" do
         ResqueSpec.queue_by_name(:test_queue).should_not be_empty
       end
+
+      it "uses the correct queue when the queue argument is the same defined on the worker class" do
+        Resque.enqueue_in_with_queue(:name_from_class_method, scheduled_in, NameFromClassMethod, 1)
+        ResqueSpec.schedule_for(NameFromClassMethod).should_not be_empty
+      end
     end
 
     describe "#remove_delayed" do

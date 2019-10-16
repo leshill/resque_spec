@@ -22,6 +22,14 @@ module ResqueSpec
     perform(queue_name, queue_by_name(queue_name).shift)
   end
 
+  def set_schedule_with_queue(name, config)
+    store(name, config)
+  end
+
+  def remove_schedule_from_queue(name)
+    reset_by_name!(name)
+  end
+
   def perform_all(queue_name)
     queue = queue_by_name(queue_name)
     until queue.empty?
@@ -63,6 +71,10 @@ module ResqueSpec
   def reset!
     queues.clear
     self.inline = false
+  end
+
+  def reset_by_name!(name)
+    queues[name.to_s] = []
   end
 
   private

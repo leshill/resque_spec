@@ -528,4 +528,56 @@ describe "ResqueSpec Matchers" do
     end
 
   end
+
+
+  describe "#have_set_schedule" do
+    let(:schedule_name) { "scheduler_start_method" }
+    let(:config) { {class: NoQueueClass, args: ["scheduler_arg"] } }
+
+    before do
+      Resque.set_schedule(schedule_name, config)
+    end
+
+    after :each do
+      Resque.remove_schedule(schedule_name)
+    end
+
+    it "raises approrpiate exception" do
+      lambda {
+        schedule_name.should have_set_schedule(schedule_name + "1", config)
+      }.should raise_error(RSpec::Expectations::ExpectationNotMetError)
+    end
+
+    it "return true if actual and schedule args are equal" do
+      schedule_name.should have_set_schedule("scheduler_arg")
+    end
+
+    it "not exist schedule_name" do
+      "#{schedule_name}+1".should_not have_set_schedule("scheduler_arg")
+    end
+
+    it "not existing args" do
+      schedule_name.should_not have_set_schedule("scheduler_other_arg")
+    end
+
+    context "#cron" do
+      context "with rule" do
+        let(:config) { super().merge(cron: "0 * * * *") }
+
+        it "fetches cron config from entry" do
+          schedule_name.should have_set_schedule("scheduler_arg").with_cron("0 * * * *")
+        end
+
+        it "finds only with correct cron" do
+          schedule_name.should_not have_set_schedule("scheduler_arg").with_cron("1 * * * *")
+        end
+      end
+
+      context "without rule" do
+        it "fetches empty cron config from entry" do
+          schedule_name.should have_set_schedule("scheduler_arg").with_cron(nil)
+        end
+      end
+    end
+  end
 end

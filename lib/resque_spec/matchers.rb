@@ -139,6 +139,60 @@ module ScheduleQueueHelper
     end
   end
 
+  def scheduled_jobs_for(name)
+    ResqueSpec.queue_by_name(name)
+  end
+end
+
+RSpec::Matchers.define :have_set_schedule do |*expected_args|
+  include ScheduleQueueHelper
+
+  chain :with_cron do |cron_rule|
+    @cron = cron_rule
+    @cron_rule_info = "with cron #@cron"
+  end
+
+  match do |actual|
+    scheduled_jobs_for(actual).any? do |entry|
+      args_match = match_args(expected_args, entry[:args])
+
+      cron_matches = if @cron
+                       entry[:cron] == @cron
+                     else
+                       true
+                     end
+
+      args_match && cron_matches
+    end
+  end
+
+  match_when_negated do |actual|
+    return true if scheduled_jobs_for(actual).empty?
+
+    scheduled_jobs_for(actual).any? do |entry|
+      args_match = match_args(expected_args, entry[:args])
+
+      cron_matches = if @cron
+                       entry[:cron] == @cron
+                     else
+                       true
+                     end
+
+      !(args_match && cron_matches)
+    end
+  end
+
+  failure_message do |actual|
+    ["expected that schedule queue #{actual} would have [#{expected_args.join(', ')}] scheduled", @cron_rule_info].join(' ')
+  end
+
+  failure_message_when_negated do |actual|
+    ["expected that schedule queue #{actual} would not have [#{expected_args.join(', ')}] scheduled", @cron_rule_info].join(' ')
+  end
+
+  description do
+    "have set schedule"
+  end
 end
 
 RSpec::Matchers.define :have_scheduled do |*expected_args|

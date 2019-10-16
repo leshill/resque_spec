@@ -126,6 +126,47 @@ describe "#recalculate" do
 end
 ```
 
+Resque-scheduler
+-----------------------------------------------------
+
+For usage with resque-scheduler gem, you may want to those methods
+`Resque.set_schedule(name, config)` and dequeuing `Resque.remove_schedule(name)`
+
+Let's see simple example, when you need to check if it was scheduled or not.
+The first example will only match for args option in config.
+The second context with cron, adds more precise for matching. If you need not only to verify
+whether it was scheduled, but also cron tab for performing action, you should chain `with_cron` method.
+```ruby
+describe "#schedule" do
+  before do
+    ResqueSpec.reset! # or you can use ResqueSpec.reset_by_name!(name), which is more precise
+  end
+
+  let(:config) do
+    {
+      args: ["person_recalculation", [1, 2, 3]
+      cron: "0 * * * *" # hourly
+    }
+  end
+
+  it "adds an entry to the named schedule queue with args" do
+    Resque.set_schedule("person_recalculation", config)
+
+    expect("person_recalculation").to have_set_schedule([1, 2, 3])
+  end
+
+  context "with_cron" do
+    it "adds an entry to the named schedule queue with cron tab check" do
+      Resque.set_schedule("person_recalculation", config)
+
+      expect("person_recalculation").to have_set_schedule([1, 2, 3]).with_cron("0 * * * *")
+    end
+  end
+end
+
+```
+
+
 Turning off ResqueSpec and calling directly to Resque
 -----------------------------------------------------
 

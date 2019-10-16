@@ -11,13 +11,28 @@ module ResqueSpec
           alias :enqueue_at_with_queue_without_resque_spec :enqueue_at_with_queue
           alias :enqueue_in_with_queue_without_resque_spec :enqueue_in_with_queue
           alias :remove_delayed_without_resque_spec :remove_delayed
+          alias :remove_scheduled_without_resque_spec :remove_schedule
+          alias :set_schedule_without_resque_spec :set_schedule
         end
       end
+
       klass.extend(ResqueSpec::SchedulerExtMethods)
     end
   end
 
   module SchedulerExtMethods
+    def set_schedule(name, config, reload = false)
+      return set_schedule(name, config, reload) if ResqueSpec.disable_ext && respond_to(:set_schedule)
+
+      ResqueSpec.set_schedule(name, config)
+    end
+
+    def remove_schedule(name)
+      return remove_schedule(name) if ResqueSpec.disable_ext && respond_to(:remove_schedule)
+
+      ResqueSpec.remove_schedule(name)
+    end
+
     def enqueue_at(time, klass, *args)
       return enqueue_at_without_resque_spec(time, klass, *args) if ResqueSpec.disable_ext && respond_to?(:enqueue_at_without_resque_spec)
 
@@ -47,6 +62,14 @@ module ResqueSpec
 
       ResqueSpec.remove_delayed(klass, *args)
     end
+  end
+
+  def set_schedule(name, config)
+    set_schedule_with_queue(name, config)
+  end
+
+  def remove_schedule(name)
+    remove_schedule_from_queue(name)
   end
 
   def enqueue_at(time, klass, *args)

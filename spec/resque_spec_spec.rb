@@ -141,6 +141,37 @@ describe ResqueSpec do
     end
   end
 
+  describe '#set_schedule_with_queue' do
+    let(:config) { {class: NameFromClassMethod.to_s, args: [1]} }
+    let(:name) { "scheduler_start_method" }
+
+    it 'stores job in queue' do
+      ResqueSpec.set_schedule_with_queue(name, config)
+
+      ResqueSpec.queue_by_name(name).should include(config)
+    end
+  end
+
+
+  describe '#remove_schedule_from_queue' do
+    let(:config) { {class: NameFromClassMethod.to_s, args: [1]} }
+    let(:name) { "scheduler_start_method" }
+
+    it 'name found' do
+      ResqueSpec.set_schedule_with_queue(name, config)
+      ResqueSpec.remove_schedule_from_queue(name)
+
+      ResqueSpec.queue_by_name(name).should_not include(config)
+    end
+
+    it 'name not found' do
+      ResqueSpec.set_schedule_with_queue(name, config)
+      ResqueSpec.remove_schedule_from_queue(name)
+
+      ResqueSpec.queue_by_name(name).should_not include(config)
+    end
+  end
+
   describe "#perform_all" do
     before do
       ResqueSpec.enqueue(:queue_name, NameFromClassMethod, 1)
@@ -279,6 +310,14 @@ describe ResqueSpec do
       ResqueSpec.inline = true
       ResqueSpec.reset!
       ResqueSpec.inline.should == false
+    end
+  end
+
+  describe "#reset_by_name!" do
+    it "clears the queue" do
+      ResqueSpec.queue_by_name('scheduler_start_method') << 'queued'
+      ResqueSpec.reset_by_name!('scheduler_start_method')
+      ResqueSpec.queue_by_name('scheduler_start_method').should be_empty
     end
   end
 end

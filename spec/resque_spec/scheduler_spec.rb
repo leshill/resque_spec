@@ -132,6 +132,41 @@ describe ResqueSpec do
       end
     end
 
+    describe "#set_schedule_with_queue" do
+      let(:name) { "scheduler_start_method" }
+      let(:config) { {class: "NoQueueClass", args: [1]} }
+
+      before do
+        Resque.set_schedule(name, config)
+      end
+
+      it "adds to the scheduled queue hash" do
+        ResqueSpec.queue_by_name(name).should_not be_empty
+      end
+
+      it "sets the klass on the queue" do
+        ResqueSpec.queue_by_name(name).first.should include(:class => "NoQueueClass", :args => [1])
+      end
+    end
+
+    describe "#remove_schedule_from_queue" do
+      let(:name) { "scheduler_start_method" }
+      let(:config) { {class: "NoQueueClass", args: [1]} }
+
+      before do
+        Resque.set_schedule(name, config)
+        Resque.remove_schedule(name)
+      end
+
+      it "removes the scheduled queue hash" do
+        ResqueSpec.queue_by_name(name).should be_empty
+      end
+
+      it "removes content from the queue" do
+        ResqueSpec.queue_by_name(name).should_not include(:class => "NoQueueClass")
+      end
+    end
+
     describe "#enqueue_in_with_queue" do
       before do
         Timecop.freeze(Time.now)

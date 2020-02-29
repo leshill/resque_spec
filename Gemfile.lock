@@ -32,7 +32,7 @@ GEM
     rack (2.0.6)
     rack-protection (2.0.4)
       rack
-    rake (12.3.1)
+    rake (13.0.1)
     redis (4.0.3)
     redis-namespace (1.6.0)
       redis (>= 3.0.4)

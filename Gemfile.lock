@@ -29,7 +29,7 @@ GEM
       byebug (~> 10.0)
       pry (~> 0.10)
     raabro (1.1.6)
-    rack (2.0.6)
+    rack (2.2.3)
     rack-protection (2.0.4)
       rack
     rake (12.3.1)
